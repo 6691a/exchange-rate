@@ -9,4 +9,5 @@ RUN pip install --upgrade pip
 COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# gunicorn  config.asgi.application -k uvicorn.workers.UvicornWorker --access-logfile ./gunicorn-access.log  --bind 0.0.0.0:8000 --workers 2 --daemon
+CMD ["gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker --access-logfile ./gunicorn-access.log  --bind 0.0.0.0:8000"]
+# --workers 2 --daemon

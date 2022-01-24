@@ -1,9 +1,11 @@
 version: "3.8"
 
 services:
-  exchange_rate:
-    build: 
+  django:
+    build:
+      context: .
       dockerfile: Dockerfile.prod
+    image: exchange_rate:0.0.1
     container_name: exchange_rate
     restart: always
     ports:

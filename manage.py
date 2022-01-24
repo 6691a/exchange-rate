@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+import uvicorn
 
 def main():
     """Run administrative tasks."""
@@ -19,4 +19,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    uvicorn.run("config.asgi:application", port=8080, reload=True)

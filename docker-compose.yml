@@ -1,9 +1,10 @@
 version: "3.8"
 
 services:
-  server:
-    image: test
-    container_name: test
+  exchange_rate:
+    build: 
+      dockerfile: Dockerfile.prod
+    container_name: exchange_rate
     restart: always
     ports:
       - 8000:8000

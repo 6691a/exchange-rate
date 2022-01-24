@@ -6,8 +6,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    image: exchange_rate:0.0.1
+    image: exchange_rate:0.0.2
     restart: always
+    expose:
+      - 8000
     ports:
       - 8000:8000
 

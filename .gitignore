@@ -5,6 +5,7 @@
 
 ### Editer ###
 .vscode
+.gitconfig
 
 ### Django ###
 *.log

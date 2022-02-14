@@ -4,6 +4,7 @@ import os
 import sys
 import uvicorn
 
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -18,6 +19,12 @@ def main():
     execute_from_command_line(sys.argv)
 
 
+def run():
+    if sys.argv[1] == "run":
+        uvicorn.run("config.asgi:application", port=8080, reload=True)
+    else:
+        main()
+
+
 if __name__ == "__main__":
-    # main()
-    uvicorn.run("config.asgi:application", port=8080, reload=True)
+    run()

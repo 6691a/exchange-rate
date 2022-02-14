@@ -14,6 +14,8 @@ services:
   nginx:
     container_name: nginx
     build: ./nginx
+    image: nginx_django:1.19.0-alpine
+    restart: always
     ports:
       - 80:80
     depends_on:

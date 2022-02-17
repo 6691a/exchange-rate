@@ -1,2 +1,2 @@
--r shared.txt
+-r common.txt
 

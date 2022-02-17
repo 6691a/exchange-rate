@@ -10,7 +10,13 @@ services:
     restart: always
     expose:
       - 8000
-
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
   nginx:
     container_name: nginx
     build: ./nginx

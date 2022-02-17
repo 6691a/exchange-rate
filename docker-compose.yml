@@ -4,22 +4,20 @@ services:
   django:
     container_name: exchange_rate
     build:
-      context: .
-      dockerfile: Dockerfile.prod
+      context: ./project
+      dockerfile: dockerfile.prod
+    env_file:
+      - .env
     image: exchange_rate:0.0.2
     restart: always
     expose:
       - 8000
-    environment:
-      - SECRET_KEY=${SECRET_KEY}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}
+
   nginx:
     container_name: nginx
-    build: ./nginx
+    build: 
+      context: ./nginx
+      dockerfile: dockerfile
     image: nginx_django:1.19.0-alpine
     restart: always
     ports:

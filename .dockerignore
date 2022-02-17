@@ -1,0 +1,36 @@
+*.pyc
+*.pyo
+*.mo
+*.db
+*.css.map
+*.egg-info
+*.sql.gz
+.cache
+.project
+.idea
+.pydevproject
+.idea/workspace.xml
+.DS_Store
+.git/
+.sass-cache
+.vagrant/
+env
+__pycache__
+dist
+docs
+logs
+web/media
+web/static/CACHE
+stats
+dockerfile.prod
+config/settings/dev.py
+config/wsgi.py
+venv
+db.sqlite3
+# requirements
+requirements/dev.txt
+
+# test file
+test_data/
+
+.gitignore

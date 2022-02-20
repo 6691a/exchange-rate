@@ -9,10 +9,11 @@ RUN pip install --upgrade pip
 
 COPY ["requirements/common.txt", "requirements/prod.txt" ,"./"].
 
-RUN pip install --no-cache-dir -r prod.txt
+RUN pip install --user -r prod.txt
 
 COPY . .
 
+ENV PATH=/root/.local:$PATH
 
 # ADD USER
 # RUN adduser -u 8080 --disabled-password --gecos "" exchange-rate && chown -R exchange-rate /app

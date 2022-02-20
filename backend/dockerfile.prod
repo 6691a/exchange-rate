@@ -1,15 +1,20 @@
-FROM python:3.9-alpine
-EXPOSE 8000
+FROM python:3.9-alpine AS builder
 
-WORKDIR /app
+COPY ["requirements/common.txt", "requirements/prod.txt" ,"./"].
 
 RUN apk update && apk add bash
 
 RUN pip install --upgrade pip
 
-COPY ["requirements/common.txt", "requirements/prod.txt" ,"./"].
-
 RUN pip install --user -r prod.txt
+
+WORKDIR /app
+
+FROM python:3.9-slim
+
+EXPOSE 8000
+
+COPY --from=builder /root/.local /root/.local
 
 COPY . .
 

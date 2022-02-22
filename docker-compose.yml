@@ -4,11 +4,10 @@ services:
   django:
     container_name: exchange_rate
     build:
-      context: ./project
-      dockerfile: dockerfile.prod
+      context: ./backend
+      dockerfile: dockerfile
     env_file:
-      - ./project/.env
-    image: exchange_rate:0.0.2
+      - ./backend/.env
     restart: always
     expose:
       - 8000

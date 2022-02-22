@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(name: "BUILD", defaultValue: true, description: "Docker image Build")
+        booleanParam(name: "TEST", defaultValue: true, description: "Run test")
+        booleanParam(name: "PUSH", defaultValue: true, description: "Docker image push")
+
+        // CI
+        string(name: "IMANGE_NAME", defaultValue: 'exchange-rate', description: "Docker image name")
+        string(name: "DOCKER_TAG", defaultValue: '1.0.0', description: "Docker tag")
+
+        //
+
+    }
+
+    environment {
+        DOCKER_HUB_URL = "hub.1ife.kr"
+    }
+
+
+    stages {
+        stage('🛠 Build Docker Image 🛠') {
+            when {
+                expression {
+                    return params.BUILD
+                }
+            }
+            steps {
+                // env.WORKSPACE는 jenkins가 설정해 준 환경 값
+                // /var/jenkins_home/wrkspace/test
+                dir("${env.WORKSPACE}") {
+                    sh "docker build -f dockerfile -t ${IMANGE_NAME}:${DOCKER_TAG} ."
+                }
+            }
+            post {
+                success {
+                    echo "😄 Docker Build success 😄"
+                }
+            }
+        }
+
+        stage('📖 Run test code 📖') {
+            when { 
+                expression { 
+                    return params.TEST 
+                } 
+            }
+            steps {
+                sh ("docker run --rm ${params.IMANGE_NAME}:${params.DOCKER_TAG} python manage.py test")
+            }
+            post {
+                success {
+                    echo "😄 Test success 😄"
+                }
+            }
+        }
+
+        // stage('📨') {
+        //     steps {
+        //         echo "Push Docker Image to ECR"
+        //     }
+        // }
+    }
+}

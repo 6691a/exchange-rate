@@ -30,7 +30,7 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
-                    sh "docker build -f dockerfile -t ${IMANGE_NAME}:${DOCKER_TAG} ."
+                    sh "docker build -f dockerfile.prod -t ${IMANGE_NAME}:${DOCKER_TAG} ."
                 }
             }
             post {

@@ -1,14 +1,14 @@
-def loadProperties(path) {
-    properties = new Properties()
-    File propertiesFile = new File(path)
-    properties.load(propertiesFile.newDataInputStream())
-    Set<Object> keys = properties.keySet();
-    for(Object k:keys) {
-        String key = (String)k;
-        String value =(String) properties.getProperty(key)
-        env."${key}" = "${value}"
-    }
-}
+// def loadProperties(path) {
+//     properties = new Properties()
+//     File propertiesFile = new File(path)
+//     properties.load(propertiesFile.newDataInputStream())
+//     Set<Object> keys = properties.keySet();
+//     for(Object k:keys) {
+//         String key = (String)k;
+//         String value =(String) properties.getProperty(key)
+//         env."${key}" = "${value}"
+//     }
+// }
 
 pipeline {
     agent any
@@ -30,14 +30,7 @@ pipeline {
         DOCKER_HUB_URL = "hub.1ife.kr"
     }
 
-
     stages {
-        stage('Set Up') {
-            steps {
-                loadProperties("${env.ENV_PATH}/${params.ENV_FILE_PATH}")
-            }
-        }
-
         stage('🛠 Build Docker Image 🛠') {
             when {
                 expression {
@@ -67,7 +60,8 @@ pipeline {
             steps {
                 sh "printenv"
                 sh "export"
-                sh ("docker run --rm ${params.IMANGE_NAME}:${params.DOCKER_TAG} python manage.py test")
+                sh ("docker run --env-file=${env.ENV_PATH}/${params.ENV_FILE_PATH}\
+                --rm ${params.IMANGE_NAME}:${params.DOCKER_TAG} python manage.py test")
             }
             post {
                 success {

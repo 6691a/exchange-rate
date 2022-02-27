@@ -11,7 +11,7 @@ pipeline {
 
         // CI
         string(name: "IMANGE_NAME", defaultValue: 'exchange-rate', description: "DOCKER_IMAGE_NAME")
-        string(name: "DOCKER_TAG", defaultValue: '1.0.0', description: "DOCKER_TAG")
+        string(name: "DOCKER_TAG", defaultValue: '0.0.4', description: "DOCKER_TAG")
         
         // CD
 

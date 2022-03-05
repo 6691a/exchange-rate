@@ -51,8 +51,6 @@ pipeline {
                 } 
             }
             steps {
-                sh "printenv"
-                sh "export"
                 sh ("docker run --env-file=${ENV_FILE}\
                 --rm ${DOCKER_IMAGE} python manage.py test")
             }

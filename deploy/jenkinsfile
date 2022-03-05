@@ -35,7 +35,7 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
-                        APP = docker.build(${DOCKER_IMAGE},"-f ${params.DOCKER_FILE} ./backend"
+                        APP = docker.build(${DOCKER_IMAGE}, "-f ${params.DOCKER_FILE} ./backend")
                 }
             }
             post {
@@ -47,7 +47,7 @@ pipeline {
 
         stage('📖 Run test code 📖') {
             when { 
-                expression { 
+                expression {
                     return params.TEST 
                 } 
             }
@@ -65,10 +65,10 @@ pipeline {
         stage('📨') {
             steps {
                 sh """
-                docker.withRegistry( '',docker_hub) { 
-                                                    dockerImage.push() 
-                    }
-                    docker push ${DOCKER_IMAGE}
+                // docker.withRegistry( '',docker_hub) { 
+                //                                     dockerImage.push() 
+                //     }
+                //     docker push ${DOCKER_IMAGE}
                 """
             }
         }

@@ -74,7 +74,7 @@ pipeline {
                         usernameVariable: 'USERNAME', 
                         passwordVariable: 'PASSWORD')
                     ]) {
-                        sh 'docker login -u ${USERNAME} -p ${PASSWORD}'
+                        sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
                     }
                 }
             }

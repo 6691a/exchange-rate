@@ -13,6 +13,7 @@ pipeline {
         string(name: "IMANGE_NAME", defaultValue: 'exchange-rate', description: "DOCKER_IMAGE_NAME")
         string(name: "TAG_NAME", defaultValue: '0.3.0', description: "DOCKER_TAG")
         string(name: "DOCKER_REPOSITORY", defaultValue: "hub.1ife.kr", description: "DOCKER_TAG")
+        string(name: "DOCKER_FILE", defaultValue: "backend/dockerfile", description: "DOCKER_FILE_PATH")
 
         // CD
 
@@ -34,7 +35,7 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
-                    sh "docker build -f backend/dockerfile -t ${DOCKER_IMAGE} ./backend"
+                        APP = docker.build(${DOCKER_IMAGE},"-f ${params.DOCKER_FILE} ./backend"
                 }
             }
             post {
@@ -64,8 +65,10 @@ pipeline {
         stage('📨') {
             steps {
                 sh """
-                    docker info | grep Username
-                    // docker push ${DOCKER_IMAGE}
+                docker.withRegistry( '',docker_hub) { 
+                                                    dockerImage.push() 
+                    }
+                    docker push ${DOCKER_IMAGE}
                 """
             }
         }

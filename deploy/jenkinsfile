@@ -12,8 +12,8 @@ pipeline {
         // CI
         string(name: "IMANGE_NAME", defaultValue: 'exchange-rate', description: "DOCKER_IMAGE_NAME")
         string(name: "TAG_NAME", defaultValue: '0.3.0', description: "DOCKER_TAG")
-        string(name: "DOCKER_REPOSITORY" defaultValue: "hub.1ife.kr", description: "DOCKER_TAG")
-        
+        string(name: "DOCKER_REPOSITORY", defaultValue: "hub.1ife.kr", description: "DOCKER_TAG")
+
         // CD
 
     }

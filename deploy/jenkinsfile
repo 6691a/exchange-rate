@@ -12,14 +12,14 @@ pipeline {
         // CI
         string(name: "IMANGE_NAME", defaultValue: 'exchange-rate', description: "DOCKER_IMAGE_NAME")
         string(name: "TAG_NAME", defaultValue: '0.3.0', description: "DOCKER_TAG")
+        string(name: "DOCKER_REPOSITORY" defaultValue: "hub.1ife.kr", description: "DOCKER_TAG")
         
         // CD
 
     }
 
     environment {
-        DOCKER_REPOSITORY = "hub.1ife.kr"
-        DOCKER_IMAGE =  "${DOCKER_REPOSITORY}/${param.IMANGE_NAME}:${param.TAG_NAME}"
+        DOCKER_IMAGE =  "${params.DOCKER_REPOSITORY}/${params.IMANGE_NAME}:${params.TAG_NAME}"
         ENV_FILE = "${env.ENV_PATH}/${params.ENV_FILE_PATH}"
     }
 

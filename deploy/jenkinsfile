@@ -68,8 +68,10 @@ pipeline {
 
         stage('📮 Image Push 📮') {
             steps {
-                docker.withRegistry('${DOCKER_REPOSITORY}', docker_hub) { 
-                    DOCKER.push()
+                script {
+                    docker.withRegistry('${DOCKER_REPOSITORY}', docker_hub) { 
+                        DOCKER.push()
+                    }
                 }
             }
         }

@@ -31,6 +31,7 @@ pipeline {
                     return params.BUILD
                 }
             }
+
             steps {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
@@ -64,15 +65,15 @@ pipeline {
             }
         }
 
-        stage('📨') {
-            steps {
-                sh """
-                // docker.withRegistry( '',docker_hub) { 
-                //                                     dockerImage.push() 
-                //     }
-                //     docker push ${DOCKER_IMAGE}
-                """
-            }
-        }
+        // stage('📨') {
+        //     steps {
+        //         sh """
+        //         // docker.withRegistry( '',docker_hub) { 
+        //         //                                     dockerImage.push() 
+        //         //     }
+        //         //     docker push ${DOCKER_IMAGE}
+        //         """
+        //     }
+        // }
     }
 }

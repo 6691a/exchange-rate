@@ -37,7 +37,7 @@ pipeline {
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
                     script {
-                        docker = docker.build(${DOCKER_IMAGE}, "-f ${params.DOCKER_FILE} ./backend")
+                        docker = docker.build("${DOCKER_IMAGE}", "-f ${params.DOCKER_FILE} ./backend")
                     }
                 }
             }

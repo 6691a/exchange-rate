@@ -69,8 +69,12 @@ pipeline {
         stage('📮 Image Push 📮') {
             steps {
                 script {
-                    docker.withRegistry('${DOCKER_REPOSITORY}', docker_hub) { 
-                        DOCKER.push()
+                    withCredentials([
+                        usernamePassword( credentialsId: 'docker_hub', 
+                        usernameVariable: 'USERNAME', 
+                        passwordVariable: 'PASSWORD')
+                    ]) {
+                        sh 'docker login -u ${USERNAME} -p ${PASSWORD}'
                     }
                 }
             }

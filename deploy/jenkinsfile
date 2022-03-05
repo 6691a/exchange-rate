@@ -35,7 +35,7 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
-                        APP = docker.build(${DOCKER_IMAGE}, "-f ${params.DOCKER_FILE} ./backend")
+                        docker = docker.build(${DOCKER_IMAGE}, "-f ${params.DOCKER_FILE} ./backend")
                 }
             }
             post {

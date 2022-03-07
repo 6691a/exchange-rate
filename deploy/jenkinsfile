@@ -108,7 +108,7 @@ pipeline {
         }
 
         // CD
-        stage'🛫 Deploy Workload 🛫') {
+        stage('🛫 Deploy Workload 🛫') {
             when {
                 expression { 
                     return params.DEPLOY

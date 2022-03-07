@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     parameters {
         booleanParam(name: "BUILD", defaultValue: true, description: "DOCKER_IMAGE_BUILD")
         booleanParam(name: "TEST", defaultValue: true, description: "RUN_TEST")
@@ -20,7 +20,6 @@ pipeline {
         string(name : 'TARGET_USER', defaultValue : 'juniya', description : 'TARGET_SVR_USER')
         string(name : 'TARGET_SERVER', defaultValue : '1ife.kr', description : 'TARGET_SERVER_IP')
         string(name : 'TARGET_SERVER_PORT', defaultValue : '4252', description : 'TARGET_SERVER_SSH_PORT')
-
     }
 
     environment {
@@ -40,7 +39,7 @@ pipeline {
                     // docker hub login
                     withCredentials([
                         usernamePassword(credentialsId: 'docker_hub',
-                        usernameVariable: 'USERNAME', 
+                        usernameVariable: 'USERNAME',
                         passwordVariable: 'PASSWORD')
                     ]) {
                         sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
@@ -70,10 +69,10 @@ pipeline {
         }
 
         stage('🔎 Runing Test 🔎') {
-            when { 
+            when {
                 expression {
-                    return params.TEST 
-                } 
+                    return params.TEST
+                }
             }
             steps {
                 sh ("docker run --env-file=${ENV_FILE}\
@@ -110,26 +109,20 @@ pipeline {
         // CD
         stage('🛫 Deploy Workload 🛫') {
             when {
-                expression { 
+                expression {
                     return params.DEPLOY
                 }
             }
 
             steps {
-//                 withCredentials([sshUserPrivateKey(credentialsId: 'worker1_ssh', keyFileVariable: 'identity', passphraseVariable: 'pass', usernameVariable: 'user')]) {
-//                     sh'${pass}'
-//                     sh'${user}'
-//                     sh'${identity}'
-// }
-                sshagent (credentials: ['worker1_ssh']) {
-                sh """
-
-                    ssh -p ${params.TARGET_SERVER_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
-                        ${params.TARGET_USER}@${params.TARGET_SERVER} ;\
-                        pwd
-                """
+                    sshagent (credentials: ['worker1_ssh']) {
+                        sh """
+                            ssh -p ${params.TARGET_SERVER_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+                                ${params.TARGET_USER}@${params.TARGET_SERVER} ;\
+                                pwd
+                        """
+                    }
                 }
-            }
 
 
             post {
@@ -139,14 +132,14 @@ pipeline {
             }
         }
 
-//         stage('🧹 Clean Up 🧹') {
-//             steps {
-//                     // docker image prune -f
-//                     // docker container prune -f
-//                 sh """
-//                     docker rmi ${DOCKER_IMAGE_TAG}"
-//                 """
-//             }
-//         }
+        stage('🧹 Clean Up 🧹') {
+            steps {
+                    // docker image prune -f
+                    // docker container prune -f
+                sh """
+                    docker rmi ${DOCKER_IMAGE_TAG}"
+                """
+            }
+        }
     }
 }

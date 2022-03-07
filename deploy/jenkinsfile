@@ -124,8 +124,8 @@ pipeline {
                 sshagent (credentials: ['worker1_ssh']) {
                     sh """
                         ssh -p ${params.TARGET_SERVER_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
-                            ${params.TARGET_USER}@${params.TARGET_SERVER} ;\
-                            pwd
+                            ${params.TARGET_USER}@${params.TARGET_SERVER} ;
+                             export ;
                     """
                 }
             }

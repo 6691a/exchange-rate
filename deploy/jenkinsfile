@@ -26,6 +26,20 @@ pipeline {
     }
 
     stages {
+        stage('⚙️ Set Up ⚙️') {
+            steps {
+                script {
+                    // docker hub login
+                    withCredentials([
+                        usernamePassword( credentialsId: 'docker_hub', 
+                        usernameVariable: 'USERNAME', 
+                        passwordVariable: 'PASSWORD')
+                    ]) {
+                        sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
+                    }
+                }
+            }
+        }
         stage('🛠 Build Docker Image 🛠') {
             when {
                 expression {
@@ -37,9 +51,7 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
-                    script {
-                        DOCKER = docker.build("${DOCKER_IMAGE}", "-f ${params.DOCKER_FILE} ./backend")
-                    }
+                    sh "docker build -f backend/dockerfile -t ${DOCKER_IMANGE} ./backend"
                 }
             }
             post {
@@ -67,16 +79,16 @@ pipeline {
         }
 
         stage('📮 Image Push 📮') {
-            steps {
-                script {
-                    withCredentials([
-                        usernamePassword( credentialsId: 'docker_hub', 
-                        usernameVariable: 'USERNAME', 
-                        passwordVariable: 'PASSWORD')
-                    ]) {
-                        sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
-                    }
+            when {
+                expression {
+                    return params.PUSH
                 }
+            }
+
+            steps {
+                sh'''
+                    docker push ${ECR_DOCKER_IMAGE}:${ECR_DOCKER_TAG}
+                '''
             }
         }
 

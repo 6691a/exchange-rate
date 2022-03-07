@@ -116,12 +116,18 @@ pipeline {
             }
 
             steps {
-                sshagent (credentials: ["worker1_ssh"]) {
+                sshagent (credentials: ['worker1_ssh']) {
                     sh """
                         scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P ${params.TARGET_SERVER_PORT}\
                         docker-compose.yml \
                         ${params.TARGET_USER}@${params.TARGET_SERVER_IP}:${TARGET_SERVER_PATH}
                     """
+                }
+            }
+
+             post {
+                success {
+                    echo "😄 Target Deploy Success 😄"
                 }
             }
         }

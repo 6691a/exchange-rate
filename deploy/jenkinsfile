@@ -121,7 +121,7 @@ pipeline {
 //                     sh'${user}'
 //                     sh'${identity}'
 // }
-                sshagent (credentials: ['aws_ec2_user_ssh']) {
+                sshagent (credentials: ['worker1_ssh']) {
                 sh """
 
                     ssh -p ${params.TARGET_SERVER_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \

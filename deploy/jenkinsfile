@@ -39,7 +39,7 @@ pipeline {
                 script {
                     // docker hub login
                     withCredentials([
-                        usernamePassword( credentialsId: 'docker_hub', 
+                        usernamePassword(credentialsId: 'docker_hub',
                         usernameVariable: 'USERNAME', 
                         passwordVariable: 'PASSWORD')
                     ]) {
@@ -116,12 +116,30 @@ pipeline {
             }
 
             steps {
-                sshagent (credentials: ['worker1_ssh']) {
-                    sh """
-                        scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P ${params.TARGET_SERVER_PORT}\
-                        docker-compose.yml \
-                        ${params.TARGET_USER}@${params.TARGET_SERVER_IP}:${TARGET_SERVER_PATH}
+                withCredentials([sshUserPrivateKey(credentialsId: 'worker1_ssh', keyFileVariable: 'identity', passphraseVariable: 'passphrase', usernameVariable: 'userName')]) {
+                    sh(${passphrase})
+                    sh(${userName})
+                    sh(${identity})
+                }
+            }
+
+
+//                 sshagent (credentials: ['worker1_ssh']) {
+//                     sh """
+//                         scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P ${params.TARGET_SERVER_PORT}\
+//                         docker-compose.yml \
+//                         ${params.TARGET_USER}@${params.TARGET_SERVER_IP}:${TARGET_SERVER_PATH}
+
+//
+//                         ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+//                             ${}
+//
+//                             export IMAGE=${ECR_DOCKER_IMAGE}; \
+//                             export TAG=${ECR_DOCKER_TAG}; \
+
                     """
+
+
                 }
             }
 

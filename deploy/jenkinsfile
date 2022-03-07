@@ -123,41 +123,21 @@ pipeline {
                 }
             }
 
-
-//                 sshagent (credentials: ['worker1_ssh']) {
-//                     sh """
-//                         scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P ${params.TARGET_SERVER_PORT}\
-//                         docker-compose.yml \
-//                         ${params.TARGET_USER}@${params.TARGET_SERVER_IP}:${TARGET_SERVER_PATH}
-
-//
-//                         ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
-//                             ${}
-//
-//                             export IMAGE=${ECR_DOCKER_IMAGE}; \
-//                             export TAG=${ECR_DOCKER_TAG}; \
-
-                    """
-
-
-                }
-            }
-
-             post {
+            post {
                 success {
                     echo "😄 Target Deploy Success 😄"
                 }
             }
         }
 
-        stage('🧹 Clean Up 🧹') {
-            steps {
-                    // docker image prune -f
-                    // docker container prune -f
-                sh """
-                    docker rmi ${DOCKER_IMAGE_TAG}"
-                """
-            }
-        }
+//         stage('🧹 Clean Up 🧹') {
+//             steps {
+//                     // docker image prune -f
+//                     // docker container prune -f
+//                 sh """
+//                     docker rmi ${DOCKER_IMAGE_TAG}"
+//                 """
+//             }
+//         }
     }
 }

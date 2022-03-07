@@ -10,7 +10,7 @@ pipeline {
         string(name: "ENV_FILE_PATH", defaultValue: "exchange-rate/.env", description:"ENV_FILE_PATH")
 
         // CI
-        string(name: "IMANGE_NAME", defaultValue: 'exchange-rate', description: "DOCKER_IMAGE_NAME")
+        string(name: "IMAGE_NAME", defaultValue: 'exchange-rate', description: "DOCKER_IMAGE_NAME")
         string(name: "TAG_NAME", defaultValue: '0.3.0', description: "DOCKER_TAG")
         string(name: "DOCKER_REPOSITORY", defaultValue: "hub.1ife.kr", description: "DOCKER_TAG")
         string(name: "DOCKER_FILE", defaultValue: "backend/dockerfile", description: "DOCKER_FILE_PATH")
@@ -21,7 +21,7 @@ pipeline {
 
     environment {
         DOCKER_REPOSITORY = "${params.DOCKER_REPOSITORY}"
-        DOCKER_IMAGE =  "${DOCKER_REPOSITORY}/${params.IMANGE_NAME}:${params.TAG_NAME}"
+        DOCKER_IMAGE_TAG =  "${DOCKER_REPOSITORY}/${params.IMAGE_NAME}:${params.TAG_NAME}"
         ENV_FILE = "${env.ENV_PATH}/${params.ENV_FILE_PATH}"
     }
 
@@ -51,7 +51,7 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
-                    sh "docker build -f backend/dockerfile -t ${DOCKER_IMANGE} ./backend"
+                    sh "docker build -f backend/dockerfile -t ${DOCKER_IMAGE_TAG} ./backend"
                 }
             }
             post {
@@ -69,7 +69,7 @@ pipeline {
             }
             steps {
                 sh ("docker run --env-file=${ENV_FILE}\
-                --rm ${DOCKER_IMAGE} python manage.py test")
+                --rm ${DOCKER_IMAGE_TAG} python manage.py test")
             }
             post {
                 success {
@@ -87,7 +87,7 @@ pipeline {
 
             steps {
                 sh'''
-                    docker push ${ECR_DOCKER_IMAGE}:${ECR_DOCKER_TAG}
+                    docker push ${DOCKER_IMAGE_TAG}
                 '''
             }
         }
@@ -95,7 +95,7 @@ pipeline {
         // stage('🧹 Clean Up 🧹') {
         //     steps {
         //         sh """
-        //             docker rmi ${DOCKER_IMAGE}"
+        //             docker rmi ${DOCKER_IMAGE_TAG}"
         //         """
         //     }
         // }

@@ -117,9 +117,9 @@ pipeline {
 
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'worker1_ssh', keyFileVariable: 'identity', passphraseVariable: 'passphrase', usernameVariable: 'userName')]) {
-                    sh(${passphrase})
-                    sh(${userName})
-                    sh(${identity})
+                    sh'${passphrase}'
+                    sh'(${userName}'
+                    sh'(${identity})'
                 }
             }
 

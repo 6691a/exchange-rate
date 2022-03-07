@@ -116,12 +116,20 @@ pipeline {
             }
 
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'worker1_ssh', keyFileVariable: 'identity', passphraseVariable: 'pass', usernameVariable: 'user')]) {
-                    sh'${pass}'
-                    sh'(${user}'
-                    sh'(${identity})'
+//                 withCredentials([sshUserPrivateKey(credentialsId: 'worker1_ssh', keyFileVariable: 'identity', passphraseVariable: 'pass', usernameVariable: 'user')]) {
+//                     sh'${pass}'
+//                     sh'${user}'
+//                     sh'${identity}'
+// }
+                sshagent (credentials: ['aws_ec2_user_ssh']) {
+                sh """
+                    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p ${params.TARGET_SERVER_PORT}\
+                    ${params.TARGET_USER}@${params.TARGET_SERVER} \
+                    'pwd'
+                """
                 }
             }
+
 
             post {
                 success {

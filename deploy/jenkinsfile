@@ -107,6 +107,12 @@ pipeline {
         }
 
         // CD
+
+
+
+
+
+
         stage('🛫 Deploy Workload 🛫') {
             when {
                 expression {
@@ -115,31 +121,31 @@ pipeline {
             }
 
             steps {
-                    sshagent (credentials: ['worker1_ssh']) {
-                        sh """
-                            ssh -p ${params.TARGET_SERVER_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
-                                ${params.TARGET_USER}@${params.TARGET_SERVER} ;\
-                                pwd
-                        """
-                    }
-                }
-
-
-            post {
-                success {
-                    echo "😄 Target Deploy Success 😄"
+                sshagent (credentials: ['worker1_ssh']) {
+                    sh """
+                        ssh -p ${params.TARGET_SERVER_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+                            ${params.TARGET_USER}@${params.TARGET_SERVER} ;\
+                            pwd
+                    """
                 }
             }
+
+
+//             post {
+//                 success {
+//                     echo "😄 Target Deploy Success 😄"
+//                 }
+//             }
         }
 
-        stage('🧹 Clean Up 🧹') {
-            steps {
-                    // docker image prune -f
-                    // docker container prune -f
-                sh """
-                    docker rmi ${DOCKER_IMAGE_TAG}"
-                """
-            }
-        }
+//         stage('🧹 Clean Up 🧹') {
+//             steps {
+//                     // docker image prune -f
+//                     // docker container prune -f
+//                 sh """
+//                     docker rmi ${DOCKER_IMAGE_TAG}"
+//                 """
+//             }
+//         }
     }
 }

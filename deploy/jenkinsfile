@@ -5,6 +5,7 @@ pipeline {
         booleanParam(name: "BUILD", defaultValue: true, description: "DOCKER_IMAGE_BUILD")
         booleanParam(name: "TEST", defaultValue: true, description: "RUN_TEST")
         booleanParam(name: "PUSH", defaultValue: true, description: "DOCKER_IMAGE_PUSH")
+        booleanParam(name : 'DEPLOY', defaultValue : true, description : 'DEPLOY_WORKLOAD')
 
         // SETTINGS
         string(name: "ENV_FILE_PATH", defaultValue: "exchange-rate/.env", description:"ENV_FILE_PATH")
@@ -16,13 +17,20 @@ pipeline {
         string(name: "DOCKER_FILE", defaultValue: "backend/dockerfile", description: "DOCKER_FILE_PATH")
 
         // CD
+        string(name : 'TARGET_USER', defaultValue : 'juniya', description : 'TARGET_SVR_USER')
+        string(name : 'TARGET_SERVER', defaultValue : '1ife.kr', description : 'TARGET_SERVER_IP')
+        string(name : 'TARGET_SERVER_PORT', defaultValue : '4252', description : 'TARGET_SERVER_SSH_PORT')
 
     }
 
     environment {
+        // CI
         DOCKER_REPOSITORY = "${params.DOCKER_REPOSITORY}"
         DOCKER_IMAGE_TAG =  "${DOCKER_REPOSITORY}/${params.IMAGE_NAME}:${params.TAG_NAME}"
         ENV_FILE = "${env.ENV_PATH}/${params.ENV_FILE_PATH}"
+
+        // CD
+        TARGET_SERVER_PATH = "/home/${params.TARGET_USER}/"
     }
 
     stages {
@@ -56,7 +64,7 @@ pipeline {
             }
             post {
                 success {
-                    echo "😄 Docker Build success 😄"
+                    echo "😄 Docker Build Success 😄"
                 }
             }
         }
@@ -73,7 +81,7 @@ pipeline {
             }
             post {
                 success {
-                    echo "😄 Test success 😄"
+                    echo "😄 Test Success 😄"
                 }
             }
         }
@@ -90,14 +98,42 @@ pipeline {
                     docker push ${DOCKER_IMAGE_TAG}
                 '''
             }
+
+            post {
+                success {
+                    echo "😄 Image Push Success 😄"
+
+                }
+            }
         }
 
-        // stage('🧹 Clean Up 🧹') {
-        //     steps {
-        //         sh """
-        //             docker rmi ${DOCKER_IMAGE_TAG}"
-        //         """
-        //     }
-        // }
+        // CD
+        stage'🛫 Deploy Workload 🛫') {
+            when {
+                expression { 
+                    return params.DEPLOY
+                }
+            }
+
+            steps {
+                sshagent (credentials: ["worker1_ssh"]) {
+                    sh """
+                        scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -P ${params.TARGET_SERVER_PORT}\
+                        docker-compose.yml \
+                        ${params.TARGET_USER}@${params.TARGET_SERVER_IP}:${TARGET_SERVER_PATH}
+                    """
+                }
+            }
+        }
+
+        stage('🧹 Clean Up 🧹') {
+            steps {
+                    // docker image prune -f
+                    // docker container prune -f
+                sh """
+                    docker rmi ${DOCKER_IMAGE_TAG}"
+                """
+            }
+        }
     }
 }

@@ -6,8 +6,8 @@ services:
     build:
       context: ./backend
       dockerfile: dockerfile
-    # env_file:
-    #   - ./backend/.env
+    env_file:
+      - ./backend/.env
     restart: always
     expose:
       - 8000

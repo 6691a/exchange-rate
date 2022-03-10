@@ -33,20 +33,21 @@ pipeline {
     }
 
     stages {
-        stage('⚙️ Set Up ⚙️') {
-            steps {
-                script {
-                    // docker hub login
-                    withCredentials([
-                        usernamePassword(credentialsId: 'docker_hub',
-                        usernameVariable: 'USERNAME',
-                        passwordVariable: 'PASSWORD')
-                    ]) {
-                        sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
-                    }
-                }
-            }
-        }
+//         stage('⚙️ Set Up ⚙️') {
+//             steps {
+//                 script {
+//                     // docker hub login
+//                     withCredentials([
+//                         usernamePassword(credentialsId: 'docker_hub',
+//                         usernameVariable: 'USERNAME',
+//                         passwordVariable: 'PASSWORD')
+//                     ]) {
+//                         sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
+//                     }
+//                 }
+//             }
+//         }
+
         stage('🛠 Build Docker Image 🛠') {
             when {
                 expression {
@@ -85,34 +86,28 @@ pipeline {
             }
         }
 
-        stage('📮 Image Push 📮') {
-            when {
-                expression {
-                    return params.PUSH
-                }
-            }
-
-            steps {
-                sh'''
-                    docker push ${DOCKER_IMAGE_TAG}
-                '''
-            }
-
-            post {
-                success {
-                    echo "😄 Image Push Success 😄"
-
-                }
-            }
-        }
+//         stage('📮 Image Push 📮') {
+//             when {
+//                 expression {
+//                     return params.PUSH
+//                 }
+//             }
+//
+//             steps {
+//                 sh'''
+//                     docker push ${DOCKER_IMAGE_TAG}
+//                 '''
+//             }
+//
+//             post {
+//                 success {
+//                     echo "😄 Image Push Success 😄"
+//
+//                 }
+//             }
+//         }
 
         // CD
-
-
-
-
-
-
         stage('🛫 Deploy Workload 🛫') {
             when {
                 expression {

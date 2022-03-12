@@ -26,7 +26,7 @@ pipeline {
         // CI
         DOCKER_REPOSITORY = "${params.DOCKER_REPOSITORY}"
         DOCKER_IMAGE_TAG =  "${DOCKER_REPOSITORY}/${params.IMAGE_NAME}:${params.TAG_NAME}"
-        ENV_FILE = "${env.WORKSPACE}/${params.ENV_FILE_PATH}"
+        ENV_FILE = "${env.JENKINS_URL}/${params.ENV_FILE_PATH}"
 
         // CD
         TARGET_SERVER_PATH = "/home/${params.TARGET_USER}/"

@@ -30,6 +30,7 @@ media
 *.so
 
 # Distribution / packaging
+.DS_Store
 .idea
 .Python
 build/

@@ -82,10 +82,10 @@ pipeline {
             
             steps {
                 sshagent (credentials: ['jenkins_ssh']) {
-                    sh """
+                    sh """ #!/bin/bash
                         scp -P ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
                         docker-compose.yml \
-                        ${params.TARGET_USER}@${params.TARGET_SERVER}:${TARGET_SERVER_PATH}
+                        ${params.TARGET_USER}@${params.TARGET_SERVER}:${TARGET_SERVER_PATH};
                     """
                 }
                 

@@ -32,7 +32,7 @@ pipeline {
         TARGET_SERVER_PATH = "/home/${params.TARGET_USER}/"
     }
 
-    stages {
+//    stages {
 //         stage('⚙️ Set Up ⚙️') {
 //             steps {
 //                 script {

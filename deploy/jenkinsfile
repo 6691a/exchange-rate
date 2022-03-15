@@ -30,7 +30,7 @@ pipeline {
         ENV_FILE = "${env.JENKINS_HOME}/env/${params.ENV_FILE_PATH}"
 
         // CD
-        TARGET_SERVER_PATH = "/home/${params.TARGET_USER}/${env.JOB_NAME}/"
+        TARGET_SERVER_PATH = "/home/${params.TARGET_USER}/"
     }
     
     stages {
@@ -85,7 +85,7 @@ pipeline {
                     sh """ #!/bin/bash
                         scp -P ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
                         docker-compose.yml \
-                        ${params.TARGET_USER}@${params.TARGET_SERVER}:${TARGET_SERVER_PATH}/docker-compose.yml;
+                        ${params.TARGET_USER}@${params.TARGET_SERVER}:${TARGET_SERVER_PATH};
                     """
                 }
                 

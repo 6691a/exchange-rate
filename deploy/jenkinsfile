@@ -33,7 +33,6 @@ pipeline {
     }
     
     stages {
-
         stage('🛠 Build Docker Image 🛠') {
             when {
                 expression {
@@ -101,6 +100,7 @@ pipeline {
                         echo "😄 Target Deploy Success 😄"
                     }
                 }
+            }
         }
 
         stage('🧹 Clean Up 🧹') {

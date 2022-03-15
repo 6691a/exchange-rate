@@ -82,7 +82,7 @@ pipeline {
             
             steps {
                 sshagent (credentials: ['worker1_ssh']) {
-                    sh """ scp -P ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
+                    sh """scp -P ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
                         docker-compose.yml \
                         ${params.TARGET_USER}@${params.TARGET_SERVER}:${TARGET_SERVER_PATH}
                     """

@@ -31,6 +31,7 @@ pipeline {
         // CD
         TARGET_SERVER_PATH = "/home/${params.TARGET_USER}/"
     }
+    
     stages {
 
         stage('🛠 Build Docker Image 🛠') {
@@ -72,7 +73,6 @@ pipeline {
         }
 
         // CD
-
         stage('🛫 Deploy Workload 🛫') {
             when {
                 expression {
@@ -113,42 +113,4 @@ pipeline {
             }
         }
     }
-//         stage('⚙️ Set Up ⚙️') {
-//             steps {
-//                 script {
-//                     // docker hub login
-//                     withCredentials([
-//                         usernamePassword(credentialsId: 'docker_hub',
-//                         usernameVariable: 'USERNAME',
-//                         passwordVariable: 'PASSWORD')
-//                     ]) {
-//                         sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
-//                     }
-//                 }
-//             }
-//         }
-
-
-
-//         stage('📮 Image Push 📮') {
-//             when {
-//                 expression {
-//                     return params.PUSH
-//                 }
-//             }
-//
-//             steps {
-//                 sh'''
-//                     docker push ${DOCKER_IMAGE_TAG}
-//                 '''
-//             }
-//
-//             post {
-//                 success {
-//                     echo "😄 Image Push Success 😄"
-//
-//                 }
-//             }
-//         }
-
 }

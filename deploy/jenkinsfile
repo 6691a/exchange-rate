@@ -31,22 +31,7 @@ pipeline {
         // CD
         TARGET_SERVER_PATH = "/home/${params.TARGET_USER}/"
     }
-
-//    stages {
-//         stage('⚙️ Set Up ⚙️') {
-//             steps {
-//                 script {
-//                     // docker hub login
-//                     withCredentials([
-//                         usernamePassword(credentialsId: 'docker_hub',
-//                         usernameVariable: 'USERNAME',
-//                         passwordVariable: 'PASSWORD')
-//                     ]) {
-//                         sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
-//                     }
-//                 }
-//             }
-//         }
+    stages {
 
         stage('🛠 Build Docker Image 🛠') {
             when {
@@ -86,6 +71,65 @@ pipeline {
             }
         }
 
+        // CD
+
+        stage('🛫 Deploy Workload 🛫') {
+            when {
+                expression {
+                    return params.DEPLOY
+                }
+            }
+            
+            steps {
+                sshagent (credentials: ['worker1_ssh']) {
+                    sh """#!/bin/bash
+                        scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+                            deploy/docker-compose.yml \
+                            ${params.TARGET_SVR_USER}@${params.TARGET_SVR}:${params.TARGET_SVR_PATH};
+                        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+                            ${params.TARGET_SVR_USER}@${params.TARGET_SVR} \
+                            'aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}; \
+                            export IMAGE=${ECR_DOCKER_IMAGE}; \
+                            export TAG=${ECR_DOCKER_TAG}; \
+                            docker-compose -f docker-compose.yml down;
+                            docker-compose -f docker-compose.yml up -d';
+                    """
+                }
+
+                post {
+                    success {
+                        echo "😄 Target Deploy Success 😄"
+                    }
+                }
+        }
+
+        stage('🧹 Clean Up 🧹') {
+            steps {
+                    // docker image prune -f
+                    // docker container prune -f
+                sh """
+                    docker rmi ${DOCKER_IMAGE_TAG}"
+                """
+            }
+        }
+    }
+//         stage('⚙️ Set Up ⚙️') {
+//             steps {
+//                 script {
+//                     // docker hub login
+//                     withCredentials([
+//                         usernamePassword(credentialsId: 'docker_hub',
+//                         usernameVariable: 'USERNAME',
+//                         passwordVariable: 'PASSWORD')
+//                     ]) {
+//                         sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
+//                     }
+//                 }
+//             }
+//         }
+
+
+
 //         stage('📮 Image Push 📮') {
 //             when {
 //                 expression {
@@ -107,45 +151,4 @@ pipeline {
 //             }
 //         }
 
-        // CD
-        stage('🛫 Deploy Workload 🛫') {
-            when {
-                expression {
-                    return params.DEPLOY
-                }
-            }
-            
-            steps {
-            sshagent (credentials: ['worker1_ssh']) {
-                sh """#!/bin/bash
-                    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
-                        deploy/docker-compose.yml \
-                        ${params.TARGET_SVR_USER}@${params.TARGET_SVR}:${params.TARGET_SVR_PATH};
-                    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
-                        ${params.TARGET_SVR_USER}@${params.TARGET_SVR} \
-                        'aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}; \
-                         export IMAGE=${ECR_DOCKER_IMAGE}; \
-                         export TAG=${ECR_DOCKER_TAG}; \
-                         docker-compose -f docker-compose.yml down;
-                         docker-compose -f docker-compose.yml up -d';
-                """
-            }
-
-            post {
-                success {
-                    echo "😄 Target Deploy Success 😄"
-                }
-            }
-        }
-
-//         stage('🧹 Clean Up 🧹') {
-//             steps {
-//                     // docker image prune -f
-//                     // docker container prune -f
-//                 sh """
-//                     docker rmi ${DOCKER_IMAGE_TAG}"
-//                 """
-//             }
-//         }
-    }
 }

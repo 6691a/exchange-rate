@@ -19,7 +19,7 @@ pipeline {
         // CD
         string(name : 'TARGET_USER', defaultValue : 'juniya', description : 'TARGET_SVR_USER')
         string(name : 'TARGET_SERVER', defaultValue : '1ife.kr', description : 'TARGET_SERVER_IP')
-        string(name : 'TARGET_SERVER_PORT', defaultValue : '4252', description : 'TARGET_SERVER_SSH_PORT')
+        string(name : 'TARGET_PORT', defaultValue : '4252', description : 'TARGET_SERVER_SSH_PORT')
     }
 
     environment {
@@ -83,7 +83,7 @@ pipeline {
             steps {
                 sshagent (credentials: ['worker1_ssh']) {                                                                                                                                              
                     sh """#!/bin/bash
-                        scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p ${params.TARGET_SERVER} \
+                        scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p ${params.TARGET_PORT} \
                             docker-compose.yml \
                             ${params.TARGET_USER}@${params.TARGET_SERVER}:${TARGET_SERVER_PATH};
 

@@ -87,6 +87,26 @@ pipeline {
             }
         }
 
+        stage('📮 Image Push 📮') {
+            when {
+                expression {
+                    return params.PUSH
+                }
+            }
+
+            steps {
+                sh'''
+                    docker push ${DOCKER_IMAGE_TAG}
+                '''
+            }
+
+            post {
+                success {
+                    echo "😄 Image Push Success 😄"
+                }
+            }
+        }
+
         // CD
         stage('🛫 Deploy Workload 🛫') {
             when {

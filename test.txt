@@ -2,26 +2,7 @@
 
 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
 
-//         stage('📮 Image Push 📮') {
-//             when {
-//                 expression {
-//                     return params.PUSH
-//                 }
-//             }
-//
-//             steps {
-//                 sh'''
-//                     docker push ${DOCKER_IMAGE_TAG}
-//                 '''
-//             }
-//
-//             post {
-//                 success {
-//                     echo "😄 Image Push Success 😄"
-//
-//                 }
-//             }
-//         }
+
 
 
  sh """#!/bin/bash

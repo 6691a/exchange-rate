@@ -34,6 +34,21 @@ pipeline {
     }
     
     stages {
+        stage('⚙️ Set Up ⚙️') {
+            steps {
+                script {
+                    // docker hub login
+                    withCredentials([
+                        usernamePassword(credentialsId: 'docker_hub',
+                        usernameVariable: 'USERNAME',
+                        passwordVariable: 'PASSWORD')
+                    ]) {
+                        sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
+                    }
+                }
+            }
+        }
+
         stage('🛠 Build Docker Image 🛠') {
             when {
                 expression {
@@ -98,14 +113,14 @@ pipeline {
             }
         }
 
-        // stage('🧹 Clean Up 🧹') {
-        //     steps {
-        //             // docker image prune -f
-        //             // docker container prune -f
-        //         sh """
-        //             docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG}"
-        //         """
-        //     }
-        // }
+        stage('🧹 Clean Up 🧹') {
+            steps {
+                    // docker image prune -f
+                    // docker container prune -f
+                sh """
+                    docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                """
+            }
+        }
     }
 }

@@ -1,17 +1,4 @@
-//         stage('⚙️ Set Up ⚙️') {
-//             steps {
-//                 script {
-//                     // docker hub login
-//                     withCredentials([
-//                         usernamePassword(credentialsId: 'docker_hub',
-//                         usernameVariable: 'USERNAME',
-//                         passwordVariable: 'PASSWORD')
-//                     ]) {
-//                         sh 'docker login ${DOCKER_REPOSITORY} -u ${USERNAME} -p ${PASSWORD}'
-//                     }
-//                 }
-//             }
-//         }
+
 
 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
 

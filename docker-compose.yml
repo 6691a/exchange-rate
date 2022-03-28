@@ -5,7 +5,7 @@ services:
     container_name: exchange_rate
     build:
       context: ./backend
-      dockerfile: dockerfile
+      dockerfile: ${IMAGE}:${TAG}
     env_file:
       - ./backend/.env
     restart: always

@@ -3,21 +3,14 @@ version: "3.8"
 services:
   django:
     container_name: exchange_rate
-    build:
-      context: ./backend
-      dockerfile: ${IMAGE}:${TAG}
-    env_file:
-      - ./backend/.env
+    image: ${DJANGO_IMAGE}:${DJANGO_TAG}
     restart: always
     expose:
       - 8000
 
   nginx:
     container_name: nginx
-    build: 
-      context: ./nginx
-      dockerfile: dockerfile
-    image: nginx_django:1.19.0-alpine
+    image: ${NAINX_IMAGE}:${NGINX_TAG}
     restart: always
     ports:
       - 80:80

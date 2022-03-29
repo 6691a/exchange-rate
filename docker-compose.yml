@@ -3,6 +3,8 @@ version: "3.8"
 services:
   django:
     container_name: exchange_rate
+    env_file:
+      - ./.env
     image: ${DJANGO_IMAGE}:${DJANGO_TAG}
     restart: always
     expose:

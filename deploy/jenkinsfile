@@ -128,7 +128,9 @@ pipeline {
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         docker-compose -f docker-compose.yml down;\
-                        docker-compose -f docker-compose.yml --env-file .env up -d;'
+                        echo ${DJANGO_IMAGE}
+                        echo ${DJANGO_TAG}
+                        docker-compose -f docker-compose.yml up -d;'
 
 
                 """

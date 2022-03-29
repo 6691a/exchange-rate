@@ -58,7 +58,7 @@ pipeline {
                 dir("${env.WORKSPACE}") {
                     // DJANGO BUILD
                     sh "docker build -f backend/dockerfile -t ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG} ./backend"
-                    
+
                     // NGINX BUILD
                 }
             }
@@ -127,7 +127,9 @@ pipeline {
                         'sh echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_TAG}; \
-                        docker-compose -f docker-compose.yml down;'
+                        docker-compose -f docker-compose.yml down;\
+                        docker-compose -f docker-compose.yml --env-file .env up -d;'
+
 
                 """
                 }

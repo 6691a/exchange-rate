@@ -56,7 +56,10 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
+                    // DJANGO BUILD
                     sh "docker build -f backend/dockerfile -t ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG} ./backend"
+                    
+                    // NGINX BUILD
                 }
             }
             post {
@@ -121,7 +124,7 @@ pipeline {
                 sh """
                     ssh -p ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
                         ${params.TARGET_USER}@${params.TARGET_SERVER} \
-                        'sh echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REPOSITORY} -u ${DOCKER_HUB_USR} --password-stdin; \
+                        'sh echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_TAG}; \
                         docker-compose -f docker-compose.yml down;'
@@ -142,7 +145,7 @@ pipeline {
                     // docker image prune -f
                     // docker container prune -f
                 sh """
-                    docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG}
+                    docker rmi ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG}
                 """
             }
         }

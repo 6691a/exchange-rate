@@ -1,5 +1,7 @@
 FROM python:3.9-alpine 
 
+WORKDIR /app
+
 COPY ["requirements/common.txt", "requirements/prod.txt" ,"./"].
 
 RUN apk update && apk add bash
@@ -7,8 +9,6 @@ RUN apk update && apk add bash
 RUN pip install --upgrade pip
 
 RUN pip install --user -r prod.txt
-
-WORKDIR /app
 
 EXPOSE 8000
 

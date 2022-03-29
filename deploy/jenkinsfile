@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     // docker hub login
-                    sh 'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REPOSITORY} -u ${DOCKER_HUB_USR} --password-stdin'
+                    sh 'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin'
                 }
             }
         }
@@ -56,7 +56,7 @@ pipeline {
                 // env.WORKSPACE는 jenkins가 설정해 준 환경 값
                 // /var/jenkins_home/wrkspace/test
                 dir("${env.WORKSPACE}") {
-                    sh "docker build -f backend/dockerfile -t ${DOCKER_IMAGE}:${DOCKER_TAG} ./backend"
+                    sh "docker build -f backend/dockerfile -t ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG} ./backend"
                 }
             }
             post {
@@ -74,7 +74,7 @@ pipeline {
             }
             steps {
                 sh ("docker run --env-file=${ENV_FILE}\
-                --rm ${DOCKER_IMAGE}:${DOCKER_TAG} python manage.py test")
+                --rm ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG} python manage.py test")
             }
             post {
                 success {
@@ -92,7 +92,7 @@ pipeline {
 
             steps {
                 sh'''
-                    docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+                    docker push ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG}
                 '''
             }
 
@@ -122,8 +122,8 @@ pipeline {
                     ssh -p ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
                         ${params.TARGET_USER}@${params.TARGET_SERVER} \
                         'sh echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REPOSITORY} -u ${DOCKER_HUB_USR} --password-stdin; \
-                        export DJANGO_IMAGE=${DOCKER_IMAGE}; \
-                        export DJANGO_IMAGE=${DOCKER_TAG}; \
+                        export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
+                        export DJANGO_IMAGE=${DJANGO_DOCKER_TAG}; \
                         docker-compose -f docker-compose.yml down;'
 
                 """

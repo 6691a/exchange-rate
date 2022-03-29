@@ -18,5 +18,5 @@ COPY . .
 # RUN adduser -u 8080 --disabled-password --gecos "" exchange-rate && chown -R exchange-rate /app
 # USER exchange-rate 
 
-RUN ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile", "./gunicorn-access.log", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile", "./gunicorn-access.log", "--bind", "0.0.0.0:8000"]
 

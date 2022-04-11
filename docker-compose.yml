@@ -11,7 +11,7 @@ services:
       - 8000
   nginx:
     container_name: nginx
-    image: ${NAINX_IMAGE}:${NGINX_TAG}
+    image: ${NGINX_IMAGE}:${NGINX_TAG}
     restart: always
     ports:
       - 80:80

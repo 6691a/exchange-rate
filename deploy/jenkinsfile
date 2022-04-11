@@ -140,20 +140,18 @@ pipeline {
                         'sh echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
-                        export NAINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
-                        export NAINX_TAG=${NGINX_DOCKER_TAG}; \
+                        export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
+                        export NGINX_TAG=${NGINX_DOCKER_TAG}; \
                         docker-compose -f docker-compose.yml down;\
                         docker-compose -f docker-compose.yml up -d;'
-
-
                 """
                 }
 
-                // post {
-                //     success {
-                //         echo "😄 Target Deploy Success 😄"
-                //     }
-                // }
+                post {
+                    success {
+                        echo "😄 Target Deploy Success 😄"
+                    }
+                }
             }
         }
 
@@ -163,6 +161,8 @@ pipeline {
                     // docker container prune -f
                 sh """
                     docker rmi ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG}
+                    docker rmi ${NGINX_DOCKER_IMAGE}:${NGINX_DOCKER_TAG}
+
                 """
             }
         }

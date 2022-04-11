@@ -6,11 +6,13 @@ services:
     env_file:
       - ./.env
     image: ${DJANGO_IMAGE}:${DJANGO_TAG}
+    # image: hub.1ife.kr/exchange-rate:0.3.0
     restart: always
     expose:
       - 8000
   nginx:
     container_name: nginx
+    # image: hub.1ife.kr/nginx:0.1.0
     image: ${NGINX_IMAGE}:${NGINX_TAG}
     restart: always
     ports:

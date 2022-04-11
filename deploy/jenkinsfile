@@ -143,7 +143,7 @@ pipeline {
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
                         docker-compose -f docker-compose.yml down;\
-                        docker-compose -f docker-compose.yml up -d;'
+                        docker-compose -f docker-compose.yml up -d --build;'
                 """
                 }
             }

@@ -106,6 +106,8 @@ pipeline {
             steps {
                 sh (
                     "docker push ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG}"
+                )
+                sh (
                     "docker push ${NGINX_DOCKER_IMAGE}:${NGINX_DOCKER_TAG}"
                 )
             }

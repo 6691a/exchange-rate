@@ -12,8 +12,11 @@ pipeline {
         string(name: "DOCKER_REGISTRY", defaultValue: "hub.1ife.kr", description: "DOCKER_REGISTRY")
 
         // CI
-        string(name: "DJANGO_IMAGE_NAME", defaultValue: 'exchange-rate', description: "DOCKER_IMAGE_NAME")
-        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.3.0', description: "DOCKER_TAG")
+        string(name: "DJANGO_IMAGE_NAME", defaultValue: 'exchange-rate', description: "DJANGO_IMAGE_NAME")
+        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.3.0', description: "DJANGO_IMAGE_TAG")
+        string(name: "NGINX_IMAGE_NAME", defaultValue: 'nginx', description: "NGINX_IMAGE_NAME")
+        string(name: "NGINX_IMAGE_TAG", defaultValue: '0.1.0', description: "NGINX_IMAGE_TAG")
+
 
         // CD
         string(name : 'TARGET_USER', defaultValue : 'juniya', description : 'TARGET_SVR_USER')
@@ -27,8 +30,12 @@ pipeline {
 
         // CI
         DOCKER_REGISTRY = "${params.DOCKER_REGISTRY}"
-        DJANGO_DOCKER_IMAGE =  "${DOCKER_REGISTRY}/${params.DJANGO_IMAGE_NAME}"
+
+        DJANGO_DOCKER_IMAGE = "${DOCKER_REGISTRY}/${params.DJANGO_IMAGE_NAME}"
         DJANGO_DOCKER_TAG = "${params.DJANGO_IMAGE_TAG}"
+        NGINX_DOCKER_IMAGE="${DOCKER_REGISTRY}/${params.NGINX_IMAGE_NAME}"
+        NGINX_DOCKER_TAG = "${params.NGINX_IMAGE_TAG}"
+
         ENV_FILE = "${env.JENKINS_HOME}/env/${params.ENV_FILE_PATH}"
 
         // CD
@@ -60,6 +67,7 @@ pipeline {
                     sh "docker build -f backend/dockerfile -t ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG} ./backend"
 
                     // NGINX BUILD
+                    sh "docker build -f nginx/dockerfile -t ${NGINX_DOCKER_IMAGE}:${NGINX_DOCKER_TAG} ./nginx"
                 }
             }
             post {
@@ -76,8 +84,10 @@ pipeline {
                 }
             }
             steps {
-                sh ("docker run --env-file=${ENV_FILE}\
-                --rm ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG} python manage.py test")
+                sh (
+                    "docker run --env-file=${ENV_FILE}\
+                    --rm ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG} python manage.py test"
+                )
             }
             post {
                 success {
@@ -94,9 +104,12 @@ pipeline {
             }
 
             steps {
-                sh'''
-                    docker push ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG}
-                '''
+                sh(
+                    "docker push ${DJANGO_DOCKER_IMAGE}:${DJANGO_DOCKER_TAG}";
+                )
+                sh (
+                    "docker push ${NGINX_DOCKER_IMAGE}:${NGINX_DOCKER_TAG}"";
+                )
             }
 
             post {
@@ -127,6 +140,8 @@ pipeline {
                         'sh echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
+                        export DJANGO_IMAGE=${NGINX_DOCKER_IMAGE}; \
+                        export DJANGO_TAG=${NGINX_DOCKER_TAG}; \
                         docker-compose -f docker-compose.yml down;\
                         docker-compose -f docker-compose.yml up -d;'
 

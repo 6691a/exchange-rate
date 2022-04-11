@@ -9,11 +9,11 @@ services:
     restart: always
     expose:
       - 8000
-  # nginx:
-  #   container_name: nginx
-  #   image: ${NAINX_IMAGE}:${NGINX_TAG}
-  #   restart: always
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #   - django
+  nginx:
+    container_name: nginx
+    image: ${NAINX_IMAGE}:${NGINX_TAG}
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - django

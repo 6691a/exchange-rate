@@ -137,7 +137,7 @@ pipeline {
                 sh """
                     ssh -p ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
                         ${params.TARGET_USER}@${params.TARGET_SERVER} \
-                        'sh echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
+                        'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \

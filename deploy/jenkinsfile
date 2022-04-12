@@ -135,9 +135,9 @@ pipeline {
                     ${params.TARGET_USER}@${params.TARGET_SERVER}:${TARGET_SERVER_PATH};
                 """
                 sh """
-                    ssh -p ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+                        ssh -p ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
                         ${params.TARGET_USER}@${params.TARGET_SERVER} \
-                        'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
+                        '
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
@@ -145,6 +145,8 @@ pipeline {
                         docker-compose -f docker-compose.yml down;\
                         docker-compose -f docker-compose.yml up -d --build;'
                 """
+                        // docker login error -> 수동 로그인으로 변경
+                        // echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
                 }
             }
             
@@ -168,4 +170,3 @@ pipeline {
         }
     }
 }
-

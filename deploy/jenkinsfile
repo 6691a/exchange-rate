@@ -122,20 +122,20 @@ pipeline {
         stage('Prompt for deploy') {
             when { 
                 expression { 
-                    return params.PROMPT_FOR_DEPLOY 
+                    return params.PROMPT_FOR_DEPLOY
                 } 
             }
-            
-            // steps {
-            //     script {
-            //         env.APPROAL_NUM = input message: 'Please enter the approval number',
-            //                         parameters: [string(defaultValue: '',
-            //                                     description: '',
-            //                                     name: 'APPROVAL_NUM')]
-            //     }
-
-            //     echo "${env.APPROAL_NUM}"
-            // }
+        
+            steps {
+                input 'Deploy this?'
+                // script {
+                //     env.APPROAL_NUM = input message: 'Please enter the approval number',
+                //                       parameters: [string(defaultValue: '',
+                //                                    description: '',
+                //                                    name: 'APPROVAL_NUM')]
+                // }
+                // echo "${env.APPROAL_NUM}"
+            }
         }
         // CD
         stage('🛫 Deploy Workload 🛫') {

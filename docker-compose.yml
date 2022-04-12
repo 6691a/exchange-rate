@@ -10,6 +10,9 @@ services:
     restart: always
     expose:
       - 8000
+    depends_on:
+      - postgres
+
   nginx:
     container_name: nginx
     # image: hub.1ife.kr/nginx:0.1.0
@@ -19,3 +22,15 @@ services:
       - 80:80
     depends_on:
       - django
+
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - ./data/:./var/lib/postgresql/data
+    ports:
+      - 5432:5432

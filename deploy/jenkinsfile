@@ -6,6 +6,7 @@ pipeline {
         booleanParam(name: "TEST", defaultValue: true, description: "RUN_TEST")
         booleanParam(name: "PUSH", defaultValue: true, description: "DOCKER_IMAGE_PUSH")
         booleanParam(name : 'DEPLOY', defaultValue : true, description : 'DEPLOY_WORKLOAD')
+        booleanParam(name : 'PROMPT_FOR_DEPLOY', defaultValue : false, description : 'PROMPT_FOR_DEPLOY')
 
         // SETTINGS
         string(name: "ENV_FILE_PATH", defaultValue: "exchange-rate/.env", description:"ENV_FILE_PATH")
@@ -118,7 +119,24 @@ pipeline {
                 }
             }
         }
+        stage('Prompt for deploy') {
+            when { 
+                expression { 
+                    return params.PROMPT_FOR_DEPLOY 
+                } 
+            }
+            
+            // steps {
+            //     script {
+            //         env.APPROAL_NUM = input message: 'Please enter the approval number',
+            //                         parameters: [string(defaultValue: '',
+            //                                     description: '',
+            //                                     name: 'APPROVAL_NUM')]
+            //     }
 
+            //     echo "${env.APPROAL_NUM}"
+            // }
+        }
         // CD
         stage('🛫 Deploy Workload 🛫') {
             when {
@@ -167,6 +185,23 @@ pipeline {
 
                 """
             }
+        }
+    }
+
+    post {
+        success {
+            slackSend(
+                channel: "#jenkins",
+                color: "good",
+                message: "[Successful] Job:${env.JOB_NAME}, Build num:#${env.BUILD_NUMBER} (<${env.RUN_DISPLAY_URL}|open job detail>)"
+            )
+        }
+        failure {
+            slackSend(
+                channel: "#jenkins",
+                color: "danger",
+                message: "[Failed] Job:${env.JOB_NAME}, Build num:#${env.BUILD_NUMBER} @channel (<${env.RUN_DISPLAY_URL}|open job detail>)"
+            )
         }
     }
 }

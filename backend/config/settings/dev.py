@@ -9,9 +9,10 @@ class Env(BaseSettings):
     DB_HOST: str
     DB_PORT: str
     DB_NAME: str
-
+    
     # Django
     SECRET_KEY: SecretStr
+    TIME_ZONE: str
 
     class Config:
         env_file = "dev.env"
@@ -43,3 +44,4 @@ DATABASES = {
     }
 }
 
+TIME_ZONE = env.TIME_ZONE

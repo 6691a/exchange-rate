@@ -50,6 +50,16 @@ pipeline {
                     // docker hub login
                     sh 'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin'
                 }
+
+                agent {
+                    docker { image 'gitguardian/ggshield:latest' }
+                }
+                environment {
+                    GITGUARDIAN_API_KEY = credentials('gitguardian')
+                }
+                steps {
+                    sh 'ggshield scan ci'
+                }
             }
         }
 

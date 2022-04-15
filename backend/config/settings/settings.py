@@ -70,6 +70,8 @@ TEMPLATES = [
     },
 ]
 
+# git guardian test
+SECRET_KEY = "12ffha43123a652@1sdfaghnbasd"
 WSGI_APPLICATION = "config.wsgi.application"
 
 

@@ -49,6 +49,7 @@ pipeline {
             steps {
                 // git guardian
                 sh 'ggshield scan ci'
+
                 // docker hub login
                 sh 'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin'
             }
@@ -59,6 +60,7 @@ pipeline {
                 expression {
                     return params.BUILD
                 }
+
             }
 
             steps {
@@ -201,7 +203,7 @@ pipeline {
             slackSend(
                 channel: "#jenkins",
                 color: "danger",
-                message: "[Failed] Job:${env.JOB_NAME}, Build num:#${env.BUILD_NUMBER} @channel (<${env.RUN_DISPLAY_URL}|open job detail>)"
+                message: "[Failed] Job:${env.JOB_NAME}, Build num:#${env.BUILD_NUMBER} (<${env.RUN_DISPLAY_URL}|open job detail>)"
             )
         }
     }

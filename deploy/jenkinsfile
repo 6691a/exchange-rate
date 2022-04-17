@@ -28,7 +28,8 @@ pipeline {
     environment {
         // CREDENTIALS
         DOCKER_HUB=credentials('docker_hub')
-        GITGUARDIAN = credentials('gitguardian')
+        GITGUARDIAN_API_KEY = credentials('gitguardian')
+
         // CI
         DOCKER_REGISTRY = "${params.DOCKER_REGISTRY}"
 
@@ -59,6 +60,7 @@ pipeline {
                 expression {
                     return params.BUILD
                 }
+
             }
 
             steps {
@@ -201,7 +203,7 @@ pipeline {
             slackSend(
                 channel: "#jenkins",
                 color: "danger",
-                message: "[Failed] Job:${env.JOB_NAME}, Build num:#${env.BUILD_NUMBER} @channel (<${env.RUN_DISPLAY_URL}|open job detail>)"
+                message: "[Failed] Job:${env.JOB_NAME}, Build num:#${env.BUILD_NUMBER} (<${env.RUN_DISPLAY_URL}|open job detail>)"
             )
         }
     }

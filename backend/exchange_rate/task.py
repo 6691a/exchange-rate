@@ -33,3 +33,8 @@ class Currency:
 def update_exchange_rate():
     c = Currency()
     c.update()
+
+@shared_task
+def test():
+    print ("Testing exchange rate")
+    

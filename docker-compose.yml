@@ -34,3 +34,13 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  celery_worker:
+    container_name: celery_worker
+    image: django
+    volumes: -./:/home/
+    command: celery -A backend worker --loglevel=info
+
+  celery_beat:
+    container_name: celery_beat
+    command: celery -A backend beat --loglevel=info

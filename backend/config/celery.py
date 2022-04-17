@@ -15,8 +15,14 @@ def debug_task(self):
 
 
 app.conf.beat_schedule = {
-	'update_exchange_rate': {
-		'task': 'update_exchange_rate',
-		'schedule': crontab(minute='*/30'),
+	# 'update_exchange_rate': {
+	# 	'task': 'update_exchange_rate',
+	# 	'schedule': crontab(minute='*/30'),
+	# },
+	'test': {
+		'task': 'test',
+		# 'schedule': crontab(minute='*/30'),
+		'schedule': 5,
 	},
 }
+

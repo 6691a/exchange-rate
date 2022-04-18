@@ -163,7 +163,8 @@ pipeline {
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
-                        docker-compose -f docker-compose.yml down docker-compose rm -f;\
+                        docker-compose -f docker-compose.yml down; \
+                        docker-compose rm -f; \
                         docker-compose -f docker-compose.yml up -d --build;'
                 """
                         // docker login error -> 수동 로그인으로 변경

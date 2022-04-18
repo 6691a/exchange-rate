@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   django:
-    &django
+    &backend
     container_name: exchange_rate
     env_file:
       - ./.env
@@ -29,8 +29,8 @@ services:
     restart: always
     image: postgres
     environment:
-      POSTGRES_USER: "${DB_USERNAME}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./data/:/var/lib/postgresql/data
     ports:
@@ -38,16 +38,16 @@ services:
 
   celery_worker:
     container_name: celery_worker
-    <<: *django
-    # command: celery -A backend worker --loglevel=info
+    <<: *backend
+    command: celery -A backend worker --loglevel=info
     depends_on:
       - django
       - postgres
 
   celery_beat:
     container_name: celery_beat
-    <<: *django
-    # command: celery -A backend beat --loglevel=info
+    <<: *backend
+    command: celery -A backend beat --loglevel=info
     depends_on:
       - django
       - postgres

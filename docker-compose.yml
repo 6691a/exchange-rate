@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   django:
+    &django
     container_name: exchange_rate
     env_file:
       - ./.env
@@ -37,16 +38,16 @@ services:
 
   celery_worker:
     container_name: celery_worker
-    image: django
-    command: celery -A backend worker --loglevel=info
+    <<: *django
+    # command: celery -A backend worker --loglevel=info
     depends_on:
       - django
       - postgres
 
   celery_beat:
     container_name: celery_beat
-    image: django
-    command: celery -A backend beat --loglevel=info
+    <<: *django
+    # command: celery -A backend beat --loglevel=info
     depends_on:
       - django
       - postgres

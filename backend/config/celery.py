@@ -19,7 +19,7 @@ app.conf.beat_schedule = {
 	# 	'schedule': crontab(minute='*/30'),
 	# },
 	'test_code': {
-		'task': 'exchange_rate.task.test',
+		'task': 'test',
 		# 'schedule': crontab(minute='*/30'),
 		'schedule': 5,
 	},

@@ -12,44 +12,41 @@ services:
     restart: always
     expose:
       - 8000
-    depends_on:
-      - postgres
+    # depends_on:
+      # - postgres
 
   nginx:
     container_name: nginx
-    build: 
-      context: ./nginx
-      dockerfile: dockerfile
-    # image: nginx_django:1.19.0-alpine
+    # image: ${NGINX_IMAGE}:${NGINX_TAG}
+    image: hub.1ife.kr/nginx:0.1.0
     restart: always
     ports:
       - 80:80
     depends_on:
-    - django
+      - django
 
-  postgres:
-    container_name: "postgres"
-    restart: always
-    image: postgres
-    environment:
-      POSTGRES_USER: "${DB_USERNAME}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
-    volumes:
-      - ./data/:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
+  # postgres:
+  #   container_name: "postgres"
+  #   restart: always
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: "${DB_USERNAME}"
+  #     POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  #   volumes:
+  #     - ./data/:/var/lib/postgresql/data
+  #   ports:
+  #     - 5432:5432
 
-  # celery_worker:
-  #   <<: *django
-  #   container_name: "celery_worker"
-  #   command: celery -A config worker --loglevel=info
-  #   depends_on:
-  #     - postgres
+  celery_worker:
+    <<: *django
+    container_name: "celery_worker"
+    command: celery -A config worker --loglevel=info
+    # depends_on:
+    #   - postgres
   
-  # celery_beat:
-  #   <<: *django
-  #   container_name: "celery_beat"
-  #   # image: django
-  #   command: celery -A backend beat --loglevel=info
-  #   depends_on:
-  #     - postgres
+  celery_beat:
+    <<: *django
+    container_name: "celery_beat"
+    command: celery -A config beat --loglevel=info
+    # depends_on:
+    #   - postgres

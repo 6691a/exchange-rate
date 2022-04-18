@@ -15,7 +15,7 @@ class Env(BaseSettings):
     TIME_ZONE: str
     EXCHANGE_RATE_API_URL: str
     
-    CELERY_BROKER_URL:SecretStr 
+    CELERY_BROKER_URL: SecretStr 
 
     class Config:
         env_file = ".env"

@@ -39,15 +39,13 @@ services:
   celery_worker:
     <<: *django
     container_name: "celery_worker"
-    # image: django
     command: celery -A config worker --loglevel=info
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
 
   celery_beat:
     <<: *django
     container_name: "celery_beat"
-    # image: django
     command: celery -A config beat --loglevel=info
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres

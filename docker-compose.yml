@@ -44,11 +44,10 @@ services:
     command: celery -A backend worker --loglevel=info
     depends_on:
       - postgres
-
-  celery_beat:
-    <<: *django
-    container_name: "celery_beat"
-    # image: django
-    command: celery -A backend beat --loglevel=info
-    depends_on:
-      - postgres
+  # celery_beat:
+  #   <<: *django
+  #   container_name: "celery_beat"
+  #   # image: django
+  #   command: celery -A backend beat --loglevel=info
+  #   depends_on:
+  #     - postgres

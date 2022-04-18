@@ -13,7 +13,6 @@ services:
       - 8000
     depends_on:
       - postgres
-      - celery_worker
 
   nginx:
     container_name: nginx

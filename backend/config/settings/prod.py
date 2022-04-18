@@ -54,6 +54,7 @@ EXCHANGE_RATE_API_URL = env.EXCHANGE_RATE_API_URL
 
 # celery settings
 CELERY_ALWAYS_EAGER = True
+# CELERY_BROKER_URL = 'amqp://[user_name]:[password]@localhost/[vhost_name]'
 CELERY_BROKER_URL = env.CELERY_BROKER_URL
 # CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']

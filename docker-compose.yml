@@ -40,8 +40,14 @@ services:
     image: django
     volumes: -./:/home/
     command: celery -A backend worker --loglevel=info
+    depends_on:
+      - django
+      - postgres
 
   celery_beat:
     container_name: celery_beat
     image: django
     command: celery -A backend beat --loglevel=info
+    depends_on:
+      - django
+      - postgres

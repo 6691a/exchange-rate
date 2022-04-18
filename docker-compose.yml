@@ -4,6 +4,7 @@ services:
   x_backend:
     &backend
     image: ${DJANGO_IMAGE}:${DJANGO_TAG}
+    container_name: test_backend
     env_file:
       - ./.env
     depends_on:
@@ -41,14 +42,13 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - 5432:5432
-  # celery_worker:
-  #   container_name: celery_worker
-  #   <<: *backend
-  #   command: celery -A backend worker --loglevel=info
-  #   depends_on:
-  #     - django
-  #     - postgres
-
+  celery_worker:
+    container_name: celery_worker
+    <<: *backend
+    command: celery -A backend worker --loglevel=info
+    depends_on:
+      - django
+      - postgres
   # celery_beat:
   #   container_name: celery_beat
   #   <<: *backend

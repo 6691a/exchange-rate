@@ -1,23 +1,29 @@
 version: "3.8"
 
 services:
-  django:
+  x_backend:
     &backend
-    container_name: exchange_rate
+    image: ${DJANGO_IMAGE}:${DJANGO_TAG}
     env_file:
       - ./.env
-    # image: ${DJANGO_IMAGE}:${DJANGO_TAG}
-    image: hub.1ife.kr/exchange-rate:0.3.0
-    restart: always
-    expose:
-      - 8000
     depends_on:
       - postgres
 
+  django:
+    <<: *backend
+    container_name: exchange_rate
+    # env_file:
+    #   - ./.env
+
+    # image: hub.1ife.kr/exchange-rate:0.3.0
+    restart: always
+    expose:
+      - 8000
+
   nginx:
     container_name: nginx
-    # image: ${NGINX_IMAGE}:${NGINX_TAG}
-    image: hub.1ife.kr/nginx:0.1.0
+    image: ${NGINX_IMAGE}:${NGINX_TAG}
+    # image: hub.1ife.kr/nginx:0.1.0
     restart: always
     ports:
       - 80:80
@@ -35,19 +41,18 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  # celery_worker:
+  #   container_name: celery_worker
+  #   <<: *backend
+  #   command: celery -A backend worker --loglevel=info
+  #   depends_on:
+  #     - django
+  #     - postgres
 
-  celery_worker:
-    container_name: celery_worker
-    <<: *backend
-    command: celery -A backend worker --loglevel=info
-    depends_on:
-      - django
-      - postgres
-
-  celery_beat:
-    container_name: celery_beat
-    <<: *backend
-    command: celery -A backend beat --loglevel=info
-    depends_on:
-      - django
-      - postgres
+  # celery_beat:
+  #   container_name: celery_beat
+  #   <<: *backend
+  #   command: celery -A backend beat --loglevel=info
+  #   depends_on:
+  #     - django
+  #     - postgres

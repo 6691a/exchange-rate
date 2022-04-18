@@ -5,9 +5,10 @@ services:
     &django
     container_name: "exchange_rate"
     env_file:
-      - ./.env
-    # image: ${DJANGO_IMAGE}:${DJANGO_TAG}
-    image: hub.1ife.kr/exchange-rate:0.3.0
+      - ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: dockerfile
     restart: always
     expose:
       - 8000
@@ -16,13 +17,15 @@ services:
 
   nginx:
     container_name: nginx
-    # image: ${NGINX_IMAGE}:${NGINX_TAG}
-    image: hub.1ife.kr/nginx:0.1.0
+    build: 
+      context: ./nginx
+      dockerfile: dockerfile
+    # image: nginx_django:1.19.0-alpine
     restart: always
     ports:
       - 80:80
     depends_on:
-      - django
+    - django
 
   postgres:
     container_name: "postgres"
@@ -35,13 +38,12 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - 5432:5432
-  celery_worker:
-    <<: *django
-    container_name: "celery_worker"
-    # image: django
-    command: celery -A config worker --loglevel=info
-    depends_on:
-      - postgres
+  # celery_worker:
+  #   <<: *django
+  #   container_name: "celery_worker"
+  #   command: celery -A config worker --loglevel=info
+  #   depends_on:
+  #     - postgres
   # celery_beat:
   #   <<: *django
   #   container_name: "celery_beat"

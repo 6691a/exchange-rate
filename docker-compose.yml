@@ -51,5 +51,4 @@ services:
     # image: django
     command: celery -A backend beat --loglevel=info
     depends_on:
-      - django
       - postgres

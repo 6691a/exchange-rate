@@ -43,7 +43,6 @@ services:
     # image: django
     command: celery -A backend worker --loglevel=info
     depends_on:
-      - django
       - postgres
 
   celery_beat:

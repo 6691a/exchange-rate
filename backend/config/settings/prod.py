@@ -55,7 +55,6 @@ EXCHANGE_RATE_API_URL = env.EXCHANGE_RATE_API_URL
 # celery settings
 CELERY_ALWAYS_EAGER = True
 # CELERY_BROKER_URL = 'amqp://[user_name]:[password]@localhost/[vhost_name]'
-print(env.CELERY_BROKER_URL)
 CELERY_BROKER_URL = env.CELERY_BROKER_URL
 CELERY_RESULT_BACKEND = 'django-db'
 # CELERY_CACHE_BACKEND = 'django-cache'

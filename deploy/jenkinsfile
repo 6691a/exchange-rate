@@ -164,7 +164,6 @@ pipeline {
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
                         docker-compose.yml down; \
-                        docker rmi $(docker images -q); \
                         docker-compose pull; \
                         docker-compose.yml up -d --build;'
                 """

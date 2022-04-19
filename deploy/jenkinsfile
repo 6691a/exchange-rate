@@ -163,10 +163,10 @@ pipeline {
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
-                        docker-compose -f docker-compose.yml down; \
+                        docker-compose.yml down; \
                         docker rmi $(docker images -q); \
                         docker-compose pull; \
-                        docker-compose -f docker-compose.yml up -d --build;'
+                        docker-compose.yml up -d --build;'
                 """
                         // docker login error -> 수동 로그인으로 변경
                         // echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \

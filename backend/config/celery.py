@@ -17,7 +17,7 @@ app.conf.beat_schedule = {
 	# 9:00 ~ 15:00
 	'update_exchange_rate': {
 		'task': 'exchange_rate.tasks.update_exchange_rate',
-		'schedule': crontab(hour='9-14', minute='*/5', day_of_week='1-5'),
+		'schedule': crontab(hour='9-15', minute='*/5', day_of_week='1-5'),
 	},
 	# 15:00 ~ 15:30
 	# 'last_update_exchange_rate': {
@@ -27,7 +27,7 @@ app.conf.beat_schedule = {
 
 	'last_update_exchange_rate': {
 		'task': 'exchange_rate.tasks.test',
-		'schedule': crontab(hour='17', minute='*/531-59', day_of_week='1-5'),
+		'schedule': crontab(hour='17', minute='31-59*/5', day_of_week='1-5'),
 	},
 }
 

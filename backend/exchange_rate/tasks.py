@@ -1,8 +1,10 @@
 ## testapi/task.py
-from celery import shared_task
-import json
-from httpx import AsyncClient
 import re
+import json
+from django.conf import settings
+from celery import shared_task
+from httpx import AsyncClient
+
 from .models import ExchangeRate
 
 class Currency:
@@ -15,7 +17,7 @@ class Currency:
     """
     def __init__(self) -> None:
         self.client = AsyncClient(base_url="")
-        self.url = "http://fx.kebhana.com/FER1101M.web"
+        self.url = settings.EXCHANGE_RATE_API_URL
 
     async def get(self) -> dict:
         async with self.client:
@@ -34,8 +36,3 @@ def update_exchange_rate():
     c = Currency()
     c.update()
 
-@shared_task
-def test():
-    print(ExchangeRate.objects.all())
-    print ("Testing exchange rate")
-    

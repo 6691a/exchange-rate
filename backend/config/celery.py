@@ -14,13 +14,15 @@ def debug_task(self):
     print(f'Request: {self.request!r}')
 
 app.conf.beat_schedule = {
+	# 9:00 ~ 15:00
 	'update_exchange_rate': {
 		'task': 'exchange_rate.tasks.update_exchange_rate',
-		'schedule': crontab(hour='9-16', minute='*/5', day_of_week='1-5'),
+		'schedule': crontab(hour='9-15', minute='*/5', day_of_week='1-5'),
 	},
-	# 'update_exchange_rate': {
-	# 	'task': 'exchange_rate.tasks.update_exchange_rate',
-	# 	'schedule': 5,
-	# },
+	# 15:00 ~ 15:30
+	'last_update_exchange_rate': {
+		'task': 'exchange_rate.tasks.update_exchange_rate',
+		'schedule': crontab(hour='15-16', minute='*/5, 0-30', day_of_week='1-5'),
+	},
 }
 

@@ -1,7 +1,9 @@
+from pyexpat import model
 from django.db import models
 from base.models import BaseModel
 
 class ExchangeRate(BaseModel):
+    call_date = models.DateTimeField(verbose_name="환율 호출 시간")
     currency = models.CharField(max_length=25, verbose_name="통화")
     sales_rate = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="매매 기준")
     class Meta:

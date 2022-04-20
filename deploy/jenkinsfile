@@ -148,6 +148,7 @@ pipeline {
                 }
             }
             environment {
+                DOCKER_HUB_LOGIN = 'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin'
                 DOCKER_RMI_CMD = 'docker rmi $(docker images -f "dangling=true" -q)'
             }
             steps {
@@ -161,6 +162,7 @@ pipeline {
                         ssh -p ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
                         ${params.TARGET_USER}@${params.TARGET_SERVER} \
                         '
+                        ${DOCKER_HUB_LOGIN}; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
@@ -170,8 +172,6 @@ pipeline {
                         ${DOCKER_RMI_CMD}; \
                         docker-compose -f docker-compose.yml up -d --build;'
                 """
-                        // docker login error -> 수동 로그인으로 변경
-                        // echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin; \
                 }
             }
             

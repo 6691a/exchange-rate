@@ -28,7 +28,7 @@ app.conf.beat_schedule = {
 
 	'last_update_exchange_rate': {
 		'task': 'exchange_rate.tasks.test',
-		'schedule': crontab(hour='18', minute='31-59*/5', day_of_week='1-5'),
+		'schedule': crontab(hour='18', minute='0-59*/5', day_of_week='1-5'),
 	},
 }
 

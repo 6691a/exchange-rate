@@ -165,6 +165,7 @@ pipeline {
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
                         docker-compose -f docker-compose.yml down; \
                         docker-compose pull; \
+                        docker rmi $(docker images -f "dangling=true" -q); \
                         docker-compose -f docker-compose.yml up -d --build;'
                 """
                         // docker login error -> 수동 로그인으로 변경

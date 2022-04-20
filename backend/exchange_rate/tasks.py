@@ -29,6 +29,7 @@ class Currency:
 
     async def update(self) -> None:
         res = await self.get()
+        print(res)
         ExchangeRate.objects.create(**res)
 
 @shared_task

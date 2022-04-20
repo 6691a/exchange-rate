@@ -36,5 +36,6 @@ def update_exchange_rate():
 
 @shared_task
 def test():
+    print(ExchangeRate.objects.all())
     print ("Testing exchange rate")
     

@@ -33,10 +33,6 @@ class Currency:
         
         if not res:
             return
-            
-        res = json.loads(res)
-        if not res:
-            return
 
         call_date = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
         for i in res.get("리스트"):

@@ -37,7 +37,7 @@ class Currency:
         call_date = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
         for i in res.get("리스트"):
             currency = i.get("통화명")
-            sales_rate = i.get("매기준율")
+            sales_rate = i.get("매매기준율")
             ExchangeRate.objects.create(call_date=call_date, currency=currency, sales_rate=sales_rate)
 
 @shared_task

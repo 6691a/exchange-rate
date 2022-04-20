@@ -28,12 +28,16 @@ class Currency:
         return json.loads(req)
 
     async def update(self) -> None:
+        print("111111")
+
         res = await self.get()
         print(res)
+        print("12312312312312")
         ExchangeRate.objects.create(**res)
 
 @shared_task
 def update_exchange_rate():
     c = Currency()
+    print("123123")
     c.update()
 

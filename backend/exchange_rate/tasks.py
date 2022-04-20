@@ -30,10 +30,10 @@ class Currency:
     async def update(self) -> None:
         print("111111")
 
-        res = await self.get()
-        print(res)
+        # res = await self.get()
+        # print(res)
         print("12312312312312")
-        ExchangeRate.objects.create(**res)
+        # ExchangeRate.objects.create(**res)
 
 @shared_task
 def update_exchange_rate():

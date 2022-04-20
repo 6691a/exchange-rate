@@ -149,7 +149,7 @@ pipeline {
             }
             environment {
                 DOCKER_HUB_LOGIN = 'echo ${DOCKER_HUB_PSW} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_HUB_USR} --password-stdin'
-                DOCKER_RMI_CMD = 'docker rmi $(docker images -f "dangling=true" -q)'
+                DOCKER_RMI_CMD = 'docker rmi $(docker images -q)'
             }
             steps {
                 sshagent (credentials: ['jenkins_ssh']) {

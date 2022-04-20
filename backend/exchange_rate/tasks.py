@@ -1,43 +1,29 @@
 ## testapi/task.py
 import re
 import json
+import httpx
 from django.conf import settings
 from celery import shared_task
-from httpx import AsyncClient
 
 from .models import ExchangeRate
 
 class Currency:
-    """
-    사용 후 close 할 것
-    1. async with httpx.AsyncClient() as client:
-    2. client = httpx.AsyncClient()
-       ...
-       await client.aclose()
-    """
-    def __init__(self) -> None:
-        self.client = AsyncClient(base_url="")
-        self.url = settings.EXCHANGE_RATE_API_URL
-
-    async def get(self) -> dict:
-        async with self.client:
-            r = await self.client.get(self.url)
-
+    def get(self) -> dict:
+        r = httpx.get(settings.EXCHANGE_RATE_API_URL)
         req = r.text.replace("var exView = ", "")
         req = re.sub(r",(\s)+]", "]", req)
         return json.loads(req)
 
-    async def update(self) -> None:
+    def update(self) -> None:
         print("111111")
-
-        # res = await self.get()
-        # print(res)
+        res = self.get()
+        print(res)
         print("12312312312312")
-        # ExchangeRate.objects.create(**res)
+        ExchangeRate.objects.create(**res)
 
 @shared_task
-async def update_exchange_rate():
+def update_exchange_rate():
     c = Currency()
     print("123123")
-    await c.update()
+    c.update()
 

@@ -46,3 +46,5 @@ def update_exchange_rate():
     c.update()
 
 
+def test():
+    print("test")

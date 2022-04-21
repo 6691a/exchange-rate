@@ -35,19 +35,17 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - 5432:5432
-
-  celery_worker:
-    <<: *django
-    container_name: "celery_worker"
-    command: celery -A config worker --loglevel=info
-    restart: always
-    depends_on:
-      - postgres
-
-  celery_beat:
-    <<: *django
-    container_name: "celery_beat"
-    restart: always
-    command: celery -A config beat --loglevel=info
-    depends_on:
-      - postgres
+  # celery_worker:
+  #   <<: *django
+  #   container_name: "celery_worker"
+  #   command: celery -A config worker --loglevel=info
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  # celery_beat:
+  #   <<: *django
+  #   container_name: "celery_beat"
+  #   restart: always
+  #   command: celery -A config beat --loglevel=info
+  #   depends_on:
+  #     - postgres

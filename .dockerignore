@@ -15,6 +15,7 @@
 .sass-cache
 .vagrant/
 env
+*.env
 __pycache__
 dist
 docs

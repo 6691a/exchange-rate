@@ -45,17 +45,19 @@ class Currency:
 
 def is_day_off() -> bool:
     day_off = cache.get("exchange_rate_schedule")
+
     if not day_off or day_off != datetime.today().date():
-        cache.set(
-            "exchange_rate_schedule",
-            ExchangeRateSchedule.objects.get(day_off=datetime.today()).day_off,
-        )
+        day_off = ExchangeRateSchedule.objects.get(day_off=datetime.today()).day_off
+        cache.set("exchange_rate_schedule", day_off)
+
+    if day_off == datetime.today().date():
         return True
     return False
 
 
 @shared_task
 def update_exchange_rate():
+    print(is_day_off())
     if not is_day_off():
         print("111")
         # c = Currency()

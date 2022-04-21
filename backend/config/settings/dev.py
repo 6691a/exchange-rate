@@ -27,26 +27,29 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-INSTALLED_APPS += []
+INSTALLED_APPS += [
+    "django_celery_beat",
+    "django_celery_results",
+]
 
 MIDDLEWARE += []
 
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": env.DB_HOST,
-#         "USER": env.DB_USERNAME,
-#         "PASSWORD": env.DB_PASSWORD.get_secret_value(),
-#         "NAME": env.DB_NAME,
-#     }
-# }
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env.DB_HOST,
+        "USER": env.DB_USERNAME,
+        "PASSWORD": env.DB_PASSWORD.get_secret_value(),
+        "NAME": env.DB_NAME,
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 TIME_ZONE = env.TIME_ZONE

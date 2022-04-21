@@ -43,22 +43,15 @@ class Currency:
             ExchangeRate.objects.create(fix_time=fix_time, currency=currency, sales_rate=sales_rate)
 
 
-def is_day_off() -> bool:
-    day_off = cache.get("exchange_rate_schedule")
-
-    if not day_off or day_off != datetime.today().date():
-        day_off = ExchangeRateSchedule.objects.filter(day_off=datetime.today()).first().day_off
-        cache.set("exchange_rate_schedule", day_off)
-
-    if day_off == datetime.today().date():
-        return True
-    return False
+@shared_task
+def day_off() -> bool:
+    today = datetime.today().date()
+    if ExchangeRateSchedule.objects.filter(day_off=datetime.today()).exists():
+        cache.set("day_off", today)
 
 
 @shared_task
 def update_exchange_rate():
-    print(is_day_off())
-    if not is_day_off():
-        print("111")
-        # c = Currency()
-        # c.update()
+    if cache.get("day_off"):
+        c = Currency()
+        c.update()

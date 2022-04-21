@@ -14,7 +14,7 @@ pipeline {
 
         // CI
         string(name: "DJANGO_IMAGE_NAME", defaultValue: 'exchange-rate', description: "DJANGO_IMAGE_NAME")
-        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.4.0', description: "DJANGO_IMAGE_TAG")
+        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.5.0', description: "DJANGO_IMAGE_TAG")
         string(name: "NGINX_IMAGE_NAME", defaultValue: 'nginx', description: "NGINX_IMAGE_NAME")
         string(name: "NGINX_IMAGE_TAG", defaultValue: '0.1.0', description: "NGINX_IMAGE_TAG")
 

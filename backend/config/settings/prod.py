@@ -1,5 +1,6 @@
 from .settings import *
 from pydantic import BaseSettings, SecretStr
+from celery.schedules import crontab
 
 
 class Env(BaseSettings):
@@ -62,3 +63,16 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = env.TIME_ZONE
+
+CELERY_BEAT_SCHEDULE = {
+	# 9:00 ~ 15:00
+	'update_exchange_rate': {
+		'task': 'exchange_rate.tasks.update_exchange_rate',
+		'schedule': crontab(hour='9-15', minute='*/5', day_of_week='1-5'),
+	},
+	# 15:00 ~ 15:30
+	'end_update_exchange_rate': {
+		'task': 'exchange_rate.tasks.update_exchange_rate',
+		'schedule': crontab(hour='15', minute='0-30/5', day_of_week='1-5'),
+	},
+}

@@ -29,6 +29,6 @@ app.conf.beat_schedule = {
     # },
     "end_update_exchange_rate": {
         "task": "exchange_rate.tasks.update_exchange_rate",
-        "schedule": crontab(seconds="5"),
+        "schedule": 5,
     },
 }

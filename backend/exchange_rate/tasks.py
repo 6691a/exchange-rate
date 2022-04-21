@@ -47,7 +47,7 @@ def is_day_off() -> bool:
     day_off = cache.get("exchange_rate_schedule")
 
     if not day_off or day_off != datetime.today().date():
-        day_off = ExchangeRateSchedule.objects.get(day_off=datetime.today()).day_off
+        day_off = ExchangeRateSchedule.objects.filter(day_off=datetime.today()).first().day_off
         cache.set("exchange_rate_schedule", day_off)
 
     if day_off == datetime.today().date():

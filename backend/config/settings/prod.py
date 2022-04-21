@@ -14,8 +14,8 @@ class Env(BaseSettings):
     SECRET_KEY: SecretStr
     TIME_ZONE: str
     EXCHANGE_RATE_API_URL: str
-    
-    CELERY_BROKER_URL: SecretStr 
+
+    CELERY_BROKER_URL: SecretStr
 
     class Config:
         env_file = ".env"
@@ -31,12 +31,11 @@ DEBUG = False
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS += [
-    'django_celery_beat',
-    'django_celery_results',
+    "django_celery_beat",
+    "django_celery_results",
 ]
 
-MIDDLEWARE += [
-]
+MIDDLEWARE += []
 
 DATABASES = {
     "default": {
@@ -56,9 +55,9 @@ EXCHANGE_RATE_API_URL = env.EXCHANGE_RATE_API_URL
 CELERY_ALWAYS_EAGER = True
 # CELERY_BROKER_URL = 'amqp://[user_name]:[password]@localhost/[vhost_name]'
 CELERY_BROKER_URL = env.CELERY_BROKER_URL.get_secret_value()
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = "django-db"
 # CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = env.TIME_ZONE

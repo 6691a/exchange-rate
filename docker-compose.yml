@@ -42,10 +42,10 @@ services:
   #   restart: always
   #   depends_on:
   #     - postgres
-  # celery_beat:
-  #   <<: *django
-  #   container_name: "celery_beat"
-  #   restart: always
-  #   command: celery -A config beat --loglevel=info
-  #   depends_on:
-  #     - postgres
+  celery_beat:
+    <<: *django
+    container_name: "celery_beat"
+    restart: always
+    command: celery -A config beat --loglevel=info
+    depends_on:
+      - postgres

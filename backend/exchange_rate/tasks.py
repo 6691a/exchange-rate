@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Union
 from django.conf import settings
 
-from .models import ExchangeRate
+from .models import ExchangeRate, ExchangeRateSchedule
 
 class Currency:
     def get(self) -> Union[dict, None]:
@@ -42,5 +42,6 @@ class Currency:
 
 @shared_task
 def update_exchange_rate():
+    ExchangeRateSchedule.objects.get(day_off=datetime.today())
     c = Currency()
     c.update()

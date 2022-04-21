@@ -1,4 +1,6 @@
+from operator import mod
 from pyexpat import model
+from statistics import mode
 from django.db import models
 from base.models import BaseModel
 
@@ -9,4 +11,12 @@ class ExchangeRate(BaseModel):
     
     class Meta:
         db_table = "exchange_rate"
+        ordering = []
+
+class ExchangeRateSchedule(BaseModel):
+    day_off = models.DateField(verbose_name="쉬는 날")
+    memo = models.TextField(verbose_name="사유")
+
+    class Meta:
+        db_table = "exchange_rate_schedule"
         ordering = []

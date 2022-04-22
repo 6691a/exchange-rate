@@ -5,8 +5,9 @@ from celery import shared_task
 from datetime import datetime
 from typing import Union
 from django.conf import settings
+from django.core.cache import cache
 
-from .models import ExchangeRate
+from .models import ExchangeRate, ExchangeRateSchedule
 
 class Currency:
     def get(self) -> Union[dict, None]:
@@ -41,9 +42,25 @@ class Currency:
             ExchangeRate.objects.create(fix_time=fix_time, currency=currency, sales_rate=sales_rate)
 
 @shared_task
+def day_off() -> bool:
+    today = datetime.today().date()
+    if ExchangeRateSchedule.objects.filter(day_off=datetime.today()).exists():
+        cache.set("day_off", today)
+        return "day_off"
+    return "Working"
+
+# @shared_task
+# def update_exchange_rate():
+#     c = Currency()
+#     c.update()
+
+@shared_task
 def update_exchange_rate():
+    if cache.get("day_off"):
+        return "day_off"
     c = Currency()
     c.update()
+    return "Working"
 
 @shared_task
 def test():

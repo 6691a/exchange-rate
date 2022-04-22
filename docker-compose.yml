@@ -48,7 +48,7 @@ services:
     <<: *django
     container_name: "celery_beat"
     restart: always
-    command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    # command: celery -A config beat --loglevel=info
+    # command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery -A config beat --loglevel=info
     depends_on:
       - postgres

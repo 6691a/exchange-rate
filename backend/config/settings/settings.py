@@ -17,7 +17,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "debug_toolbar",
     "exchange_rate",
-    
 ]
 
 INTERNAL_IPS = [
@@ -83,7 +82,7 @@ LANGUAGE_CODE = "en-us"
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 STATIC_URL = "static/"
 

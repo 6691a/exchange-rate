@@ -10,6 +10,6 @@ class ExchangeRateAdmin(admin.ModelAdmin):
 
 
 @admin.register(ExchangeRateSchedule)
-class ExchangeRateAdmin(admin.ModelAdmin):
+class ExchangeRateScheduleAdmin(admin.ModelAdmin):
     list_display = ["day_off", "memo"]
     # search_fields = ["id", "username", "company_code__company_code"]

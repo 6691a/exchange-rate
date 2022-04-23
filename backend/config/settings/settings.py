@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "debug_toolbar",
     "exchange_rate",
+    
 ]
 
 INTERNAL_IPS = [

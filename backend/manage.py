@@ -21,7 +21,7 @@ def main():
 
 def run():
     if sys.argv[1] == "run":
-        uvicorn.run("config.asgi:application", port=8080, reload=True)
+        uvicorn.run("config.asgi:application", port=8001, reload=True)
     else:
         main()
 

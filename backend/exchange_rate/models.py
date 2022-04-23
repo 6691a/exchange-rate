@@ -15,8 +15,12 @@ class ExchangeRate(BaseModel):
 
 class ExchangeRateSchedule(BaseModel):
     day_off = models.DateField(verbose_name="쉬는 날")
+<<<<<<< HEAD
     memo = models.TextField(verbose_name="사유")
 
+=======
+    memo = models.TextField(verbose_name="메모", blank=True, null=True)
+>>>>>>> 2ba8d10ca7d1f52f19358402ade2ed938f999d37
     class Meta:
         db_table = "exchange_rate_schedule"
         ordering = []

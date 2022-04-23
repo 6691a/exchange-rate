@@ -6,9 +6,14 @@ from datetime import datetime
 from typing import Union
 from django.conf import settings
 from django.core.cache import cache
+<<<<<<< HEAD
 
 from .models import ExchangeRate, ExchangeRateSchedule
 
+=======
+
+from .models import ExchangeRate, ExchangeRateSchedule
+>>>>>>> 2ba8d10ca7d1f52f19358402ade2ed938f999d37
 
 class Currency:
     def get(self) -> Union[dict, None]:
@@ -44,14 +49,26 @@ class Currency:
 
 
 @shared_task
-def day_off() -> bool:
+def day_off():
     today = datetime.today().date()
     if ExchangeRateSchedule.objects.filter(day_off=datetime.today()).exists():
         cache.set("day_off", today)
+    cache.set("day_off", -1)
+    
 
+def is_day_off():
+    day_off = cache.get("day_off")
+    today = datetime.today().date()
+
+    if not day_off:
+        if ExchangeRateSchedule.objects.filter(day_off=today).exists():
+            cache.set("day_off", today)
+            return True
+    return False
 
 @shared_task
-def update_exchange_rate():
-    if cache.get("day_off"):
+def exchange_rate():
+    if not is_day_off():
         c = Currency()
         c.update()
+

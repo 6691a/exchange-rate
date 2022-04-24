@@ -8,6 +8,6 @@ router = Router()
 
 @router.get("")
 async def get_exchange_rate(request, currency: str):
-    test = await sync_to_async(list)(ExchangeRate.objects.latest(currency__icontains=currency))
+    test = await sync_to_async(list)(ExchangeRate.objects.filter(currency__icontains=currency))
     print(test)
     return {"message": "Hello from V1"}

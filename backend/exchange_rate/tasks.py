@@ -60,18 +60,21 @@ def is_day_off():
     if not day_off:
         if ExchangeRateSchedule.objects.filter(day_off=today).exists():
             print("DB Search")
-            cache.set("day_off", -1)
-            return False
-        cache.set("day_off", today)
-        return True
-    elif day_off == today:
+            cache.set("day_off", today)
+            return True
+        cache.set("day_off", -1)
         return False
+
+    if day_off == today:
+        return True
+    return False
 
 
 
 @shared_task
 def exchange_rate():
     a = is_day_off()
+    print(a)
     if not a:
         c = Currency()
         c.update()

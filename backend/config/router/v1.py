@@ -1,6 +1,6 @@
 from ninja import NinjaAPI
 from django.conf import settings
-from exchange_rate.api.v1.api import router as exchange_rate_router
+from exchange_rate.apis.v1.apis import router as exchange_rate_router
 
 docs_url = ""
 

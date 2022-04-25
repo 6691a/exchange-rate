@@ -58,7 +58,7 @@ def is_day_off():
 
     if not day_off:
         today = datetime.today().date()
-        if not ExchangeRateSchedule.objects.filter(day_off=today).exists():
+        if ExchangeRateSchedule.objects.filter(day_off=today).exists():
             print("DB Search")
             cache.set("day_off", -1)
             return False

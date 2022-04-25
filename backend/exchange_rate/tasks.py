@@ -67,6 +67,7 @@ def is_day_off():
             return True
     
     print("not_day_off")
+    cache.set("day_off", -1)
     return False
 
 

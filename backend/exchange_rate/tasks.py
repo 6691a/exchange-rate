@@ -71,7 +71,7 @@ def is_day_off():
 def exchange_rate():
     print("start func")
     iss = is_day_off()
-    print("iss")
+    print(iss)
 
     if not iss:
         # c = Currency()

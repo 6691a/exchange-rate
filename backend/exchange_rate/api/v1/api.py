@@ -1,7 +1,7 @@
 from ninja import Router
 from asgiref.sync import sync_to_async
 
-from ..models import ExchangeRate
+from ...models import ExchangeRate
 
 router = Router()
 

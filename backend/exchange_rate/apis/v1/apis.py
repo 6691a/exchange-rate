@@ -20,5 +20,5 @@ def _exchange_latest(latest: str, *args, **kwargs) -> QuerySet | None:
 @router.get("", response={200: ExchangeRateSchema})
 async def get_exchange_rate(request, currency: str):
     test = await _exchange_latest("created_at", currency__icontains=currency)
-    print(test)
+    print(test.__dict__)
     return test

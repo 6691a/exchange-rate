@@ -1,8 +1,8 @@
 from django.db import models
-from base.models import BaseModel
+from base.models import AsyncBaseModel
 
 
-class ExchangeRate(BaseModel):
+class ExchangeRate(AsyncBaseModel):
     fix_time = models.DateTimeField(verbose_name="환율 갱신 시간")
     currency = models.CharField(max_length=25, verbose_name="통화")
     sales_rate = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="매매 기준")
@@ -12,7 +12,7 @@ class ExchangeRate(BaseModel):
         ordering = []
 
 
-class ExchangeRateSchedule(BaseModel):
+class ExchangeRateSchedule(AsyncBaseModel):
     day_off = models.DateField(verbose_name="쉬는 날")
     memo = models.TextField(verbose_name="메모", blank=True, null=True)
 

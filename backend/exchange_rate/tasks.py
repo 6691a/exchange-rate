@@ -70,7 +70,6 @@ def is_day_off():
     return False
 
 
-
 @shared_task
 def exchange_rate():
     a = is_day_off()

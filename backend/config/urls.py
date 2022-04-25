@@ -20,7 +20,9 @@ from django.conf import settings
 from .router.v1 import api as v1_api
 
 
-urlpatterns = [path("api/", v1_api.urls)]
+urlpatterns = [
+    path("api/", v1_api.urls),
+]
 
 if settings.DEBUG:
     import debug_toolbar

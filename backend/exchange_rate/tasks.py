@@ -32,7 +32,6 @@ class Currency:
 
     def update(self) -> None:
         res = self.get()
-
         if not res:
             return
 
@@ -71,8 +70,12 @@ def is_day_off():
 
 @shared_task
 def exchange_rate():
-    if not is_day_off():
+    a = is_day_off()
+    print(a)
+    if not a:
         c = Currency()
-        c.update()
+        print("1")
+        if c.update():
+            return -2
         return datetime.today().date()
     return -1

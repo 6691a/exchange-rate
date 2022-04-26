@@ -33,14 +33,14 @@ class Currency:
     def update(self) -> None:
         res = self.get()
         if not res:
-            return
+            return False
 
         fix_time = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
         for i in res.get("리스트"):
             currency = i.get("통화명")
             sales_rate = i.get("매매기준율")
             ExchangeRate.objects.create(fix_time=fix_time, currency=currency, sales_rate=sales_rate)
-
+        return True
 
 @shared_task
 def day_off():
@@ -75,7 +75,7 @@ def exchange_rate():
     if not a:
         c = Currency()
         print("1")
-        if c.update():
+        if not c.update():
             return -2
         return datetime.today().date()
     return -1

@@ -70,11 +70,8 @@ def is_day_off():
 
 @shared_task
 def exchange_rate():
-    a = is_day_off()
-    print(a)
-    if not a:
+    if not is_day_off():
         c = Currency()
-        print("1")
         if not c.update():
             return -2
         return datetime.today().date()

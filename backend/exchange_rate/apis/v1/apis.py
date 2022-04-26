@@ -8,7 +8,6 @@ from .schemas import ExchangeRateSchema
 
 router = Router()
 
-
 @sync_to_async
 def _exchange_latest(latest: str, *args, **kwargs) -> QuerySet | None:
     try:

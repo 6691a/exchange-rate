@@ -18,3 +18,12 @@ class ExchangeRateSchema(BaseSchema):
     @staticmethod
     def resolve_fix_time(obj):
         return obj.fix_time.strftime("%Y.%m.%d %H:%M")
+    {
+      "data": {
+        currency: str
+        sales_rate: str
+        fix_time: str
+        created_at: str
+      },
+      "status": 400
+    }

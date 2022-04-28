@@ -62,6 +62,16 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     
+    @property
+    def dict(self) -> dict:
+        result = {}
+
+        for key in self._meta.get_fields():
+            name = key.get_attname()
+            value = getattr(self, name)
+            result[name] = value
+        return result
+
     class Meta:
         abstract = True
 

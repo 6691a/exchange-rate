@@ -9,4 +9,4 @@ class Response(BaseRenderer):
             "data": data,
             "status": response_status
         }
-        return json.dumps(data)
+        return json.dumps(data, default=str)

@@ -5,7 +5,6 @@ from base.models import BaseModel
 
 
 class UserManager(BaseUserManager):
-
     use_in_migrations = True
 
     def create_user(self, email, password):

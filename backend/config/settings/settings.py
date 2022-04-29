@@ -1,6 +1,7 @@
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECRET_KEY = env.SECRET_KEY.get_secret_value()
 
@@ -40,7 +41,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -99,3 +102,5 @@ CACHES = {
 }
 
 AUTH_USER_MODEL = "account.User"
+
+LOGIN_URL = "/account/login"

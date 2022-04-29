@@ -1,8 +1,9 @@
 import httpx
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.http import JsonResponse
+from django.contrib.auth import login
 
+from .models import User
 
 key = settings.KAKAO_LOGIN_REST_KEY
 redirect_url = "http://127.0.0.1:8000/account/login/kakao/callback/"
@@ -45,22 +46,24 @@ def _get_user(access_token) -> dict | None:
     return None
 
 
-def _create_user(**kwargs) -> bool:
-    print(kwargs)
-    print(User.objects.get_or_create(**kwargs))
-    return False
+def _get_or_user(**kwargs) -> User:
+    user, is_create = User.objects.get_or_create(**kwargs)
+    if is_create:
+        user.set_unusable_password()
+        user.save()
+    return user
 
 
 def kakao_login_callback(request):
     kakao_token = _get_kakao_token(request)
     if not kakao_token:
-        return
+        return redirect("account:login")
 
     access_token = kakao_token.get("access_token")
 
     kakao_user = _get_user(access_token)
     if not kakao_user:
-        return
+        return redirect("account:login")
 
     kakao_user = kakao_user.get("kakao_account")
 
@@ -69,7 +72,6 @@ def kakao_login_callback(request):
     gender = kakao_user.get("gender")
     age_range = kakao_user.get("age_range")
 
-    if not _create_user(nickname=nickname, email=email, gender=gender, age_range=age_range):
-        return
-
-    return JsonResponse({123123: "!231"})
+    user = _get_or_user(nickname=nickname, email=email, gender=gender, age_range=age_range)
+    login(request, user)
+    return redirect("exchange_rate:main")

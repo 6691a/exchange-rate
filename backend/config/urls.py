@@ -21,6 +21,7 @@ from .router.v1 import api as v1_api
 
 
 urlpatterns = [
+    path("", include("exchange_rate.urls")),
     path("api/", v1_api.urls),
     path("account/", include("account.urls")),
 ]

@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 
     "debug_toolbar",
     "exchange_rate",
+    "account.apps.AccountConfig",
 ]
 
 INTERNAL_IPS = [

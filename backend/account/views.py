@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
-
 from django.conf import settings
-# Create your views here.
+
 def login(request):
     return render(request, 'login.html')
 
@@ -12,6 +11,3 @@ def kakao_login(request):
     # redirect_uri = main_domain + "users/login/kakao/callback" 
     url = f'https://kauth.kakao.com/oauth/authorize?client_id={key}&redirect_uri={redirect_url}&response_type=code'
     return redirect(url)
-
-# def kakao_login_callback(reqeust):
-    

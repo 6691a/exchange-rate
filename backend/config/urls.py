@@ -22,7 +22,9 @@ from .router.v1 import api as v1_api
 
 urlpatterns = [
     path("api/", v1_api.urls),
+    path('accounts/', include('account.urls')),
     path('accounts/', include('allauth.urls')),
+
 ]
 
 if settings.DEBUG:

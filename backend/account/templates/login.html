@@ -1,0 +1,14 @@
+{% load socialaccount %}
+{% if user.is_authenticated %}
+<a href="{/accounts/logout}">
+    로그아웃
+</a>
+{{user.username}}
+{% else %}
+<a href="{% provider_login_url 'kakao' %}">
+    카카오톡 로그인
+</a>
+<!-- <a href="{kakao/login' %}">
+    카카오톡 로그인
+</a> -->
+{% endif %}

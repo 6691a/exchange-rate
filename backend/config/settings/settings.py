@@ -15,6 +15,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    'django.contrib.sites', 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
+
     "debug_toolbar",
     "exchange_rate",
 ]
@@ -96,3 +103,9 @@ CACHES = {
         'TIMEOUT': 86400,
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', # 기본 인증 백엔드
+    'allauth.account.auth_backends.AuthenticationBackend', # 추가 
+]
+SITE_ID =1 

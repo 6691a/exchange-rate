@@ -39,5 +39,9 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     USERNAME_FIELD = "email"
 
+    @property
+    def is_staff(self):
+        return self.is_admin
+
     class Meta:
         db_table = "user"

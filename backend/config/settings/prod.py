@@ -17,6 +17,8 @@ class Env(BaseSettings):
 
     CELERY_BROKER_URL: SecretStr
 
+    KAKAO_LOGIN_REST_KEY: SecretStr
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
@@ -61,3 +63,5 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = env.TIME_ZONE
+
+KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()

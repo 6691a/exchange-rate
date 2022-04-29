@@ -14,6 +14,8 @@ class Env(BaseSettings):
     SECRET_KEY: SecretStr
     TIME_ZONE: str
 
+    KAKAO_LOGIN_REST_KEY: SecretStr
+
     class Config:
         env_file = "dev.env"
         env_file_encoding = "utf-8"
@@ -53,3 +55,5 @@ DATABASES = {
 # }
 
 TIME_ZONE = env.TIME_ZONE
+
+KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()

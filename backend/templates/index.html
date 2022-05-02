@@ -7,6 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title%} {% endblock %}</title>
+    
+    <!-- Core CSS -->
+    
+    <link rel="stylesheet" href="{% static 'css/core/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'css/core/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'css/core/demo.css' %}" />
+
     {% block css %}
     {% endblock %}
 
@@ -15,6 +22,7 @@
 </head>
 
 <body>
+    {% include "menu.html" %}
     {% if request.user.is_authenticated %}
         <p>{{ request.user.email }}</p>
         

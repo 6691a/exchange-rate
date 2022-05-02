@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
+from base.utils import destructuring
 from base import redirects
 from .models import User
 
@@ -15,10 +16,12 @@ def kakao_login(request):
     url = f"https://kauth.kakao.com/oauth/authorize?client_id={key}&redirect_uri={redirect_url}&response_type=code"
     return redirect(url)
 
+
 @login_required
-def logout(request):
+def kakao_logout(request):
     logout(request)
     return redirects.login()
+
 
 def _get_kakao_token(request) -> dict | None:
     code = request.GET.get("code", None)
@@ -52,11 +55,21 @@ def _get_user(access_token) -> dict | None:
 
 
 def _get_or_user(**kwargs) -> User:
-    user, is_create = User.objects.get_or_create(**kwargs)
+
+    nickname, email, gender, age_range, avatar_url = destructuring(
+        kwargs, "nickname", "email", "gender", "age_range", "avatar_url"
+    )
+    user, is_create = User.objects.get_or_create(email=email)
     if is_create:
         user.set_unusable_password()
+        user.age_range = age_range
+        user.nickname = nickname
+        user.avatar_url = avatar_url
+        user.gender = gender
         user.save()
-    # avatar 
+    else:
+        user.update(**kwargs)
+
     return user
 
 
@@ -75,15 +88,14 @@ def kakao_login_callback(request):
         return redirects.login()
 
     kakao_user = kakao_user.get("kakao_account")
-    print(kakao_user)
+
     nickname = kakao_user.get("profile").get("nickname")
+    avatar_url = kakao_user.get("profile").get("profile_image_url")
     email = kakao_user.get("email")
     gender = kakao_user.get("gender")
     age_range = kakao_user.get("age_range")
-    # avatar_url = profile.get("profile_image_url", None)
-
-    user = _get_or_user(nickname=nickname, email=email, gender=gender, age_range=age_range)
+    user = _get_or_user(
+        nickname=nickname, email=email, gender=gender, age_range=age_range, avatar_url=avatar_url
+    )
     login(request, user)
     return redirects.main()
-
-

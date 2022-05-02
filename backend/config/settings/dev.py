@@ -54,6 +54,8 @@ DATABASES = {
 #     }
 # }
 
+STATIC_URL = "/static/"
+
 TIME_ZONE = env.TIME_ZONE
 
 KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()

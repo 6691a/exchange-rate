@@ -1,7 +1,7 @@
 from datetime import datetime
 from base.schemas import BaseSchema
 
-from pydantic.generics import GenericModel 
+from pydantic.generics import GenericModel
 from pydantic import validator
 from typing import TypeVar, Generic
 
@@ -33,11 +33,10 @@ class ExchangeRateSchema(BaseSchema):
     fix_time: datetime
     created_at: datetime
 
-    @validator('currency')
+    @validator("currency")
     def validate_currency(cls, v):
-        print(v.split()[0])
         return v.split()[0]
 
-    @validator('fix_time')
+    @validator("fix_time")
     def validate_fix_time(cls, v):
         return v.strftime("%Y.%m.%d %H:%M")

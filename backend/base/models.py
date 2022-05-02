@@ -59,9 +59,9 @@ class AsyncBaseModel(models.Model):
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
-    
+    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="생성일")
+    updated_at = models.DateTimeField(auto_now=True, null=True, verbose_name="수정일")
+
     @property
     def dict(self) -> dict:
         result = {}
@@ -74,6 +74,17 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+    def destructuring(self, keys):
+        """
+        https://stackoverflow.com/a/63961732/15126990
+        Access fields sequentially:
+        id, _, email, *_ = current_user
+        Access fields out of order:
+        id, email, gender, username = current_user["id", "email", "gender", "username"]
+        """
+        return iter(getattr(self, k) for k in keys)
+
 
 # class AsyncManager(models.Manager):
 

@@ -31,6 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     nickname = models.CharField(max_length=50)
     gender = models.CharField(max_length=10)
     age_range = models.CharField(max_length=10)
+    # avatar = model.
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 

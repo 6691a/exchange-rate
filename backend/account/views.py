@@ -1,8 +1,10 @@
 import httpx
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 
+from base import redirects
 from .models import User
 
 key = settings.KAKAO_LOGIN_REST_KEY
@@ -13,6 +15,10 @@ def kakao_login(request):
     url = f"https://kauth.kakao.com/oauth/authorize?client_id={key}&redirect_uri={redirect_url}&response_type=code"
     return redirect(url)
 
+@login_required
+def logout(request):
+    logout(request)
+    return redirects.login()
 
 def _get_kakao_token(request) -> dict | None:
     code = request.GET.get("code", None)
@@ -25,7 +31,6 @@ def _get_kakao_token(request) -> dict | None:
         "grant_type": "authorization_code",
         "client_id": key,
         "redirect_url": redirect_url,
-        # "client_secret": SOCIAL_OUTH_CONFIG["KAKAO_SECRET_KEY"],
         "code": code,
     }
     headers = {"Content-type": "application/x-www-form-urlencoded;charset=utf-8"}
@@ -51,27 +56,34 @@ def _get_or_user(**kwargs) -> User:
     if is_create:
         user.set_unusable_password()
         user.save()
+    # avatar 
     return user
 
 
 def kakao_login_callback(request):
+    if request.user.is_authenticated:
+        return redirects.main()
+
     kakao_token = _get_kakao_token(request)
     if not kakao_token:
-        return redirect("account:login")
+        return redirects.login()
 
     access_token = kakao_token.get("access_token")
 
     kakao_user = _get_user(access_token)
     if not kakao_user:
-        return redirect("account:login")
+        return redirects.login()
 
     kakao_user = kakao_user.get("kakao_account")
-
+    print(kakao_user)
     nickname = kakao_user.get("profile").get("nickname")
     email = kakao_user.get("email")
     gender = kakao_user.get("gender")
     age_range = kakao_user.get("age_range")
+    # avatar_url = profile.get("profile_image_url", None)
 
     user = _get_or_user(nickname=nickname, email=email, gender=gender, age_range=age_range)
     login(request, user)
-    return redirect("exchange_rate:main")
+    return redirects.main()
+
+

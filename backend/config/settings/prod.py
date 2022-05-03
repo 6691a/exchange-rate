@@ -55,7 +55,7 @@ TIME_ZONE = env.TIME_ZONE
 
 EXCHANGE_RATE_API_URL = env.EXCHANGE_RATE_API_URL
 
-# celery settings
+# celery
 CELERY_ALWAYS_EAGER = True
 # CELERY_BROKER_URL = 'amqp://[user_name]:[password]@localhost/[vhost_name]'
 CELERY_BROKER_URL = env.CELERY_BROKER_URL.get_secret_value()
@@ -66,4 +66,18 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = env.TIME_ZONE
 
+# kakao login
 KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()
+
+
+# channels
+ASGI_APPLICATION = "config.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+        "CONFIG": {
+            "host": env.CELERY_BROKER_URL.get_secret_value(),
+        },
+    },
+}

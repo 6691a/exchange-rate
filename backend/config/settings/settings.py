@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "channels",
     "debug_toolbar",
     "account",
     "exchange_rate",
@@ -106,3 +107,14 @@ CACHES = {
 AUTH_USER_MODEL = "account.User"
 
 LOGIN_URL = "/account/login"
+
+ASGI_APPLICATION = "config.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+        "CONFIG": {
+            "host": "amqp://guest:guest@127.0.0.1/asgi",
+        },
+    },
+}

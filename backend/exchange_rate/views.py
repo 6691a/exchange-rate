@@ -8,7 +8,7 @@ def main(request):
 
 
 def index(request):
-    return render(request, "chat.html")
+    return render(request, "room.html")
 
 
 def room(request, room_name):

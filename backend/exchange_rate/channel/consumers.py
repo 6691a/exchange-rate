@@ -1,3 +1,5 @@
+from datetime import date
+from typing import List
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.db.models.query import QuerySet
@@ -8,11 +10,9 @@ from ..models import ExchangeRate
 
 
 @database_sync_to_async
-def _exchange_latest(latest: str, *args, **kwargs) -> QuerySet | None:
-    try:
-        return ExchangeRate.objects.filter(*args, **kwargs).latest(latest)
-    except ExchangeRate.DoesNotExist:
-        return None
+def today_exchange(*args, **kwargs) -> List:
+    kwargs["created_at__date"] = date.today()
+    return list(ExchangeRate.objects.filter(*args, **kwargs))
 
 
 class ExchangeRateConsumer(AsyncJsonWebsocketConsumer):
@@ -27,9 +27,12 @@ class ExchangeRateConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
-        if exchange := await _exchange_latest("created_at", currency__icontains=self.group_name):
-            data = ResponseSchema(data=ExchangeRateSchema(**exchange.dict))
-            await self.send(data.json())
+        if exchange := await today_exchange(currency__icontains=self.group_name):
+            print(ExchangeRate.parse_obj(exchange))
+            # print(ResponseSchema.parse_obj(data=ExchangeRate(exchange)))
+
+            # data = ResponseSchema(data=List[ExchangeRateSchema(**exchange.dict)])
+            # await self.send(data.json())
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)

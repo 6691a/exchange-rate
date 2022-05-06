@@ -1,6 +1,8 @@
 from ninja import Schema
 from typing import TypeVar, Generic
 from pydantic.generics import GenericModel
+from pydantic import validator
+from django.conf import settings
 
 T = TypeVar("T")
 
@@ -29,10 +31,10 @@ class ErrorSchema(Schema):
 
 
 class BaseSchema(Schema):
-    @staticmethod
-    def resolve_created_at(obj):
-        return obj.created_at.strftime("%Y.%m.%d %H:%M")
+    @validator("created_at", check_fields=False)
+    def validate_created_at(cls, v):
+        return v.strftime(settings.DATE_TIME_FORMATE)
 
     @staticmethod
-    def resolve_updated_at(obj):
-        return obj.updated_at.strftime("%Y.%m.%d %H:%M")
+    def validate_updated_at(cls, v):
+        return v.strftime(settings.DATE_TIME_FORMATE)

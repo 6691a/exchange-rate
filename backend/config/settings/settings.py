@@ -106,3 +106,5 @@ CACHES = {
 AUTH_USER_MODEL = "account.User"
 
 LOGIN_URL = "/account/login"
+
+DATE_TIME_FORMATE = "%Y.%m.%d %H:%M"

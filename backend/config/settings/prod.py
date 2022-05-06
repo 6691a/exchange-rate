@@ -15,7 +15,7 @@ class Env(BaseSettings):
     TIME_ZONE: str
     EXCHANGE_RATE_API_URL: str
 
-    CELERY_BROKER_URL: SecretStr
+    RABBIT_MQ_URL: SecretStr
 
     KAKAO_LOGIN_REST_KEY: SecretStr
 
@@ -58,7 +58,7 @@ EXCHANGE_RATE_API_URL = env.EXCHANGE_RATE_API_URL
 # celery
 CELERY_ALWAYS_EAGER = True
 # CELERY_BROKER_URL = 'amqp://[user_name]:[password]@localhost/[vhost_name]'
-CELERY_BROKER_URL = env.CELERY_BROKER_URL.get_secret_value()
+CELERY_BROKER_URL = env.RABBIT_MQ_URL.get_secret_value()
 CELERY_RESULT_BACKEND = "django-db"
 # CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_ACCEPT_CONTENT = ["application/json"]
@@ -77,7 +77,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
         "CONFIG": {
-            "host": env.CELERY_BROKER_URL.get_secret_value(),
+            "host": env.RABBIT_MQ_URL.get_secret_value(),
         },
     },
 }

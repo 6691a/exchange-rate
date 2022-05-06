@@ -7,9 +7,17 @@ def main(request):
     return render(request, "main.html")
 
 
-def index(request):
-    return render(request, "room.html")
+from channels.layers import get_channel_layer
+
+channel_layer = get_channel_layer()
 
 
-def room(request, room_name):
-    return render(request, "room.html", {"room_name": room_name})
+def channels(request):
+    # channel_layer.group_send(
+    #     "USA", {
+    #         type:
+    #         "text":
+    #     }
+    # )
+    # print(channel_layer)
+    return render(request, "main.html")

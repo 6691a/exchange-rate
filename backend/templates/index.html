@@ -17,17 +17,14 @@
     {% block css %}
     {% endblock %}
 
+    <script defer type="module" src="{% static 'js/core/vue.dev.js' %}"></script>
     {% block js %}
     {% endblock %}
 </head>
 
 <body>
-    {% include "menu.html" %}
     {% if request.user.is_authenticated %}
-        <p>{{ request.user.email }}</p>
-        
-    {% else %}
-        
+    {% include "menu.html" %}
     {% endif %}
 
     {% block body %}

@@ -14,7 +14,7 @@ class Env(BaseSettings):
     SECRET_KEY: SecretStr
     TIME_ZONE: str
 
-    CELERY_BROKER_URL: SecretStr
+    ASGI_RABBIT_MQ_URL: SecretStr
 
     KAKAO_LOGIN_REST_KEY: SecretStr
 
@@ -55,21 +55,24 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    # ("node", BASE_DIR / "node_modules"),
+]
 
 TIME_ZONE = env.TIME_ZONE
 
 KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()
 
-
+# channels
 ASGI_APPLICATION = "config.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "host": env.CELERY_BROKER_URL.get_secret_value(),
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }

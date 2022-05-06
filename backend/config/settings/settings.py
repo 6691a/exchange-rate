@@ -1,4 +1,3 @@
-import imp
 from pathlib import Path
 
 
@@ -24,7 +23,7 @@ INSTALLED_APPS = [
 ]
 
 INTERNAL_IPS = [
-    "127.0.0.1",
+    # "127.0.0.1",
 ]
 
 MIDDLEWARE = [
@@ -91,7 +90,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -107,14 +106,3 @@ CACHES = {
 AUTH_USER_MODEL = "account.User"
 
 LOGIN_URL = "/account/login"
-
-ASGI_APPLICATION = "config.asgi.application"
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
-        "CONFIG": {
-            "host": "amqp://guest:guest@127.0.0.1/asgi",
-        },
-    },
-}

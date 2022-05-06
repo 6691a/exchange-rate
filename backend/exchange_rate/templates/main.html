@@ -8,10 +8,23 @@
 
     {% block css %}
     {% endblock %}
+
+    {% block js %}
+    <script defer src="{% static 'js/socket.js' %}"></script>
+    {% endblock %}
 </head>
 
 <body>
     {% block body %}
+    <span id="test1">[[time]]</span>
+    <li class="nav-item">
+        <button id="socket_1" type="button" class="nav-link", value="USD" role="tab">미국</button>
+    </li>
+    <li class="nav-item">
+        <button id="socket_2" type="button" class="nav-link", value="JPY" role="tab">일본</button>
+    </li>
+
+
 
     {% endblock %}
 </body>

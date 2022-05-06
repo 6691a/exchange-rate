@@ -5,6 +5,7 @@
 </head>
 <body>
     What chat room would you like to enter?<br>
+    <button id="socket_id" value="USA">미국</button>
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">
 
@@ -16,9 +17,8 @@
             }
         };
 
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/' + roomName + '/';
+        document.querySelector('#socket_id').onclick = function(e) {
+            window.location.pathname = '/' + this.value + '/';
         };
     </script>
 </body>

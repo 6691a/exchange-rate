@@ -12,6 +12,7 @@ class Env(BaseSettings):
 
     # Django
     SECRET_KEY: SecretStr
+    TIME_ZONE: str
     EXCHANGE_RATE_API_URL: str
 
     RABBIT_MQ_URL: SecretStr
@@ -55,6 +56,8 @@ DATABASES = {
 }
 
 STATIC_URL = "/static/"
+
+TIME_ZONE = env.TIME_ZONE
 
 EXCHANGE_RATE_API_URL = env.EXCHANGE_RATE_API_URL
 

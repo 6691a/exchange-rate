@@ -2,9 +2,8 @@ from datetime import date
 from typing import List
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.db import database_sync_to_async
-from django.db.models.query import QuerySet
 
-from base.schemas import ResponseSchema
+from base.schemas import ResponseSchema, ErrorSchema
 from ..apis.v1.schemas import ExchangeRateSchema
 from ..models import ExchangeRate
 
@@ -26,13 +25,13 @@ class ExchangeRateConsumer(AsyncJsonWebsocketConsumer):
         self.group_name = self.scope["url_route"]["kwargs"]["currency"]
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
-
         if exchange := await today_exchange(currency__icontains=self.group_name):
-            print(ExchangeRate.parse_obj(exchange))
-            # print(ResponseSchema.parse_obj(data=ExchangeRate(exchange)))
-
-            # data = ResponseSchema(data=List[ExchangeRateSchema(**exchange.dict)])
-            # await self.send(data.json())
+            return await self.send(
+                ResponseSchema(data=[ExchangeRateSchema(**i.dict) for i in exchange]).json()
+            )
+        await self.send(
+            ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
+        )
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)

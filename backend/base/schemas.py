@@ -1,3 +1,4 @@
+from datetime import datetime
 from ninja import Schema
 from typing import TypeVar, Generic
 from pydantic.generics import GenericModel
@@ -31,10 +32,14 @@ class ErrorSchema(Schema):
 
 
 class BaseSchema(Schema):
+    @classmethod
+    def kst_time(cls, time: datetime):
+        return time.astimezone().strftime(settings.DATE_TIME_FORMATE)
+
     @validator("created_at", check_fields=False)
     def validate_created_at(cls, v):
-        return v.strftime(settings.DATE_TIME_FORMATE)
+        return cls.kst_time(v)
 
-    @staticmethod
+    @validator("updated_at", check_fields=False)
     def validate_updated_at(cls, v):
-        return v.strftime(settings.DATE_TIME_FORMATE)
+        return cls.kst_time(v)

@@ -16,4 +16,4 @@ class ExchangeRateSchema(BaseSchema):
 
     @validator("fix_time")
     def validate_fix_time(cls, v):
-        return v.strftime("%Y.%m.%d %H:%M")
+        return cls.kst_time(v)

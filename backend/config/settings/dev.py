@@ -14,8 +14,6 @@ class Env(BaseSettings):
     SECRET_KEY: SecretStr
     TIME_ZONE: str
 
-    ASGI_RABBIT_MQ_URL: SecretStr
-
     KAKAO_LOGIN_REST_KEY: SecretStr
 
     class Config:

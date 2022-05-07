@@ -17,6 +17,9 @@ class Env(BaseSettings):
 
     RABBIT_MQ_URL: SecretStr
 
+    REDIS_URL: SecretStr
+    REDIS_PORT: int
+
     KAKAO_LOGIN_REST_KEY: SecretStr
 
     class Config:
@@ -71,13 +74,15 @@ KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()
 
 
 # channels
+# channels
 ASGI_APPLICATION = "config.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "host": env.RABBIT_MQ_URL.get_secret_value(),
+            "hosts": [(env.REDIS_URL.get_secret_value(), env.REDIS_PORT)],
         },
     },
 }
+

@@ -22,6 +22,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # RUN adduser -u 8080 --disabled-password --gecos "" exchange-rate && chown -R exchange-rate /app
 # USER exchange-rate 
 
-CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile", "./gunicorn-access.log", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile", "./gunicorn-access.log", "--error-logfile" "./gunicorn-error.log" "--bind", "0.0.0.0:8000"]
 
 # gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker --access-logfile ./gunicorn-access.log --bind 0.0.0.0:8000

@@ -100,6 +100,8 @@ CACHES = {
         "TIMEOUT": 86400,
     }
 }
+# channels
+ASGI_APPLICATION = "config.asgi.application"
 
 AUTH_USER_MODEL = "account.User"
 

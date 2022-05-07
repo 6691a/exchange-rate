@@ -1,7 +1,7 @@
 
 let socket
-
-const path = 'wss://' + window.location.host + '/ws/exchange_rate/'
+const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
+const path = protocol + window.location.host + '/ws/exchange_rate/'
 function socket_connect(name) {
     if (!socket) {
         socket = new WebSocket(

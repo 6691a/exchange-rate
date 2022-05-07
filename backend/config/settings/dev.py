@@ -68,8 +68,6 @@ TIME_ZONE = env.TIME_ZONE
 KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()
 
 # channels
-ASGI_APPLICATION = "config.asgi.application"
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",

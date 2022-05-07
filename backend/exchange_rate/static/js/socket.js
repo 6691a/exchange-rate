@@ -1,24 +1,17 @@
 
 let socket
 
+const path = 'wss://' + window.location.host + '/ws/exchange_rate/'
 function socket_connect(name) {
     if (!socket) {
         socket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/exchange_rate/'
-            + name
-            + '/'
+            path + name + '/'
         )
     }
     else if (socket.url.indexOf(name) === -1) {
         socket.close()
         socket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/exchange_rate/'
-            + name
-            + '/'
+            path + name + '/'
         )
     }
     add_socket_event()

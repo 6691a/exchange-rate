@@ -1,6 +1,6 @@
 FROM python:3.10.4-slim
 
-RUN apt -y install gcc
+RUN apt update -y && apt upgrade -y && apt -y install gcc
 
 WORKDIR /app
 

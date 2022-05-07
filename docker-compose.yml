@@ -14,7 +14,8 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./:/gunicorn-access.log
+      - ./gunicorn-access.log:/gunicorn-access.log
+      - ./gunicorn-error.log:/gunicorn-error.log
 
   nginx:
     container_name: nginx
@@ -37,6 +38,7 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
   celery_worker:
     <<: *django
     container_name: "celery_worker"
@@ -44,6 +46,7 @@ services:
     restart: always
     depends_on:
       - postgres
+
   celery_beat:
     <<: *django
     container_name: "celery_beat"

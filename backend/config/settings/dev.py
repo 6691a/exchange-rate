@@ -40,22 +40,23 @@ INSTALLED_APPS += [
 MIDDLEWARE += []
 
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env.DB_HOST,
+        "USER": env.DB_USERNAME,
+        "PASSWORD": env.DB_PASSWORD.get_secret_value(),
+        "NAME": env.DB_NAME,
+    }
+}
+
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": env.DB_HOST,
-#         "USER": env.DB_USERNAME,
-#         "PASSWORD": env.DB_PASSWORD.get_secret_value(),
-#         "NAME": env.DB_NAME,
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",

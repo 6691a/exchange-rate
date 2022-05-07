@@ -10,7 +10,9 @@ from ..models import ExchangeRate
 
 @database_sync_to_async
 def today_exchange(*args, **kwargs) -> List:
-    kwargs["created_at__date"] = date.today()
+    # kwargs["created_at__date"] = date.today()
+    kwargs["created_at__date"] = "2022-05-06"
+
     return list(ExchangeRate.objects.filter(*args, **kwargs))
 
 

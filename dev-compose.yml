@@ -5,10 +5,11 @@ services:
     &django
     container_name: "exchange_rate"
     env_file:
-      - ./backend/.env
-    build:
-      context: ./backend
-      dockerfile: dockerfile
+      - ./backend/dev.env
+    image: hub.1ife.kr/exchange-rate:0.5.2
+    # build:
+    #   context: ./backend
+    #   dockerfile: dockerfile
     restart: always
     expose:
       - 8000

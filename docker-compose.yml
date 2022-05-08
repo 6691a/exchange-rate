@@ -21,8 +21,6 @@ services:
     container_name: "socket_exchange_rate"
     expose:
       - 8001
-    ports:
-      - 8001
     # volumes:
     #   - ./log/socket/:/app/uvicorn.log
     command: uvicorn config.asgi:application --host=0.0.0.0 --port=8001

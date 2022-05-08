@@ -13,8 +13,17 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./:/gunicorn-access.log
-      - ./:/gunicorn-error.log
+      - ./log/gunicorn/:/app/gunicorn-access.log
+      - ./log/gunicorn/:/app/gunicorn-error.log
+
+  socket:
+    <<: *django'
+    container_name: "socket_exchange_rate"
+    expose:
+      - 8001
+    volumes:
+      - ./log/socket/:/app/uvicorn.log
+    command: uvicorn config.asgi:application --log-config ./uvicorn.log --host=0.0.0.0 --port=8001
 
   nginx:
     container_name: nginx

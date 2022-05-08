@@ -17,7 +17,7 @@ services:
       - ./log/gunicorn/:/app/gunicorn-error.log
 
   socket:
-    <<: *django'
+    <<: *django
     container_name: "socket_exchange_rate"
     expose:
       - 8001

@@ -15,10 +15,24 @@ services:
     # depends_on:
       # - postgres
 
+  socket:
+    <<: *django
+    container_name: "socket_exchange_rate"
+    expose:
+      - 8001
+
+    # volumes:
+    #   - ./log/socket/:/app/uvicorn.log
+    command: uvicorn config.asgi:application --host=0.0.0.0 --port=8001
+    # command: daphne config.asgi:application --bind 0.0.0.0 --port 8001 --verbosity 1
+
   nginx:
     container_name: nginx
     # image: ${NGINX_IMAGE}:${NGINX_TAG}
-    image: hub.1ife.kr/nginx:0.1.0
+    # image: hub.1ife.kr/nginx:0.1.0
+    build:
+      context: ./nginx
+      dockerfile: dockerfile
     restart: always
     ports:
       - 80:80

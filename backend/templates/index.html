@@ -7,27 +7,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title%} {% endblock %}</title>
-    
+
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo/premium-icon-investment-32.png' %}" />
+
     <!-- Core CSS -->
-    
     <link rel="stylesheet" href="{% static 'css/core/core.css' %}" class="template-customizer-core-css" />
     <link rel="stylesheet" href="{% static 'css/core/theme-default.css' %}" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{% static 'css/core/demo.css' %}" />
 
     {% block css %}
     {% endblock %}
-
+    <!-- Core JS -->
+    <script src="{% static 'js/core/bootstrap.js' %}"></script>
     {% block js %}
     {% endblock %}
 </head>
 
 <body>
-    {% include "menu.html" %}
     {% if request.user.is_authenticated %}
-        <p>{{ request.user.email }}</p>
-        
-    {% else %}
-        
+    {% include "menu.html" %}
     {% endif %}
 
     {% block body %}

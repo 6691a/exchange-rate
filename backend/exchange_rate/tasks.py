@@ -18,7 +18,7 @@ class Currency:
         httpx not 200
             - return None
         """
-        r = httpx.get(settings.EXCHANGE_RATE_API_URL)
+        r = httpx.get("http://fx.kebhana.com/FER1101M.web")
 
         if r.status_code != 200:
             return
@@ -35,12 +35,16 @@ class Currency:
         if not res:
             return False
 
+        data = []
         fix_time = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
         for i in res.get("리스트"):
             currency = i.get("통화명")
             sales_rate = i.get("매매기준율")
-            ExchangeRate.objects.create(fix_time=fix_time, currency=currency, sales_rate=sales_rate)
+            data.append(ExchangeRate(fix_time=fix_time, currency=currency, sales_rate=sales_rate))
+
+        ExchangeRate.objects.bulk_create(data)
         return True
+
 
 @shared_task
 def day_off():

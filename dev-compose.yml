@@ -5,20 +5,35 @@ services:
     &django
     container_name: "exchange_rate"
     env_file:
-      - ./backend/.env
-    build:
-      context: ./backend
-      dockerfile: dockerfile
+      - ./backend/dev.env
+    image: hub.1ife.kr/exchange-rate:0.5.2
+    # build:
+    #   context: ./backend
+    #   dockerfile: dockerfile
     restart: always
     expose:
       - 8000
     # depends_on:
       # - postgres
 
+  socket:
+    <<: *django
+    container_name: "socket_exchange_rate"
+    expose:
+      - 8001
+
+    # volumes:
+    #   - ./log/socket/:/app/uvicorn.log
+    command: uvicorn config.asgi:application --host=0.0.0.0 --port=8001
+    # command: daphne config.asgi:application --bind 0.0.0.0 --port 8001 --verbosity 1
+
   nginx:
     container_name: nginx
     # image: ${NGINX_IMAGE}:${NGINX_TAG}
-    image: hub.1ife.kr/nginx:0.1.0
+    # image: hub.1ife.kr/nginx:0.1.0
+    build:
+      context: ./nginx
+      dockerfile: dockerfile
     restart: always
     ports:
       - 80:80
@@ -37,17 +52,17 @@ services:
   #   ports:
   #     - 5432:5432
 
-  celery_worker:
-    <<: *django
-    container_name: "celery_worker"
-    command: celery -A config worker --loglevel=info
-    # depends_on:
-    #   - postgres
+  # celery_worker:
+  #   <<: *django
+  #   container_name: "celery_worker"
+  #   command: celery -A config worker --loglevel=info
+  #   # depends_on:
+  #   #   - postgres
   
-  celery_beat:
-    <<: *django
-    container_name: "celery_beat"
-    command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+  # celery_beat:
+  #   <<: *django
+  #   container_name: "celery_beat"
+  #   command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     # command: celery -A config beat --loglevel=info
     # depends_on:
     #   - postgres

@@ -1,7 +1,7 @@
-from django.urls import re_path, path
+from django.urls import path
 
 from .consumers import ExchangeRateConsumer
 
 websocket_urlpatterns = [
-    path(r"ws/exchange_rate/", ExchangeRateConsumer.as_asgi()),
+    path("ws/exchange_rate/<str:currency>/", ExchangeRateConsumer.as_asgi()),
 ]

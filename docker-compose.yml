@@ -7,17 +7,27 @@ services:
     env_file:
       - ./.env
     image: ${DJANGO_IMAGE}:${DJANGO_TAG}
-    # image: hub.1ife.kr/exchange-rate:0.3.0
     restart: always
     expose:
       - 8000
     depends_on:
       - postgres
+    # volumes:
+    #   - ./log/gunicorn/:/app/gunicorn-access.log
+    #   - ./log/gunicorn/:/app/gunicorn-error.log
+
+    # socket:
+    #   <<: *django
+    #   container_name: "socket_exchange_rate"
+    #   expose:
+    #     - 8001
+    #   # volumes:
+    #   #   - ./log/socket/:/app/uvicorn.log
+    #   command: uvicorn config.asgi:application --host=0.0.0.0 --port=8001
 
   nginx:
     container_name: nginx
     image: ${NGINX_IMAGE}:${NGINX_TAG}
-    # image: hub.1ife.kr/nginx:0.1.0
     restart: always
     ports:
       - 80:80
@@ -35,6 +45,7 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
   celery_worker:
     <<: *django
     container_name: "celery_worker"
@@ -42,6 +53,7 @@ services:
     restart: always
     depends_on:
       - postgres
+
   celery_beat:
     <<: *django
     container_name: "celery_beat"

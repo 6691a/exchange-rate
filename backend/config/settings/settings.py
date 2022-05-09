@@ -1,6 +1,4 @@
-import imp
 from pathlib import Path
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -17,14 +15,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "channels",
     "debug_toolbar",
+    "storages",
+    "channels",
     "account",
     "exchange_rate",
 ]
 
 INTERNAL_IPS = [
-    "127.0.0.1",
+    # "127.0.0.1",
 ]
 
 MIDDLEWARE = [
@@ -91,8 +90,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATICFILES_DIRS = [BASE_DIR / "static"]
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # cashe
@@ -103,18 +100,11 @@ CACHES = {
         "TIMEOUT": 86400,
     }
 }
+# channels
+ASGI_APPLICATION = "config.asgi.application"
 
 AUTH_USER_MODEL = "account.User"
 
 LOGIN_URL = "/account/login"
 
-ASGI_APPLICATION = "config.asgi.application"
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
-        "CONFIG": {
-            "host": "amqp://guest:guest@127.0.0.1/asgi",
-        },
-    },
-}
+DATE_TIME_FORMATE = "%Y.%m.%d %H:%M"

@@ -14,7 +14,7 @@ pipeline {
 
         // CI
         string(name: "DJANGO_IMAGE_NAME", defaultValue: 'exchange-rate', description: "DJANGO_IMAGE_NAME")
-        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.5.1', description: "DJANGO_IMAGE_TAG")
+        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.5.2', description: "DJANGO_IMAGE_TAG")
         string(name: "NGINX_IMAGE_NAME", defaultValue: 'nginx', description: "NGINX_IMAGE_NAME")
         string(name: "NGINX_IMAGE_TAG", defaultValue: '0.1.0', description: "NGINX_IMAGE_TAG")
 
@@ -168,7 +168,6 @@ pipeline {
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
-                        docker-compose -f docker-compose.yml down; \
                         docker-compose pull; \
                         ${DOCKER_RMI_CMD}; \
                         docker-compose -f docker-compose.yml up -d --build;'

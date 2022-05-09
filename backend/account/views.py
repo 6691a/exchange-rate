@@ -9,7 +9,11 @@ from base import redirects
 from .models import User
 
 key = settings.KAKAO_LOGIN_REST_KEY
-redirect_url = "http://127.0.0.1:8000/account/login/kakao/callback/"
+
+if settings.DEBUG:
+    redirect_url = "http://127.0.0.1:8000/account/login/kakao/callback/"
+else:
+    redirect_url = "https://finance.1ife.kr/account/login/kakao/callback/"
 
 
 def kakao_login(request):

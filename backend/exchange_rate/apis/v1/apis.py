@@ -25,3 +25,15 @@ async def get_exchange_rate(request, currency: str):
     if exchange := await _exchange_latest("created_at", currency__icontains=currency):
         return 200, ResponseSchema(data=ExchangeRateSchema(**exchange.dict))
     return 400, ResponseSchema(data=ErrorSchema(error="currency not found"), status=400)
+
+
+@sync_to_async
+def t1():
+    ExchangeRate(fix_time="2022-01-01", currency="미국", sales_rate="200")
+    return ExchangeRate.objects.create(fix_time="2022-01-01", currency="미국", sales_rate="200")
+
+
+@router.get("test/")
+async def test(request):
+    await t1()
+    return 200

@@ -35,14 +35,11 @@ class Currency:
         if not res:
             return False
 
-        data = []
         fix_time = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
         for i in res.get("리스트"):
             currency = i.get("통화명")
             sales_rate = i.get("매매기준율")
-            data.append(ExchangeRate(fix_time=fix_time, currency=currency, sales_rate=sales_rate))
-
-        ExchangeRate.objects.bulk_create(data)
+            ExchangeRate.objects.create(fix_time=fix_time, currency=currency, sales_rate=sales_rate)
         return True
 
 

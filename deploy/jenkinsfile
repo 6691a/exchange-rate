@@ -5,7 +5,7 @@ pipeline {
         booleanParam(name: "BUILD", defaultValue: true, description: "DOCKER_IMAGE_BUILD")
         booleanParam(name: "TEST", defaultValue: true, description: "RUN_TEST")
         booleanParam(name: "PUSH", defaultValue: true, description: "DOCKER_IMAGE_PUSH")
-        booleanParam(name : 'DEPLOY', defaultValue : true, description : 'DEPLOY_WORKLOAD')
+        booleanParam(name : 'DEPLOY', defaultValue : false, description : 'DEPLOY_WORKLOAD')
         booleanParam(name : 'PROMPT_FOR_DEPLOY', defaultValue : false, description : 'PROMPT_FOR_DEPLOY')
 
         // SETTINGS
@@ -14,7 +14,7 @@ pipeline {
 
         // CI
         string(name: "DJANGO_IMAGE_NAME", defaultValue: 'exchange-rate', description: "DJANGO_IMAGE_NAME")
-        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.5.2', description: "DJANGO_IMAGE_TAG")
+        string(name: "DJANGO_IMAGE_TAG", defaultValue: '0.5.3', description: "DJANGO_IMAGE_TAG")
         string(name: "NGINX_IMAGE_NAME", defaultValue: 'nginx', description: "NGINX_IMAGE_NAME")
         string(name: "NGINX_IMAGE_TAG", defaultValue: '0.1.0', description: "NGINX_IMAGE_TAG")
 

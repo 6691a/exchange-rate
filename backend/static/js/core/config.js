@@ -44,12 +44,14 @@ let config = {
 
 let assetsPath = document.documentElement.getAttribute('data-assets-path'),
   templateName = document.documentElement.getAttribute('data-template'),
+  mode = document.documentElement.getAttribute('data-mode'),
   rtlSupport = true; // set true for rtl support (rtl + ltr), false for ltr only.
+
 /**
- * TemplateCustomizer
- * ! You must use(include) template-customizer.js to use TemplateCustomizer settings
- * -----------------------------------------------------------------------------------------------
- */
+* TemplateCustomizer
+* ! You must use(include) template-customizer.js to use TemplateCustomizer settings
+* -----------------------------------------------------------------------------------------------
+*/
 
 // To use more themes, just push it to THEMES object.
 
@@ -89,7 +91,7 @@ if (typeof TemplateCustomizer !== 'undefined') {
     displayCustomizer: false,
     // lang: 'fr',
     // defaultTheme: 2,
-    // defaultStyle: 'light',
+    defaultStyle: mode,
     // defaultTextDir: 'ltr',
     // defaultLayoutType: 'fixed',
     // defaultMenuCollapsed: true,

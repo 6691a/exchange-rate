@@ -2,11 +2,12 @@ from django.contrib import admin
 
 from .models import User, Setting
 
-
-class SeetingInline(admin.TabularInline):
-    model = Setting
-    can_delete = False
-    verbose_name_plural = 'setting'
+@admin.register(Setting)
+class SeetingInline(admin.ModelAdmin):
+    pass
+    # model = Setting
+    # can_delete = False
+    # verbose_name_plural = 'setting'
 
 
 @admin.register(User)

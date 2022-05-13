@@ -365,38 +365,10 @@ if (typeof $ !== 'undefined') {
     // ? You can remove the following JS if you don't want to use search functionality.
     //----------------------------------------------------------------------------------
 
-    var searchToggler = $('.search-toggler'),
-      searchInputWrapper = $('.search-input-wrapper'),
+    var searchInputWrapper = $('.search-input-wrapper'),
       searchInput = $('.search-input'),
       contentBackdrop = $('.content-backdrop');
 
-    // Open search input on click of search icon
-    if (searchToggler.length) {
-      searchToggler.on('click', function () {
-        if (searchInputWrapper.length) {
-          searchInputWrapper.toggleClass('d-none');
-          searchInput.focus();
-        }
-      });
-    }
-    // Open search on 'CTRL+/'
-    $(document).on('keydown', function (event) {
-      let ctrlKey = event.ctrlKey,
-        slashKey = event.which === 191;
-
-      if (ctrlKey && slashKey) {
-        if (searchInputWrapper.length) {
-          searchInputWrapper.toggleClass('d-none');
-          searchInput.focus();
-        }
-      }
-    });
-    // Todo: Add container-xxl to twitter-typeahead
-    searchInput.on('focus', function () {
-      if (searchInputWrapper.hasClass('container-xxl')) {
-        searchInputWrapper.find('.twitter-typeahead').addClass('container-xxl');
-      }
-    });
 
     if (searchInput.length) {
       // Filter config
@@ -423,14 +395,10 @@ if (typeof $ !== 'undefined') {
         };
       };
 
-      // Search JSON
-      var searchJson = 'search-vertical.json'; // For vertical layout
-      if ($('#layout-menu').hasClass('menu-horizontal')) {
-        var searchJson = 'search-horizontal.json'; // For vertical layout
-      }
+
       // Search API AJAX call
       var searchData = $.ajax({
-        url: assetsPath + 'json/' + searchJson, //? Use your own search api instead
+        url: assetsPath + 'json/', //? Use your own search api instead
         dataType: 'json',
         async: false
       }).responseJSON;
@@ -447,7 +415,6 @@ if (typeof $ !== 'undefined') {
                 suggestion: 'suggestion d-flex justify-content-between px-3 py-2 w-100'
               }
             },
-            // ? Add/Update blocks as per need
             // Pages
             {
               name: 'pages',
@@ -455,7 +422,6 @@ if (typeof $ !== 'undefined') {
               limit: 5,
               source: filterConfig(searchData.pages),
               templates: {
-                header: '<h6 class="suggestions-header text-primary mb-0 mx-3 mt-3 pb-2">Pages</h6>',
                 suggestion: function ({ url, icon, name }) {
                   return (
                     '<a href="' +
@@ -474,88 +440,11 @@ if (typeof $ !== 'undefined') {
                 },
                 notFound:
                   '<div class="not-found px-3 py-2">' +
-                  '<h6 class="suggestions-header text-primary mb-2">Pages</h6>' +
-                  '<p class="py-2 mb-0"><i class="bx bx-error-circle bx-xs me-2"></i> No Results Found</p>' +
+                  '<p class="py-2 mb-0"><i class="bx bx-error-circle bx-xs me-2"></i>국가를 찾지 못했어요</p>' +
                   '</div>'
               }
             },
-            // Files
-            {
-              name: 'files',
-              display: 'name',
-              limit: 4,
-              source: filterConfig(searchData.files),
-              templates: {
-                header: '<h6 class="suggestions-header text-primary mb-0 mx-3 mt-3 pb-2">Files</h6>',
-                suggestion: function ({ src, name, subtitle, meta }) {
-                  return (
-                    '<a href="javascript:;">' +
-                    '<div class="d-flex w-50">' +
-                    '<img class="me-3" src="' +
-                    assetsPath +
-                    src +
-                    '" alt="' +
-                    name +
-                    '" height="32">' +
-                    '<div class="w-75">' +
-                    '<h6 class="mb-0">' +
-                    name +
-                    '</h6>' +
-                    '<small class="text-muted">' +
-                    subtitle +
-                    '</small>' +
-                    '</div>' +
-                    '</div>' +
-                    '<small class="text-muted">' +
-                    meta +
-                    '</small>' +
-                    '</a>'
-                  );
-                },
-                notFound:
-                  '<div class="not-found px-3 py-2">' +
-                  '<h6 class="suggestions-header text-primary mb-2">Files</h6>' +
-                  '<p class="py-2 mb-0"><i class="bx bx-error-circle bx-xs me-2"></i> No Results Found</p>' +
-                  '</div>'
-              }
-            },
-            // Members
-            {
-              name: 'members',
-              display: 'name',
-              limit: 4,
-              source: filterConfig(searchData.members),
-              templates: {
-                header: '<h6 class="suggestions-header text-primary mb-0 mx-3 mt-3 pb-2">Members</h6>',
-                suggestion: function ({ name, src, subtitle }) {
-                  return (
-                    '<a href="app-user-view-account.html">' +
-                    '<div class="d-flex align-items-center">' +
-                    '<img class="rounded-circle me-3" src="' +
-                    assetsPath +
-                    src +
-                    '" alt="' +
-                    name +
-                    '" height="32">' +
-                    '<div class="user-info">' +
-                    '<h6 class="mb-0">' +
-                    name +
-                    '</h6>' +
-                    '<small class="text-muted">' +
-                    subtitle +
-                    '</small>' +
-                    '</div>' +
-                    '</div>' +
-                    '</a>'
-                  );
-                },
-                notFound:
-                  '<div class="not-found px-3 py-2">' +
-                  '<h6 class="suggestions-header text-primary mb-2">Members</h6>' +
-                  '<p class="py-2 mb-0"><i class="bx bx-error-circle bx-xs me-2"></i> No Results Found</p>' +
-                  '</div>'
-              }
-            }
+
           )
           //On typeahead result render.
           .bind('typeahead:render', function () {

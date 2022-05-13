@@ -124,7 +124,7 @@ if (document.getElementById('layout-menu')) {
       if (styleSwitcherToggleEl) {
         styleSwitcherToggleEl.querySelector('i').classList.add('bx-moon');
         new bootstrap.Tooltip(styleSwitcherToggleEl, {
-          title: 'Dark mode',
+          title: '다크 모드',
           fallbackPlacements: ['bottom']
         });
       }
@@ -133,7 +133,7 @@ if (document.getElementById('layout-menu')) {
       if (styleSwitcherToggleEl) {
         styleSwitcherToggleEl.querySelector('i').classList.add('bx-sun');
         new bootstrap.Tooltip(styleSwitcherToggleEl, {
-          title: 'Light mode',
+          title: '라이트 모드',
           fallbackPlacements: ['bottom']
         });
       }

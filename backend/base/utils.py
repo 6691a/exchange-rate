@@ -1,4 +1,4 @@
-def destructuring(dict, *args):
+def destructuring(dict:dict, *args:str):
     """
     ex) foo, blah = pluck(things, 'foo', 'blah')
     https://stackoverflow.com/a/17074606/15126990

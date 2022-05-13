@@ -1,3 +1,4 @@
+from black import Mode
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
@@ -15,6 +16,7 @@ class UserManager(BaseUserManager):
             raise ValueError("must have user password")
 
         user = self.model(email=self.normalize_email(email))
+        user.setting = Setting.objects.create()
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -25,6 +27,34 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
+    
+    def create(self, *args, **kwargs):
+        nickname, email, gender, age_range, avatar_url = destructuring(
+            kwargs, "nickname", "email", "gender", "age_range", "avatar_url"
+        )
+
+        user = super().create(
+            email=email, 
+            nickname=nickname,
+            gender=gender,
+            age_range=age_range,
+            avatar_url=avatar_url,
+            setting=Setting.objects.create()
+        )
+        user.set_unusable_password()
+        return user
+
+
+
+class Setting(BaseModel):
+    MODE_CHOICES = [
+        ("light", "light"),
+        ("dark", "dark"),
+    ]
+    mode = models.CharField(max_length=10, choices=MODE_CHOICES, default=MODE_CHOICES[0][0], verbose_name="환경 모드")
+
+    class Meta:
+        db_table = "setting"
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
@@ -38,6 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    setting = models.OneToOneField(Setting, on_delete=models.CASCADE, default='', null=True)
 
     objects = UserManager()
 
@@ -50,7 +81,6 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     def update(self, **kwargs):
         if not kwargs:
             return
-
         nickname, gender, age_range, avatar_url = destructuring(
             kwargs, "nickname", "gender", "age_range", "avatar_url"
         )
@@ -71,3 +101,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     class Meta:
         db_table = "user"
+
+
+
+

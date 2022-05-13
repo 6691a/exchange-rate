@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from base.utils import destructuring
 from base import redirects
-from .models import User
+from .models import User, Setting
 
 key = settings.KAKAO_LOGIN_REST_KEY
 
@@ -59,20 +59,13 @@ def _get_user(access_token) -> dict | None:
 
 
 def _get_or_user(**kwargs) -> User:
-
-    nickname, email, gender, age_range, avatar_url = destructuring(
-        kwargs, "nickname", "email", "gender", "age_range", "avatar_url"
-    )
-    user, is_create = User.objects.get_or_create(email=email)
-    if is_create:
-        user.set_unusable_password()
-        user.age_range = age_range
-        user.nickname = nickname
-        user.avatar_url = avatar_url
-        user.gender = gender
-        user.save()
-    else:
+    email = kwargs.get("email")
+    try:
+        print(kwargs["avatar_url"])
+        user = User.objects.get(email=email)
         user.update(**kwargs)
+    except User.DoesNotExist:
+        user = User.objects.create(**kwargs)
 
     return user
 
@@ -92,7 +85,6 @@ def kakao_login_callback(request):
         return redirects.login()
 
     kakao_user = kakao_user.get("kakao_account")
-
     nickname = kakao_user.get("profile").get("nickname")
     avatar_url = kakao_user.get("profile").get("profile_image_url")
     email = kakao_user.get("email")

@@ -35,12 +35,15 @@
 
     <!-- Icorn -->
     <link rel="stylesheet" href="{% static 'css/icon/boxicons.css' %}" />
-
     {% block css %} {% endblock %}
-    <!-- Core JS -->
-    <script src="{% static 'js/core/helpers.js' %}"></script>
-    <script src="{% static 'js/core/bootstrap.js' %}"></script>
 
+    <!-- Core JS -->
+    <script src="{% static 'js/core/bootstrap.js' %}"></script>
+    <script src="{% static 'js/core/helpers.js' %}"></script>
+    <script src="{% static 'js/core/template-customizer.js' %}"></script>
+    <script src="{% static 'js/core/config.js' %}"></script>
+    {% comment %} <script defer src="{% static 'js/core/lib/jquery/jquery.js' %}"></script> {% endcomment %}
+    <script defer src="{% static 'js/core/main.js' %}"></script> 
     {% block js %} {% endblock %}
   </head>
 

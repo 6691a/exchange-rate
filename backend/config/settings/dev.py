@@ -16,8 +16,8 @@ class Env(BaseSettings):
 
     KAKAO_LOGIN_REST_KEY: SecretStr
 
-    # AWS_ACCESS_KEY_ID: SecretStr
-    # AWS_SECRET_ACCESS_KEY: SecretStr
+    AWS_ACCESS_KEY_ID: SecretStr
+    AWS_SECRET_ACCESS_KEY: SecretStr
 
     class Config:
         env_file = "dev.env"

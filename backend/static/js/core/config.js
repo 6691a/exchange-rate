@@ -45,6 +45,7 @@ let config = {
 let assetsPath = document.documentElement.getAttribute('data-assets-path'),
   templateName = document.documentElement.getAttribute('data-template'),
   mode = document.documentElement.getAttribute('data-mode'),
+  debug = document.documentElement.getAttribute('data-debug'),
   rtlSupport = true; // set true for rtl support (rtl + ltr), false for ltr only.
 
 /**
@@ -83,10 +84,13 @@ TemplateCustomizer.LANGUAGES.fr = { ... };
  * defaultShowDropdownOnHover : true, false (for horizontal layout only)
  */
 
+const host = debug ? 'http://127.0.0.1:8000/' : 'https://s3-exchange-rate.s3.ap-northeast-2.amazonaws.com/'
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
     // static/ css /
-    cssPath: assetsPath + '/css/core' + '' + '/',
+    // cssPath: assetsPath+ '/1/' + '/css/core' + '' + '/',
+    cssPath: host + assetsPath + '/css/core' + '' + '/',
+
     themesPath: assetsPath + '/css/core' + '' + '/',
     displayCustomizer: false,
     // lang: 'fr',
@@ -97,7 +101,7 @@ if (typeof TemplateCustomizer !== 'undefined') {
     // defaultMenuCollapsed: true,
     // defaultNavbarFixed: true,
     // defaultFooterFixed: false
-    defaultShowDropdownOnHover: true
+    defaultShowDropdownOnHover: true,
     // controls: [
     //   'rtl',
     //   'style',

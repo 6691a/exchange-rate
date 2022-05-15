@@ -10,7 +10,9 @@ from ...models import ExchangeRate
 def today_exchange_aggregate(currency: str) -> QuerySet:
     return (
         ExchangeRate.objects.filter(
-            currency__icontains=currency, created_at__date=date.today()
+            # currency__icontains=currency, created_at__date=date.today()
+            currency__icontains=currency, created_at__date="2022-05-13"
+
         )
         .aggregate(
             hight_price=Max(F("standard_price")), low_price=Min(F("standard_price"))
@@ -21,5 +23,6 @@ def today_exchange_aggregate(currency: str) -> QuerySet:
 @sync_to_async
 def today_exchange(currency: str) -> list[ExchangeRate]:
     return list(
-        ExchangeRate.objects.filter(currency__icontains=currency, created_at__date=date.today())
+        ExchangeRate.objects.filter(currency__icontains=currency, created_at__date="2022-05-13")
+        # ExchangeRate.objects.filter(currency__icontains=currency, created_at__date=date.today())
     )

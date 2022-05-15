@@ -11,7 +11,7 @@
     {% endblock %}
 
     {% block js %}
-    {% comment %} <script src="{% static 'js/socket.js' %}"></script> {% endcomment %}
+    <script defer src="{% static 'js/chart.js' %}"></script>
     <script defer src="{% static 'lib/apex-charts/apexcharts.js' %}"></script>
     <script defer src="{% static 'js/analytics/analytics.js' %}"></script>
     {% endblock %}
@@ -50,19 +50,6 @@
               <i class="tf-icons bx bx-user"></i> Profile
             </button>
           </li>
-          <li class="nav-item">
-            <button
-              type="button"
-              class="nav-link"
-              role="tab"
-              data-bs-toggle="tab"
-              data-bs-target="#navs-justified-messages"
-              aria-controls="navs-justified-messages"
-              aria-selected="false"
-            >
-              <i class="tf-icons bx bx-message-square"></i> Messages
-            </button>
-          </li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
@@ -70,7 +57,7 @@
             <div class="col-md-12 mb-1">
               <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                  <h5 class="card-title m-0 me-2">미국</h5>
+                  <h5 id="chart" class="card-title m-0 me-2" data-currency='usd'>미국</h5>
                 </div>
                 <div class="card-body">
                   <div class="d-flex justify-content-start">
@@ -116,17 +103,6 @@
             <p class="mb-0">
               Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
               cotton candy liquorice caramels.
-            </p>
-          </div>
-          <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
-            <p>
-              Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
-              cupcake gummi bears cake chocolate.
-            </p>
-            <p class="mb-0">
-              Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
-              roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
-              jelly-o tart brownie jelly.
             </p>
           </div>
         </div>

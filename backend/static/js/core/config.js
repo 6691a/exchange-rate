@@ -83,12 +83,14 @@ TemplateCustomizer.LANGUAGES.fr = { ... };
  * defaultFooterFixed: true, false
  * defaultShowDropdownOnHover : true, false (for horizontal layout only)
  */
-
-const host = debug ? 'http://127.0.0.1:8000/' : 'https://s3-exchange-rate.s3.ap-northeast-2.amazonaws.com/'
+const host = debug ? 'http://127.0.0.1:8000' : ''
+const path = '/api/v1/'
+const api_host = host ? host +  path : window.location.protocol + '//' + window.location.hostname + path
+const static_host = host ? host + '/' : 'https://s3-exchange-rate.s3.ap-northeast-2.amazonaws.com/'
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
-    cssPath: host + assetsPath + '/css/core' + '' + '/',
-    themesPath: host + assetsPath + '/css/core' + '' + '/',
+    cssPath: static_host + assetsPath + '/css/core' + '' + '/',
+    themesPath: static_host + assetsPath + '/css/core' + '' + '/',
     displayCustomizer: false,
     // lang: 'fr',
     // defaultTheme: 2,

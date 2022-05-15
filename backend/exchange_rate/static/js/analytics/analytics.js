@@ -2,8 +2,8 @@
  * Card Analytics
  */
 
-'use strict';
 
+'use strict';
 (function() {
   let cardColor, headingColor, axisColor, shadeColor, borderColor, heatMap1, heatMap2, heatMap3, heatMap4;
 
@@ -28,9 +28,6 @@
     heatMap3 = '#a5a7ff';
     heatMap4 = '#696cff';
   }
-
-
-
 
   // Total Balance - Line Chart
   // --------------------------------------------------------------------

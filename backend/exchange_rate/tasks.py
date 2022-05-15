@@ -38,8 +38,8 @@ class Currency:
         fix_time = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
         for i in res.get("리스트"):
             currency = i.get("통화명")
-            sales_rate = i.get("매매기준율")
-            ExchangeRate.objects.create(fix_time=fix_time, currency=currency, sales_rate=sales_rate)
+            standard_price = i.get("매매기준율")
+            ExchangeRate.objects.create(fix_time=fix_time, currency=currency, standard_price=standard_price)
         return True
 
 

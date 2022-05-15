@@ -38,7 +38,17 @@
     totalBalanceChartConfig = {
       series: [
         {
-          data: [137, 210, 160, 275, 205, 315]
+          name: "Series 1",
+          data: [
+            {
+              x: "02-10-2017 10",
+              y: 34
+            },
+            {
+              x: "02-10-2017 GMT",
+              y: 36
+            },
+          ]
         }
       ],
       chart: {
@@ -100,7 +110,14 @@
         }
       },
       xaxis: {
-        categories: ['10:00', '10:05', '10:10', '10:15', '10:20', '10:25'],
+        labels: {
+          datetimeFormatter: {
+            year: 'yyyy',
+            month: 'MMM \'yy',
+            day: 'dd MMM',
+            hour: 'HH-mm'
+          }
+        },
         axisBorder: {
           show: false
         },

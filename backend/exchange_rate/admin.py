@@ -5,7 +5,7 @@ from .models import ExchangeRate, ExchangeRateSchedule
 
 @admin.register(ExchangeRate)
 class ExchangeRateAdmin(admin.ModelAdmin):
-    list_display = ["currency", "sales_rate", "created_at", "fix_time"]
+    list_display = ["currency", "standard_price", "created_at", "fix_time"]
     # search_fields = ["id", "username", "company_code__company_code"]
 
 

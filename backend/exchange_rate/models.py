@@ -7,7 +7,7 @@ from base.models import BaseModel
 class ExchangeRate(BaseModel):
     fix_time = models.DateTimeField(verbose_name="환율 갱신일")
     currency = models.CharField(max_length=25, verbose_name="통화")
-    sales_rate = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="매매 기준")
+    standard_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="매매 기준")
 
     class Meta:
         db_table = "exchange_rate"

@@ -1,39 +1,22 @@
+from base.schemas import ErrorSchema, ResponseSchema
 from ninja import Router
-from asgiref.sync import sync_to_async
-from django.db.models.query import QuerySet
 
-from base.schemas import ResponseSchema, ErrorSchema
-
-from ...models import ExchangeRate
-from .schemas import ExchangeRateSchema
+from .schemas import ExchangeRateSchema, ChartSchema
+from .query import today_exchange_aggregate, today_exchange
 
 router = Router()
 
 
-@sync_to_async
-def _exchange_latest(latest: str, *args, **kwargs) -> QuerySet | None:
-    try:
-        return ExchangeRate.objects.filter(*args, **kwargs).latest(latest)
-    except ExchangeRate.DoesNotExist:
-        return None
-
-
 @router.get(
-    "", response={200: ResponseSchema[ExchangeRateSchema], 400: ResponseSchema[ErrorSchema]}
+    "", response={200: ResponseSchema[ChartSchema], 400: ResponseSchema[ErrorSchema]}
 )
-async def get_exchange_rate(request, currency: str):
-    if exchange := await _exchange_latest("created_at", currency__icontains=currency):
-        return 200, ResponseSchema(data=ExchangeRateSchema(**exchange.dict))
+async def today_exchange_rate(request, currency: str):
+    if exchange := await today_exchange(currency):
+        aggregate = await today_exchange_aggregate(currency)
+        return 200, ResponseSchema(
+            data=ChartSchema(
+                exchange_rate=[ExchangeRateSchema(**i.dict) for i in exchange],
+                **aggregate,
+            )
+        )
     return 400, ResponseSchema(data=ErrorSchema(error="currency not found"), status=400)
-
-
-@sync_to_async
-def t1():
-    ExchangeRate(fix_time="2022-01-01", currency="미국", sales_rate="200")
-    return ExchangeRate.objects.create(fix_time="2022-01-01", currency="미국", sales_rate="200")
-
-
-@router.get("test/")
-async def test(request):
-    await t1()
-    return 200

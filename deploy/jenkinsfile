@@ -163,14 +163,13 @@ pipeline {
                         ssh -p ${params.TARGET_PORT} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
                         ${params.TARGET_USER}@${params.TARGET_SERVER} \
                         '
-                        ${DOCKER_HUB_LOGIN}; \
                         export DJANGO_IMAGE=${DJANGO_DOCKER_IMAGE}; \
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
                         docker-compose pull; \
                         docker-compose -f docker-compose.yml down; \
-                        docker-compose -f docker-compose.yml up -d --build;'
+                        docker-compose -f docker-compose.yml up -d --build; \
                         ${DOCKER_RMI_CMD}; \
                 """
                 }

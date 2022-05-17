@@ -8,12 +8,14 @@
 
     {% block css %}
     <link rel="stylesheet" href="{% static 'css/icon/flag-icons.css' %}" />
+    <link rel="stylesheet" href="{% static 'libs/apex-charts/apex-charts.css' %}" />
+
     {% endblock %}
 
     {% block js %}
-    <script defer src="{% static 'js/chart.js' %}"></script>
-    <script defer src="{% static 'lib/apex-charts/apexcharts.js' %}"></script>
-    <script defer src="{% static 'js/analytics/analytics.js' %}"></script>
+    <script defer src="{% static 'libs/apex-charts/apexcharts.js' %}"></script>
+    <script defer src="{% static 'js/chart.js' %}"></script>/
+    {% comment %} <script defer src="{% static 'js/analytics/analytics.js' %}"></script> {% endcomment %}
     {% endblock %}
 </head>
 

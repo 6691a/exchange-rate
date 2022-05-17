@@ -34,7 +34,7 @@
 const res = {}
 const chart = Vue.createApp({
     data() {
-        return { 
+        return {
             res
         }
     },
@@ -46,54 +46,17 @@ const chart = Vue.createApp({
                 }
             })
             if (r.status === 200) {
-                this.res = r.data
-                console.log(this.res);
-            }
-        },
-        chartStyle: () => {
-            let cardColor, headingColor, axisColor, shadeColor, borderColor, heatMap1, heatMap2, heatMap3, heatMap4;
-
-            if (isDarkStyle) {
-                cardColor = config.colors_dark.cardColor;
-                headingColor = config.colors_dark.headingColor;
-                axisColor = config.colors_dark.axisColor;
-                borderColor = config.colors_dark.borderColor;
-                shadeColor = 'dark';
-                heatMap1 = '#4f51c0';
-                heatMap2 = '#595cd9';
-                heatMap3 = '#8789ff';
-                heatMap4 = '#c3c4ff';
-            } else {
-                cardColor = config.colors.white;
-                headingColor = config.colors.headingColor;
-                axisColor = config.colors.axisColor;
-                borderColor = config.colors.borderColor;
-                shadeColor = '';
-                heatMap1 = '#e1e2ff';
-                heatMap2 = '#c3c4ff';
-                heatMap3 = '#a5a7ff';
-                heatMap4 = '#696cff';
+                this.res = r.data.data
             }
         },
         renderChart: () => {
-            this.chartStyle()
             const totalBalanceChartEl = document.querySelector('#totalBalanceChart')
+            const data = self.res.exchange_rate
             const totalBalanceChartConfig = {
-                series: [
-                    {
-                        name: "Series 1",
-                        data: [
-                        {
-                            x: "02-10-2017 10",
-                            y: 34
-                        },
-                        {
-                            x: "02-10-2017 GMT",
-                            y: 36
-                        },
-                        ]
-                    }
-                ],
+                series: [{
+                    name: "가격",
+                    data: data.map((v) => ({ x: v.created_at, y: v.standard_price }))
+                }],
                 chart: {
                     height: 225,
                     parentHeightOffset: 0,
@@ -131,7 +94,7 @@ const chart = Vue.createApp({
                     discrete: [{
                         fillColor: config.colors.white,
                         seriesIndex: 0,
-                        dataPointIndex: 5,
+                        dataPointIndex: data.length - 1,
                         strokeColor: config.colors.primary,
                         strokeWidth: 8,
                         size: 6,
@@ -151,14 +114,6 @@ const chart = Vue.createApp({
                     }
                 },
                 xaxis: {
-                    labels: {
-                        datetimeFormatter: {
-                        year: 'yyyy',
-                        month: 'MMM \'yy',
-                        day: 'dd MMM',
-                        hour: 'HH-mm'
-                        }
-                    },
                     axisBorder: {
                         show: false
                     },
@@ -168,26 +123,30 @@ const chart = Vue.createApp({
                     labels: {
                         show: false,
                         style: {
-                        fontSize: '13px',
-                        colors: axisColor
+                            fontSize: '13px',
+                            colors: self.axisColor
                         }
+                    },
+                    tooltip: {
+                        enabled: false
                     }
                 },
                 yaxis: {
                     labels: {
                         show: false
-                    }
+                    },
+
                 },
                 points: [
                     {
                         x: new Date('01 Dec 2017').getTime(),
                         y: 8607.55,
                         marker: {
-                        size: 8,
+                            size: 8,
                         },
                         label: {
-                        borderColor: '#FF4560',
-                        text: 'Point Annotation'
+                            borderColor: '#FF4560',
+                            text: 'Point Annotation'
                         }
                     }
                 ]
@@ -198,53 +157,9 @@ const chart = Vue.createApp({
             }
         }
     },
-    mounted() {
-        this.getExchangeRate(this.$el.textContent);
+    async mounted() {
+        await this.getExchangeRate(this.$el.textContent);
+        this.renderChart()
     }
 })
 chart.mount('#chart')
-console.log(res)
-console.log(chart.res);
-// const chart = new Vue({
-//     delimiters: ['[[', ']]'],
-//     el: '#chart',
-//     data(){
-//         return {
-//             res: null,
-//         }
-//     },
-//     async created() {
-//         const vm = this
-//         // // currency = vm.$el.innerHTML
-//         const currency = document.getElementById('chart').getAttribute("data-currency")
-//         await vm.getExchangeRate(vm, currency)
-//     },
-//     methods: {
-//         getExchangeRate: async (vm, currency) => {
-//             const res = await axios.get(api_host, {
-//                 params: {
-//                     currency
-//                 }
-//             })
-//             if (res.status === 200) {
-//                 vm.res = res.data
-//                 console.log(res);
-//             }
-//             // axios.get(api_host, {
-//             //     params: {
-//             //         currency
-//             //     }
-//             // })
-//             // .then((r) => {
-//             //     if (r.status === 200) {
-//             //         vm.res = JSON.parse(JSON.stringify(r.data.data))
-//             //         console.log(JSON.parse(JSON.stringify(r.data.data)));
-//             //     }
-                
-//             // }) 
-//             // .catch((e) => {
-//             //     console.log(e)
-//             // });
-//         },
-//     },
-// })

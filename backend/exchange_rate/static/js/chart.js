@@ -33,6 +33,7 @@
 // }
 const res = {}
 const chart = Vue.createApp({
+    delimiters: ['[[', ']]'],
     data() {
         return {
             res
@@ -158,7 +159,8 @@ const chart = Vue.createApp({
         }
     },
     async mounted() {
-        await this.getExchangeRate(this.$el.textContent);
+
+        await this.getExchangeRate(this.$refs.currency.textContent);
         this.renderChart()
     }
 })

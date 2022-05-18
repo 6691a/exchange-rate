@@ -37,7 +37,7 @@ const chart = Vue.createApp({
     delimiters: ['[[', ']]'],
 
     setup() {
-        let price = 0
+        let price = Vue.ref(0)
         const currency = Vue.ref()
         const exchangeLength = 79
 
@@ -48,7 +48,9 @@ const chart = Vue.createApp({
                 }
             })
             if (r.status === 200) {
-                return r.data.data
+                data = r.data.data
+                price.value = data.exchange_rate.slice(-1)[0]["standard_price"]
+                return data
             }
         }
 
@@ -97,8 +99,8 @@ const chart = Vue.createApp({
                     strokeWidth: 4,
                     discrete: [{
                         fillColor: config.colors.white,
+                        seriesIndex: 0,
                         dataPointIndex: data.length - 1,
-                        dataPointIndex: 0,
                         strokeColor: config.colors.primary,
                         strokeWidth: 8,
                         size: 6,
@@ -113,7 +115,7 @@ const chart = Vue.createApp({
                     padding: {
                         top: -10,
                         left: 0,
-                        right: 0,
+                        right: 10,
                         bottom: 10
                     }
                 },
@@ -139,21 +141,22 @@ const chart = Vue.createApp({
                     labels: {
                         show: false
                     },
-
                 },
-                points: [
-                    {
-                        x: new Date('01 Dec 2017').getTime(),
-                        y: 8607.55,
-                        marker: {
-                            size: 8,
-                        },
-                        label: {
-                            borderColor: '#FF4560',
-                            text: 'Point Annotation'
+                annotations: {
+                    points: [
+                        {
+                            x: new Date('12:51').getTime(),
+                            y: 1272.9,
+                            marker: {
+                                size: 8,
+                            },
+                            label: {
+                                borderColor: '#FF4560',
+                                text: 'Point Annotation'
+                            }
                         }
-                    }
-                ]
+                    ],
+                }
             }
             if (typeof totalBalanceChartEl !== undefined && totalBalanceChartEl !== null) {
                 const totalBalanceChart = new ApexCharts(totalBalanceChartEl, totalBalanceChartConfig);
@@ -166,14 +169,9 @@ const chart = Vue.createApp({
             renderChart(res)
 
         })
-
         return { currency, price }
     },
-    // mounted() {
-    //     // this.getExchangeRate()
-
-    //     // this.renderChart()
-    // }
-
 })
 chart.mount('#chart')
+
+

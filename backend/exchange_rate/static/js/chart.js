@@ -31,35 +31,38 @@
 // document.querySelector('#socket_2').onclick = function (e) {
 //     socket_connect(this.value)
 // }
-const res = {}
+
+
 const chart = Vue.createApp({
     delimiters: ['[[', ']]'],
-    data() {
-        return {
-            res
-        }
-    },
-    methods: {
-        getExchangeRate: async (currency) => {
+
+    setup() {
+        let price = 0
+        const currency = Vue.ref()
+        const exchangeLength = 79
+
+        const getExchangeRate = async (currency) => {
             const r = await axios.get(api_host, {
                 params: {
                     currency
                 }
             })
             if (r.status === 200) {
-                this.res = r.data.data
+                return r.data.data
             }
-        },
-        renderChart: () => {
+        }
+
+        const renderChart = (res) => {
             const totalBalanceChartEl = document.querySelector('#totalBalanceChart')
-            const data = self.res.exchange_rate
+            const data = res.exchange_rate
             const totalBalanceChartConfig = {
                 series: [{
                     name: "가격",
                     data: data.map((v) => ({ x: v.created_at, y: v.standard_price }))
                 }],
                 chart: {
-                    height: 225,
+                    height: "225",
+                    width: (() => `${Math.max(10, Math.min(data.length / exchangeLength * 100, 100))}%`)(),
                     parentHeightOffset: 0,
                     parentWidthOffset: 0,
                     zoom: { enabled: false },
@@ -94,8 +97,8 @@ const chart = Vue.createApp({
                     strokeWidth: 4,
                     discrete: [{
                         fillColor: config.colors.white,
-                        seriesIndex: 0,
                         dataPointIndex: data.length - 1,
+                        dataPointIndex: 0,
                         strokeColor: config.colors.primary,
                         strokeWidth: 8,
                         size: 6,
@@ -110,7 +113,7 @@ const chart = Vue.createApp({
                     padding: {
                         top: -10,
                         left: 0,
-                        right: 20,
+                        right: 0,
                         bottom: 10
                     }
                 },
@@ -157,11 +160,20 @@ const chart = Vue.createApp({
                 totalBalanceChart.render();
             }
         }
-    },
-    async mounted() {
 
-        await this.getExchangeRate(this.$refs.currency.textContent);
-        this.renderChart()
-    }
+        Vue.onMounted(async () => {
+            const res = await getExchangeRate(currency.value.textContent)
+            renderChart(res)
+
+        })
+
+        return { currency, price }
+    },
+    // mounted() {
+    //     // this.getExchangeRate()
+
+    //     // this.renderChart()
+    // }
+
 })
 chart.mount('#chart')

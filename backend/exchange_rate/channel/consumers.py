@@ -22,7 +22,13 @@ class ExchangeRateConsumer(AsyncJsonWebsocketConsumer):
         other :
             await self.send_json()
         """
+        self.user = self.scope["user"]
         self.group_name = self.scope["url_route"]["kwargs"]["currency"]
+        
+        print(self.user)
+        print(self.group_name)
+        print(self.channel_name)
+
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
         if exchange := await today_exchange(currency__icontains=self.group_name):

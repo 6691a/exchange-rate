@@ -23,7 +23,4 @@ class ChartSchema(BaseSchema):
     exchange_rate: list[ExchangeRateSchema]
     hight_price: float | None
     low_price: float | None
-
-
-class ChartQuerySchema(BaseSchema):
-    currency: str
+    chart_length: int = 50

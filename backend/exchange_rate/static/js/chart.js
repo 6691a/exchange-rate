@@ -1,36 +1,36 @@
-// 
-// let socket
-// const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
-// const path = protocol + window.location.host + '/ws/exchange_rate/'
 
-// function socket_connect(name) {
-//     if (!socket) {
-//         socket = new WebSocket(
-//             path + name + '/'
-//         )
-//     }
-//     else if (socket.url.indexOf(name) === -1) {
-//         socket.close()
-//         socket = new WebSocket(
-//             path + name + '/'
-//         )
-//     }
-//     add_socket_event()
+let socket
+const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
+const p = protocol + window.location.host + '/ws/exchange_rate/'
 
-// }
-// function add_socket_event() {
-//     socket.onmessage = function (e) {
-//         const data = JSON.parse(e.data);
-//         console.log(data)
-//     };
-// }
+function socket_connect(name) {
+    if (!socket) {
+        socket = new WebSocket(
+            p + name + '/'
+        )
+    }
+    else if (socket.url.indexOf(name) === -1) {
+        socket.close()
+        socket = new WebSocket(
+            p + name + '/'
+        )
+    }
+    add_socket_event()
 
-// document.querySelector('#socket_1').onclick = function (e) {
-//     socket_connect(this.value)
-// }
-// document.querySelector('#socket_2').onclick = function (e) {
-//     socket_connect(this.value)
-// }
+}
+function add_socket_event() {
+    socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data)
+    };
+}
+
+document.querySelector('#socket_1').onclick = function (e) {
+    socket_connect(this.value)
+}
+document.querySelector('#socket_2').onclick = function (e) {
+    socket_connect(this.value)
+}
 
 
 const chart = Vue.createApp({
@@ -38,8 +38,8 @@ const chart = Vue.createApp({
 
     setup() {
         let price = Vue.ref(0)
+        let chartLength = 0
         const currency = Vue.ref()
-        const exchangeLength = 79
 
         const getExchangeRate = async (currency) => {
             const r = await axios.get(api_host, {
@@ -49,7 +49,9 @@ const chart = Vue.createApp({
             })
             if (r.status === 200) {
                 data = r.data.data
+                chartLength = data.chart_length
                 price.value = data.exchange_rate.slice(-1)[0]["standard_price"]
+
                 return data
             }
         }
@@ -64,7 +66,7 @@ const chart = Vue.createApp({
                 }],
                 chart: {
                     height: "225",
-                    width: (() => `${Math.max(10, Math.min(data.length / exchangeLength * 100, 100))}%`)(),
+                    width: (() => `${Math.max(6, Math.min(data.length / chartLength * 100, 100))}%`)(),
                     parentHeightOffset: 0,
                     parentWidthOffset: 0,
                     zoom: { enabled: false },

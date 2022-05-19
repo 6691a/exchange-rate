@@ -5,7 +5,7 @@ pipeline {
         booleanParam(name: "BUILD", defaultValue: true, description: "DOCKER_IMAGE_BUILD")
         booleanParam(name: "TEST", defaultValue: true, description: "RUN_TEST")
         booleanParam(name: "PUSH", defaultValue: true, description: "DOCKER_IMAGE_PUSH")
-        booleanParam(name : 'DEPLOY', defaultValue : false, description : 'DEPLOY_WORKLOAD')
+        booleanParam(name : 'DEPLOY', defaultValue : true, description : 'DEPLOY_WORKLOAD')
         booleanParam(name : 'PROMPT_FOR_DEPLOY', defaultValue : false, description : 'PROMPT_FOR_DEPLOY')
 
         // SETTINGS
@@ -168,8 +168,7 @@ pipeline {
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
                         docker-compose pull; \
-                        docker-compose -f docker-compose.yml down; \
-                        docker-compose -f docker-compose.yml up -d --build; \
+                        docker-compose -f docker-compose.yml up -d; \
                         ${DOCKER_RMI_CMD};
                         '
                 """

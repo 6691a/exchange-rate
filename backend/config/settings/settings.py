@@ -18,8 +18,10 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "storages",
     "channels",
+    "channel",
     "account",
     "exchange_rate",
+
 ]
 
 INTERNAL_IPS = [

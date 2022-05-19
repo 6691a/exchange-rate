@@ -81,7 +81,14 @@ const chart = Vue.createApp({
                     },
                     toolbar: {
                         show: false
-                    }
+                    },
+                    animations: {
+                        enabled: false,
+                        easing: "linear",
+                        dynamicAnimation: {
+                            speed: 1000
+                        }
+                    },
                 },
                 dataLabels: {
                     enabled: false

@@ -6,7 +6,7 @@
   data-theme="theme-default"
   data-assets-path="static"
   data-mode="{{user.setting.mode}}"
-  data-debug="{{ debug }}""
+  data-debug="{{ debug }}"
   class="layout-navbar-fixed dark-style layout-menu-fixed"
 >
   <head>
@@ -40,7 +40,11 @@
 
     <!-- Core JS -->
     <script src="{% static 'js/core/libs/axios/axios.js' %}"></script>
+    {% if debug  %}
     <script src="{% static 'js/core/libs/vue/vue.dev.js' %}"></script>
+    {% else%}
+    <script src="{% static 'js/core/libs/vue/vue.prod.js' %}"></script>
+    {% endif %}
     <script src="{% static 'js/core/bootstrap.js' %}"></script>
     <script src="{% static 'js/core/helpers.js' %}"></script>
     <script src="{% static 'js/core/template-customizer.js' %}"></script>

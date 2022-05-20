@@ -83,9 +83,9 @@ TemplateCustomizer.LANGUAGES.fr = { ... };
  * defaultFooterFixed: true, false
  * defaultShowDropdownOnHover : true, false (for horizontal layout only)
  */
-const host = debug ? 'http://127.0.0.1:8000' : ''
+const host = debug ? 'http://127.0.0.1:8000' : window.location.protocol + '//' + window.location.hostname
 const path = '/api/v1/'
-const api_host = host ? host +  path : window.location.protocol + '//' + window.location.hostname + path
+const api_path = host + path
 const static_host = host ? host + '/' : 'https://s3-exchange-rate.s3.ap-northeast-2.amazonaws.com/'
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({

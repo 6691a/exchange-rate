@@ -1,7 +1,12 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from asgiref.sync import async_to_sync
+
 from base.models import BaseModel
+from base.schemas import ResponseSchema
+from channel.base import channel_group_send
+from .apis.v1.schemas import ExchangeRateSchema
 
 
 class ExchangeRate(BaseModel):
@@ -17,8 +22,9 @@ class ExchangeRate(BaseModel):
 @receiver(post_save, sender=ExchangeRate)
 def creat_exchange_rate(sender, instance, created, **kwargs):
     if created:
-        print(instance.__dict__)
-        # Profile.objects.create(user=instance)
+        print(instance.currency)
+        async_to_sync(channel_group_send)(group_name="USD", data=ResponseSchema(data=ExchangeRateSchema(**instance.dict)).json())
+        print("123")
 
 
 class ExchangeRateSchedule(BaseModel):

@@ -1,29 +1,8 @@
 
-let socket
-const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
-const p = protocol + window.location.host + '/ws/exchange_rate/'
 
-function socket_connect(name) {
-    if (!socket) {
-        socket = new WebSocket(
-            p + name + '/'
-        )
-    }
-    else if (socket.url.indexOf(name) === -1) {
-        socket.close()
-        socket = new WebSocket(
-            p + name + '/'
-        )
-    }
-    add_socket_event()
 
-}
-function add_socket_event() {
-    socket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data)
-    };
-}
+
+
 
 document.querySelector('#socket_1').onclick = function (e) {
     socket_connect(this.value)
@@ -39,6 +18,7 @@ const chart = Vue.createApp({
     setup() {
         let price = Vue.ref(0)
         let chartLength = 0
+        let socket = null
         const currency = Vue.ref()
 
         const getExchangeRate = async (currency) => {
@@ -173,9 +153,37 @@ const chart = Vue.createApp({
             }
         }
 
+        const socketConnect = (name) => {
+            const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
+            const p = protocol + window.location.host + '/ws/exchange_rate/'
+
+            socket = new WebSocket(
+                p + name + '/'
+            )
+            // else if (socket.url.indexOf(name) === -1) {
+            //     socket.close()
+            //     socket = new WebSocket(
+            //         p + name + '/'
+            //     )
+            // }
+            addSocketEvent()
+        }
+
+        const addSocketEvent = () => {
+            socket.onmessage = function (e) {
+                const data = JSON.parse(e.data);
+                console.log(data)
+            };
+        }
+
+
         Vue.onMounted(async () => {
-            const res = await getExchangeRate(currency.value.textContent)
-            renderChart(res)
+            console.log(currency.value)
+            console.log(currency.props)
+
+            // socketConnect(currency.value.textContent)
+            // const res = await getExchangeRate(currency.value.textContent)
+            // renderChart(res)
 
         })
         return { currency, price }

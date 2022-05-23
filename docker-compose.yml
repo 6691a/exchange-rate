@@ -45,20 +45,20 @@ services:
     #     - ./data/:/var/lib/postgresql/data
     #   ports:
     #     - 5432:5432
-    # celery_worker:
-    #   <<: *django
-    #   container_name: "celery_worker"
-    #   # command: celery -A config worker --loglevel=info
-    #   command: celery -A config worker -B
-    #   restart: always
-    #   depends_on:
-    #     - postgres
+    celery_worker:
+      <<: *django
+      container_name: "celery_worker"
+      # command: celery -A config worker --loglevel=info
+      command: celery -A config worker -B
+      restart: always
+      depends_on:
+        - postgres
 
-    # celery_beat:
-    #   <<: *django
-    #   container_name: "celery_beat"
-    #   restart: always
-    #   command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    #   # command: celery -A config beat --loglevel=info
-    #   depends_on:
-    #     - postgres
+    celery_beat:
+      <<: *django
+      container_name: "celery_beat"
+      restart: always
+      command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+      # command: celery -A config beat --loglevel=info
+      depends_on:
+        - postgres

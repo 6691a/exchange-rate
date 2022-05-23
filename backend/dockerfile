@@ -1,4 +1,6 @@
-FROM hub.1ife.kr/python:3.10.4-slim
+FROM python:3.10.4-slim
+
+RUN apt update -y && apt upgrade -y && apt -y install gcc
 
 WORKDIR /app
 

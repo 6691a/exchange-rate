@@ -13,9 +13,9 @@ services:
       - 8000
     depends_on:
       - postgres
-    volumes:
-      - ./:/gunicorn-access.log
-      - ./:/gunicorn-error.log
+    # volumes:
+    #   - ./:/gunicorn-access.log
+    #   - ./:/gunicorn-error.log
 
   nginx:
     container_name: nginx

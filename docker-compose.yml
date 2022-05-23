@@ -7,58 +7,51 @@ services:
     env_file:
       - ./.env
     image: ${DJANGO_IMAGE}:${DJANGO_TAG}
+    # image: hub.1ife.kr/exchange-rate:0.3.0
     restart: always
     expose:
       - 8000
     depends_on:
       - postgres
-    # volumes:
-    #   - ./log/gunicorn/:/app/gunicorn-access.log
-    #   - ./log/gunicorn/:/app/gunicorn-error.log
+    volumes:
+      - ./:/gunicorn-access.log
+      - ./:/gunicorn-error.log
 
-    # socket:
-    #   <<: *django
-    #   container_name: "socket_exchange_rate"
-    #   expose:
-    #     - 8001
-    #   # volumes:
-    #   #   - ./log/socket/:/app/uvicorn.log
-    #   command: uvicorn config.asgi:application --host=0.0.0.0 --port=8001
+  nginx:
+    container_name: nginx
+    image: ${NGINX_IMAGE}:${NGINX_TAG}
+    # image: hub.1ife.kr/nginx:0.1.0
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - django
 
-    # nginx:
-    #   container_name: nginx
-    #   image: ${NGINX_IMAGE}:${NGINX_TAG}
-    #   restart: always
-    #   ports:
-    #     - 80:80
-    #   depends_on:
-    #     - django
+  postgres:
+    container_name: "postgres"
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - ./data/:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
 
-    # postgres:
-    #   container_name: "postgres"
-    #   restart: always
-    #   image: postgres
-    #   environment:
-    #     POSTGRES_USER: "${DB_USERNAME}"
-    #     POSTGRES_PASSWORD: "${DB_PASSWORD}"
-    #   volumes:
-    #     - ./data/:/var/lib/postgresql/data
-    #   ports:
-    #     - 5432:5432
-    celery_worker:
-      <<: *django
-      container_name: "celery_worker"
-      # command: celery -A config worker --loglevel=info
-      command: celery -A config worker -B
-      restart: always
-      depends_on:
-        - postgres
+  celery_worker:
+    <<: *django
+    container_name: "celery_worker"
+    command: celery -A config worker --loglevel=info
+    restart: always
+    depends_on:
+      - postgres
 
-    celery_beat:
-      <<: *django
-      container_name: "celery_beat"
-      restart: always
-      command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-      # command: celery -A config beat --loglevel=info
-      depends_on:
-        - postgres
+  celery_beat:
+    <<: *django
+    container_name: "celery_beat"
+    restart: always
+    command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    # command: celery -A config beat --loglevel=info
+    depends_on:
+      - postgres

@@ -1,5 +1,7 @@
 FROM python:3.10.4-slim
 
+RUN apt update -y && apt upgrade -y && apt -y install gcc
+
 WORKDIR /app
 
 # Keeps Python from generating .pyc files in the container

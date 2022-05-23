@@ -15,7 +15,7 @@ async def today_exchange_rate(request, currency: str):
         aggregate = await today_exchange_aggregate(currency)
         return 200, ResponseSchema(
             data=ChartSchema(
-                exchange_rate=[ExchangeRateSchema(**i.dict) for i in exchange],
+                exchange_rate=list((ExchangeRateSchema(**i.dict) for i in exchange)),
                 **aggregate,
             )
         )

@@ -1,46 +1,60 @@
-import re
-import json
-import httpx
+from re import (sub as re_sub)
+from json import (loads as json_loads)
+from httpx import (get as httpx_get)
 from celery import shared_task
 from datetime import datetime
-from typing import Union
-from django.conf import settings
 from django.core.cache import cache
+# channels
+from channel.base import channel_group_send
+from asgiref.sync import async_to_sync
 
 from .models import ExchangeRate, ExchangeRateSchedule
+from base.schemas import ResponseSchema
+from .apis.v1.schemas import ExchangeRateSchema
 
 
 class Currency:
-    def get(self) -> Union[dict, None]:
+    def get(self) -> dict | None:
         """
         httpx 200 ok
             - return dict
         httpx not 200
             - return None
         """
-        r = httpx.get("http://fx.kebhana.com/FER1101M.web")
+        r = httpx_get("http://fx.kebhana.com/FER1101M.web")
 
         if r.status_code != 200:
             return
 
         req = r.text.replace("var exView = ", "")
-        req = re.sub(r",(\s)+]", "]", req)
-        return json.loads(req)
+        req = re_sub(r",(\s)+]", "]", req)
+        return json_loads(req)
 
     def __str_to_datetime(self, str: str, format: str) -> datetime:
         return datetime.strptime(str, format)
 
-    def update(self) -> None:
+    def update(self) -> list[ExchangeRate]:
         res = self.get()
         if not res:
             return False
 
         fix_time = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
+        data = []
         for i in res.get("리스트"):
-            currency = i.get("통화명")
+            split = i.get("통화명").split(" ")
+            country = split[0]
+            currency = split[1]
             standard_price = i.get("매매기준율")
-            ExchangeRate.objects.create(fix_time=fix_time, currency=currency, standard_price=standard_price)
-        return True
+            data.append(
+                ExchangeRate(
+                    fix_time=fix_time,
+                    country=country,
+                    currency=currency,
+                    standard_price=standard_price
+                )
+            )
+    
+        return ExchangeRate.objects.bulk_create(data)
 
 
 @shared_task
@@ -73,7 +87,21 @@ def is_day_off():
 def exchange_rate():
     if not is_day_off():
         c = Currency()
-        if not c.update():
-            return -2
-        return datetime.today().date()
+        if data := c.update():
+            send_exchange_rate(data)
+            return datetime.today().date()
+        return -2
     return -1
+
+
+def send_exchange_rate(data: list[ExchangeRate]):
+    print(data)
+    for i in data:
+        group_name = i.currency
+        # print(i.currency.split(' ')[0])
+        # print(i.currency.split(' ')[1])
+        # print(i)
+        async_to_sync(channel_group_send)(
+            group_name=group_name, 
+            data=ResponseSchema(data=(ExchangeRateSchema(**i.dict))).json()
+        )

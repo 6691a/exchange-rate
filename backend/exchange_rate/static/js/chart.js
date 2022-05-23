@@ -178,10 +178,8 @@ const chart = Vue.createApp({
 
 
         Vue.onMounted(async () => {
-            console.log(currency.value)
-            console.log(currency.props)
-
-            // socketConnect(currency.value.textContent)
+            const group = currency.value.getAttribute("value")
+            socketConnect(group)
             // const res = await getExchangeRate(currency.value.textContent)
             // renderChart(res)
 

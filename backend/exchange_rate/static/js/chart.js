@@ -1,24 +1,18 @@
-
-
-
-
-
-
-document.querySelector('#socket_1').onclick = function (e) {
-    socket_connect(this.value)
-}
-document.querySelector('#socket_2').onclick = function (e) {
-    socket_connect(this.value)
+let axisColor
+if (isDarkStyle) {
+    axisColor = config.colors_dark.axisColor;
+} else {
+    axisColor = config.colors.axisColor;
 }
 
-
-const chart = Vue.createApp({
+const chartVue = Vue.createApp({
     delimiters: ['[[', ']]'],
 
     setup() {
         let price = Vue.ref(0)
         let chartLength = 0
-        let socket = null
+        let chart = null
+        let res = null
         const currency = Vue.ref()
 
         const getExchangeRate = async (currency) => {
@@ -36,17 +30,19 @@ const chart = Vue.createApp({
             }
         }
 
-        const renderChart = (res) => {
-            const totalBalanceChartEl = document.querySelector('#totalBalanceChart')
-            const data = res.exchange_rate
-            const totalBalanceChartConfig = {
-                series: [{
-                    name: "가격",
-                    data: data.map((v) => ({ x: v.created_at, y: v.standard_price }))
-                }],
+        const renderChart = () => {
+            const chartEl = document.querySelector('#chartEl')
+            // const data = res.exchange_rate
+            const chartConfig = {
+                series: [],
+                // series: [{
+                //     name: "가격",
+                //     data: data.map((v) => ({ x: v.created_at, y: v.standard_price }))
+                // }],
                 chart: {
                     height: "225",
-                    width: (() => `${Math.max(6, Math.min(data.length / chartLength * 100, 100))}%`)(),
+                    width: "100%",
+                    // width: (() => `${Math.max(6, Math.min(data.length / chartLength * 100, 100))}%`)(),
                     parentHeightOffset: 0,
                     parentWidthOffset: 0,
                     zoom: { enabled: false },
@@ -89,7 +85,8 @@ const chart = Vue.createApp({
                     discrete: [{
                         fillColor: config.colors.white,
                         seriesIndex: 0,
-                        dataPointIndex: data.length - 1,
+                        // dataPointIndex: data.length - 1,
+                        dataPointIndex: 0,
                         strokeColor: config.colors.primary,
                         strokeWidth: 8,
                         size: 6,
@@ -119,7 +116,7 @@ const chart = Vue.createApp({
                         show: false,
                         style: {
                             fontSize: '13px',
-                            colors: self.axisColor
+                            colors: axisColor
                         }
                     },
                     tooltip: {
@@ -145,20 +142,28 @@ const chart = Vue.createApp({
                             }
                         }
                     ],
+                },
+                noData: {
+                    text: '잠시만 기다려 주세요 😅',
+                    style: {
+                        color: axisColor,
+                        fontSize: '13px',
+                    }
                 }
+
             }
-            if (typeof totalBalanceChartEl !== undefined && totalBalanceChartEl !== null) {
-                const totalBalanceChart = new ApexCharts(totalBalanceChartEl, totalBalanceChartConfig);
-                totalBalanceChart.render();
+            if (typeof chartEl !== undefined && chartConfig !== null) {
+                chart = new ApexCharts(chartEl, chartConfig);
+                chart.render();
             }
         }
 
         const socketConnect = (name) => {
             const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
-            const p = protocol + window.location.host + '/ws/exchange_rate/'
+            const socketPath = protocol + window.location.host + '/ws/exchange_rate/'
 
-            socket = new WebSocket(
-                p + name + '/'
+            const socket = new WebSocket(
+                socketPath + name + '/'
             )
             // else if (socket.url.indexOf(name) === -1) {
             //     socket.close()
@@ -166,27 +171,31 @@ const chart = Vue.createApp({
             //         p + name + '/'
             //     )
             // }
-            addSocketEvent()
+
+            addSocketEvent(socket)
         }
 
-        const addSocketEvent = () => {
-            socket.onmessage = function (e) {
+        const addSocketEvent = (socket) => {
+
+            socket.onmessage = (e) => {
                 const data = JSON.parse(e.data);
+                // Object.assign(obj1, obj2)
                 console.log(data)
+                res = data
             };
         }
 
 
         Vue.onMounted(async () => {
+            renderChart()
             const group = currency.value.getAttribute("value")
             socketConnect(group)
             // const res = await getExchangeRate(currency.value.textContent)
-            // renderChart(res)
 
         })
         return { currency, price }
     },
 })
-chart.mount('#chart')
+chartVue.mount('#chart')
 
 

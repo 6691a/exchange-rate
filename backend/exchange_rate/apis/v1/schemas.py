@@ -5,14 +5,11 @@ from pydantic import validator
 
 
 class ExchangeRateSchema(BaseSchema):
+    country: str
     currency: str
     standard_price: float
     fix_time: datetime
     created_at: datetime
-
-    @validator("currency")
-    def validate_currency(cls, v):
-        return v.split()[0]
 
     @validator("fix_time")
     def validate_fix_time(cls, v):

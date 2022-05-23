@@ -1,9 +1,6 @@
 from django.db import models
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 from base.models import BaseModel
-
 
 
 class ExchangeRate(BaseModel):
@@ -15,8 +12,6 @@ class ExchangeRate(BaseModel):
     class Meta:
         db_table = "exchange_rate"
         ordering = []
-
-
 
 
 class ExchangeRateSchedule(BaseModel):

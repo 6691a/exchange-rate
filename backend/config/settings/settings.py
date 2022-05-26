@@ -102,6 +102,7 @@ CACHES = {
         "TIMEOUT": 86400,
     }
 }
+
 # channels
 ASGI_APPLICATION = "config.asgi.application"
 

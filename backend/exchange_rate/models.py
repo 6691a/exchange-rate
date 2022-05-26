@@ -11,7 +11,7 @@ class ExchangeRate(BaseModel):
 
     class Meta:
         db_table = "exchange_rate"
-        ordering = []
+        ordering = ["created_at"]
 
 
 class ExchangeRateSchedule(BaseModel):

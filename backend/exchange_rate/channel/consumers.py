@@ -1,19 +1,8 @@
-from abc import abstractmethod
-from datetime import date
-from typing import List
-from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from channels.db import database_sync_to_async
 from base.schemas import ResponseSchema, ErrorSchema
 
 from channel.base import BaseWebSocket
 from ..apis.v1.schemas import ExchangeRateSchema
-from ..models import ExchangeRate
-
-
-@database_sync_to_async
-def today_exchange(*args, **kwargs) -> List:
-    kwargs["created_at__date"] = date.today()
-    return list(ExchangeRate.objects.filter(*args, **kwargs))
+from .query import today_exchange
 
 
 class ExchangeRateConsumer(BaseWebSocket):

@@ -8,7 +8,6 @@ MaxExchanteRate = ExchangeRate
 MinExchanteRate = ExchangeRate
 
 
-
 @database_sync_to_async
 def today_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchanteRate, ]:
     today_exchange = ExchangeRate.objects.filter(

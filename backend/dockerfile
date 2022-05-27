@@ -1,10 +1,4 @@
-FROM  hub.1ife.kr/python:3.10.4-slim
-
-# Keeps Python from generating .pyc files in the container
-# ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
-# ENV PYTHONUNBUFFERED=1
+FROM hub.1ife.kr/python-nas:3.10.4-slim
 
 WORKDIR /app
 
@@ -20,4 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # RUN adduser -u 8080 --disabled-password --gecos "" exchange-rate && chown -R exchange-rate /app
 # USER exchange-rate 
 
+# CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile", "./gunicorn-access.log", "--error-logfile", "./gunicorn-error.log", "--bind", "0.0.0.0:8000"]
 CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile", "./gunicorn-access.log", "--bind", "0.0.0.0:8000"]
+

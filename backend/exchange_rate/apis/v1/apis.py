@@ -1,19 +1,18 @@
+from calendar import c
 from base.schemas import ErrorSchema, ResponseSchema
 from ninja import Router
 
 from .schemas import ExchangeRateSchema, ChartSchema
-from .query import today_exchange
+from datetime import date, timedelta, datetime
 
 router = Router()
 
-@router.get(
-    "", response={200: ResponseSchema[ChartSchema], 400: ResponseSchema[ErrorSchema]}
-)
-async def today_exchange_rate(request, currency: str):
-    if exchange := await today_exchange(currency):
-        return 200, ResponseSchema(
-            data=ChartSchema(
-                exchange_rate=list((ExchangeRateSchema(**i.dict) for i in exchange)),
-            )
-        )
-    return 400, ResponseSchema(data=ErrorSchema(error="currency not found"), status=400)
+from channel.base import channel_group_send
+from asgiref.sync import async_to_sync
+from ...models import ExchangeRate
+from django.utils import timezone
+
+
+@router.get("test/")
+def test(request):
+    return 200

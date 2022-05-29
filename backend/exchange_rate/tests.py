@@ -18,11 +18,13 @@ class ChannelSendTest(TestCase):
         ]
         ExchangeRate.objects.bulk_create(data)
     
-    def test_channel_group_send(self):
-        data = ExchangeRate.objects.all()
-        for i in data:
-            print(ResponseSchema(data=(ExchangeRateSchema(**i.dict))).json())
-            channel_group_send(
-                group_name=i.currency,
-                data=ResponseSchema(data=(ExchangeRateSchema(**i.dict))).json()
-            )
+    # def test_channel_group_send(self):
+    #     data = ExchangeRate.objects.all()
+    #     for i in data:
+    #         print(ResponseSchema(data=(ExchangeRateSchema(**i.dict))).json())
+    #         channel_group_send(
+    #             group_name=i.currency,
+    #             data=ResponseSchema(data=(ExchangeRateSchema(**i.dict))).json()
+    #         )
+
+            

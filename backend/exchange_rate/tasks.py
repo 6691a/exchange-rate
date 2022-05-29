@@ -4,13 +4,13 @@ from httpx import (get as httpx_get)
 from celery import shared_task
 from datetime import datetime
 from django.core.cache import cache
-# channels
-from channel.base import channel_group_send
 from asgiref.sync import async_to_sync
 
-from .models import ExchangeRate, ExchangeRateSchedule
+from channel.base import channel_group_send
+from channel.query import latest_exchange_aggregate
 from base.schemas import ResponseSchema
-from .apis.v1.schemas import ExchangeRateSchema
+from .models import ExchangeRate, ExchangeRateSchedule
+from .apis.v1.schemas import ExchangeRateSchema, ChartSchema
 
 
 class Currency:
@@ -96,9 +96,16 @@ def exchange_rate():
 
 def send_exchange_rate(data: list[ExchangeRate]):
     for i in data:
+        low, high = async_to_sync(latest_exchange_aggregate)(currency=i.currency)
+
         group_name = i.currency
-        
         async_to_sync(channel_group_send)(
             group_name=group_name, 
-            data=ResponseSchema(data=(ExchangeRateSchema(**i.dict))).json()
+            data=ResponseSchema(
+                data=ChartSchema(
+                    exchange_rate=[ExchangeRateSchema(**i.dict)],
+                    hight_price=ExchangeRateSchema(**high.dict),
+                    low_price=ExchangeRateSchema(**low.dict)
+                ),
+            ).json()
         )

@@ -1,8 +1,11 @@
 let axisColor
 if (isDarkStyle) {
     axisColor = config.colors_dark.axisColor;
+    bgColor = config.colors_dark.cardColor;
+    
 } else {
     axisColor = config.colors.axisColor;
+    bgColor= config.colors.white;
 }
 
 const chartVue = Vue.createApp({
@@ -11,7 +14,12 @@ const chartVue = Vue.createApp({
     setup() {
         let price = Vue.ref(0)
         let apexChart = null
+        let series = [{
+            name: '가격',
+            data: [],
+        }]
         const currency = Vue.ref()
+        const minWidth = window.innerWidth <= 500 ? 35 : 10
 
         const renderChart = () => {
             const chartEl = document.querySelector('#chartEl')
@@ -22,7 +30,9 @@ const chartVue = Vue.createApp({
                     width: "100%",
                     parentHeightOffset: 0,
                     parentWidthOffset: 0,
-                    zoom: { enabled: false },
+                    zoom: { 
+                        enabled: false 
+                    },
                     type: 'line',
                     dropShadow: {
                         enabled: false,
@@ -58,8 +68,8 @@ const chartVue = Vue.createApp({
                     show: false,
                     padding: {
                         top: -10,
-                        left: 0,
-                        right: 10,
+                        left: 20,
+                        right: 35,
                         bottom: 10
                     }
                 },
@@ -71,10 +81,10 @@ const chartVue = Vue.createApp({
                         show: false
                     },
                     labels: {
-                        show: false,
+                        show: true,
                         style: {
-                            fontSize: '13px',
-                            colors: axisColor
+                            fontSize: '1px',
+                            colors: bgColor
                         }
                     },
                     tooltip: {
@@ -83,7 +93,11 @@ const chartVue = Vue.createApp({
                 },
                 yaxis: {
                     labels: {
-                        show: false
+                        show: true,
+                        style: {
+                            fontSize: '1px',
+                            colors: bgColor
+                        }
                     },
                 },
                 noData: {
@@ -123,17 +137,18 @@ const chartVue = Vue.createApp({
             socket.onmessage = (e) => {
                 const res = JSON.parse(e.data)
                 const data = res.data
+                const exchange = data.exchange_rate
+                const chartLength = data.chart_length
+                const hight_price = data.hight_price
+                const low_price =data.low_price
 
-                console.log(data)
-                // price.value = data.exchange_rate.slice(-1)[0]["standard_price"]
-
-                apexChart.updateSeries([{
-                    name: '가격',
-                    data: data.map((v) => ({ x: v.created_at, y: v.standard_price })),
-                }])
-                console.log(data.length)
+                price.value = exchange.slice(-1)[0]["standard_price"]
+                exchange.forEach((v) => series[0].data.push({x: v.created_at, y: v.standard_price})) 
+                apexChart.updateSeries(series)
                 apexChart.updateOptions({
-                    width: (() => `${Math.max(6, Math.min(data.length / chartLength * 100, 100))}%`)(),
+                    chart: {
+                        width: (() => `${Math.max(minWidth, Math.min(series[0].data.length / chartLength * 100, 100))}%`)()
+                    },
                     markers: {
                         size: 6,
                         colors: 'transparent',
@@ -142,7 +157,7 @@ const chartVue = Vue.createApp({
                         discrete: [{
                             fillColor: config.colors.white,
                             seriesIndex: 0,
-                            dataPointIndex: data.length - 1,
+                            dataPointIndex: series[0].data.length - 1,
                             strokeColor: config.colors.primary,
                             strokeWidth: 8,
                             size: 6,
@@ -151,6 +166,55 @@ const chartVue = Vue.createApp({
                         hover: {
                             size: 7
                         }
+                    },
+                    annotations: {
+                        points: [
+                            {
+                                x: hight_price.created_at,
+                                y: hight_price.standard_price,
+                                marker: {
+                                    strokeColor: config.colors.primary,
+                                    strokeWidth: 4,
+                                    size: 6,
+                                },
+                                label: {
+                                    borderWidth: 0,
+                                    borderRadius: 0,
+                                    offsetX: 0,
+                                    offsetY: 0,
+                                    opacity: 1,
+                                    style: {
+                                        color: axisColor,
+                                        background: bgColor,
+                                        fontSize: '13px',
+                                    },
+                                    text: `최고 ${hight_price.standard_price}원`,
+                                    
+                                }
+                            },
+                            {
+                                x: low_price.created_at,
+                                y: low_price.standard_price,
+                                marker: {
+                                    strokeColor: config.colors.primary,
+                                    strokeWidth: 4,
+                                    size: 6,
+                                },
+                                label: {
+                                    borderWidth: 0,
+                                    borderRadius: 0,
+                                    offsetX: 0,
+                                    offsetY: 50,
+                                    style: {
+                                        color: axisColor,
+                                        background: bgColor,
+                                        fontSize: '13px',
+                                    },
+                                    text: `최저 ${low_price.standard_price}원`,
+                                    
+                                }
+                            },
+                        ]
                     },
                 })
             };

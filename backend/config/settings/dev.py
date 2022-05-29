@@ -39,15 +39,15 @@ INSTALLED_APPS += [
 
 MIDDLEWARE += []
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": env.DB_HOST,
-#         "USER": env.DB_USERNAME,
-#         "PASSWORD": env.DB_PASSWORD.get_secret_value(),
-#         "NAME": env.DB_NAME,
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env.DB_HOST,
+        "USER": env.DB_USERNAME,
+        "PASSWORD": env.DB_PASSWORD.get_secret_value(),
+        "NAME": env.DB_NAME,
+    }
+}
 
 DATABASES = {
     "default": {
@@ -103,7 +103,6 @@ CHANNEL_LAYERS = {
 # STATIC_URL = f"http://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 
 
-# logging
 # LOGGING = {
 #     'version': 1,
 #     'filters': {

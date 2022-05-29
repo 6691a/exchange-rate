@@ -18,6 +18,9 @@ class ExchangeRateSchema(BaseSchema):
 
 class ChartSchema(BaseSchema):
     exchange_rate: list[ExchangeRateSchema]
-    hight_price: float | None
-    low_price: float | None
+    # hight_price: ExchangeRateSchema
+    # low_price: ExchangeRateSchema
+
+    hight_price: ExchangeRateSchema | None
+    low_price: ExchangeRateSchema | None
     chart_length: int = 79

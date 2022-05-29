@@ -37,11 +37,11 @@ class BaseWebSocket(AsyncJsonWebsocketConsumer):
         self.user = self.scope["user"]
         self.group_name = self.scope["url_route"]["kwargs"]["currency"]
 
-        if not self.user.is_authenticated:
-            return
+        # if not self.user.is_authenticated:
+        #     return
         
         await self.channel_layer.group_add(self.group_name, self.channel_name)
-        await self.__save_channel_data(self.user, self.group_name, self.channel_name)
+        # await self.__save_channel_data(self.user, self.group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):

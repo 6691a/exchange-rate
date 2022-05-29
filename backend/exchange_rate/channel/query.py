@@ -9,7 +9,7 @@ MinExchanteRate = ExchangeRate
 
 
 @database_sync_to_async
-def today_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchanteRate, ]:
+def today_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchanteRate]:
     today_exchange = ExchangeRate.objects.filter(
         currency__icontains=currency, created_at__date=date.today()
     )

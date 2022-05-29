@@ -95,12 +95,9 @@ def exchange_rate():
 
 
 def send_exchange_rate(data: list[ExchangeRate]):
-    print(data)
     for i in data:
         group_name = i.currency
-        # print(i.currency.split(' ')[0])
-        # print(i.currency.split(' ')[1])
-        # print(i)
+        
         async_to_sync(channel_group_send)(
             group_name=group_name, 
             data=ResponseSchema(data=(ExchangeRateSchema(**i.dict))).json()

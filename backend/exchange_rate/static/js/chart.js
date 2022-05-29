@@ -13,21 +13,6 @@ const chartVue = Vue.createApp({
         let apexChart = null
         const currency = Vue.ref()
 
-        const getExchangeRate = async (currency) => {
-            const r = await axios.get(api_host, {
-                params: {
-                    currency
-                }
-            })
-            if (r.status === 200) {
-                data = r.data.data
-                chartLength = data.chart_length
-
-
-                return data
-            }
-        }
-
         const renderChart = () => {
             const chartEl = document.querySelector('#chartEl')
             const chartConfig = {

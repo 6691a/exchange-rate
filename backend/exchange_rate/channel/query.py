@@ -15,6 +15,7 @@ def latest_date() -> date:
         return today - timedelta(days=offset)
     return today
 
+
 @database_sync_to_async
 def latest_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchanteRate]:
     today_exchange = ExchangeRate.objects.filter(

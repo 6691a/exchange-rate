@@ -4,6 +4,7 @@ from channel.base import BaseWebSocket
 from ..apis.v1.schemas import ExchangeRateSchema, ChartSchema
 from .query import latest_exchange, latest_exchange_aggregate
 
+
 class ExchangeRateConsumer(BaseWebSocket):
     async def connect(self):
         await super().connect()

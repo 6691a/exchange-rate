@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECRET_KEY = env.SECRET_KEY.get_secret_value()
 
-# DEBUG = True
+DEBUG = True
 
 # ALLOWED_HOSTS = ["*"]
 
@@ -25,7 +25,7 @@ INSTALLED_APPS = [
 ]
 
 INTERNAL_IPS = [
-    "127.0.0.1",
+    '127.0.0.1',
 ]
 
 MIDDLEWARE = [

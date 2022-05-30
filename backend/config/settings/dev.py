@@ -49,12 +49,12 @@ DATABASES = {
     }
 }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
@@ -79,28 +79,28 @@ CHANNEL_LAYERS = {
 }
 
 # # aws s3
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
 
-AWS_ACCESS_KEY_ID = env.AWS_ACCESS_KEY_ID.get_secret_value()
-AWS_SECRET_ACCESS_KEY = env.AWS_SECRET_ACCESS_KEY.get_secret_value()
-AWS_REGION = "ap-northeast-2"
-AWS_STORAGE_BUCKET_NAME = "s3-exchange-rate"
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com"
-# 파일 캐시 유지 시간
-AWS_S3_OBJECT_PARAMETERS = {
-    "CacheControl": "max-age=86400",
-}
+# AWS_ACCESS_KEY_ID = env.AWS_ACCESS_KEY_ID.get_secret_value()
+# AWS_SECRET_ACCESS_KEY = env.AWS_SECRET_ACCESS_KEY.get_secret_value()
+# AWS_REGION = "ap-northeast-2"
+# AWS_STORAGE_BUCKET_NAME = "s3-exchange-rate"
+# AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com"
+# # 파일 캐시 유지 시간
+# AWS_S3_OBJECT_PARAMETERS = {
+#     "CacheControl": "max-age=86400",
+# }
 
-# 같은 파일이 들어오면 덮어 쓰지 말라는 의미
-AWS_S3_FILE_OVERWRITE = False
-# 외부 접근 허용
-AWS_DEFAULT_ACL = "public-read"
+# # 같은 파일이 들어오면 덮어 쓰지 말라는 의미
+# AWS_S3_FILE_OVERWRITE = False
+# # 외부 접근 허용
+# AWS_DEFAULT_ACL = "public-read"
 
-AWS_LOCATION = "static"
+# AWS_LOCATION = "static"
 
-# AWS S3 사용을 위해 수정
-STATIC_URL = f"http://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+# # AWS S3 사용을 위해 수정
+# STATIC_URL = f"http://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 
 
 # LOGGING = {

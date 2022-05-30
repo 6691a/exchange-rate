@@ -1,6 +1,5 @@
 from datetime import datetime
 from base.schemas import BaseSchema
-
 from pydantic import validator
 
 
@@ -23,4 +22,4 @@ class ChartSchema(BaseSchema):
 
     hight_price: ExchangeRateSchema | None
     low_price: ExchangeRateSchema | None
-    chart_length: int = 79
+    chart_length: int = 55

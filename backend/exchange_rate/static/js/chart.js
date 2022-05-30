@@ -2,10 +2,10 @@ let axisColor
 if (isDarkStyle) {
     axisColor = config.colors_dark.axisColor;
     bgColor = config.colors_dark.cardColor;
-    
+
 } else {
     axisColor = config.colors.axisColor;
-    bgColor= config.colors.white;
+    bgColor = config.colors.white;
 }
 
 const chartVue = Vue.createApp({
@@ -30,8 +30,8 @@ const chartVue = Vue.createApp({
                     width: "100%",
                     parentHeightOffset: 0,
                     parentWidthOffset: 0,
-                    zoom: { 
-                        enabled: false 
+                    zoom: {
+                        enabled: false
                     },
                     type: 'line',
                     dropShadow: {
@@ -140,10 +140,9 @@ const chartVue = Vue.createApp({
                 const exchange = data.exchange_rate
                 const chartLength = data.chart_length
                 const hight_price = data.hight_price
-                const low_price =data.low_price
-
+                const low_price = data.low_price
                 price.value = exchange.slice(-1)[0]["standard_price"]
-                exchange.forEach((v) => series[0].data.push({x: v.created_at, y: v.standard_price})) 
+                exchange.forEach((v) => series[0].data.push({ x: v.created_at, y: v.standard_price }))
                 apexChart.updateSeries(series)
                 apexChart.updateOptions({
                     chart: {
@@ -160,7 +159,7 @@ const chartVue = Vue.createApp({
                             dataPointIndex: series[0].data.length - 1,
                             strokeColor: config.colors.primary,
                             strokeWidth: 8,
-                            size: 6,
+                            size: 5,
                             radius: 8,
                         },],
                         hover: {
@@ -173,15 +172,18 @@ const chartVue = Vue.createApp({
                                 x: hight_price.created_at,
                                 y: hight_price.standard_price,
                                 marker: {
+                                    offsetX: 0,
+                                    offsetY: -15,
+                                    fillColor: config.colors.primary,
                                     strokeColor: config.colors.primary,
-                                    strokeWidth: 4,
-                                    size: 6,
+                                    strokeWidth: 2,
+                                    size: 2,
                                 },
                                 label: {
                                     borderWidth: 0,
                                     borderRadius: 0,
                                     offsetX: 0,
-                                    offsetY: 0,
+                                    offsetY: -10,
                                     opacity: 1,
                                     style: {
                                         color: axisColor,
@@ -189,16 +191,19 @@ const chartVue = Vue.createApp({
                                         fontSize: '13px',
                                     },
                                     text: `최고 ${hight_price.standard_price}원`,
-                                    
+
                                 }
                             },
                             {
                                 x: low_price.created_at,
                                 y: low_price.standard_price,
                                 marker: {
+                                    offsetX: 0,
+                                    offsetY: 15,
+                                    fillColor: config.colors.primary,
                                     strokeColor: config.colors.primary,
-                                    strokeWidth: 4,
-                                    size: 6,
+                                    strokeWidth: 2,
+                                    size: 2,
                                 },
                                 label: {
                                     borderWidth: 0,
@@ -211,7 +216,7 @@ const chartVue = Vue.createApp({
                                         fontSize: '13px',
                                     },
                                     text: `최저 ${low_price.standard_price}원`,
-                                    
+
                                 }
                             },
                         ]

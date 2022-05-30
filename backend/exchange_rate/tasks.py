@@ -7,7 +7,7 @@ from django.core.cache import cache
 from asgiref.sync import async_to_sync
 
 from channel.base import channel_group_send
-from channel.query import latest_exchange_aggregate
+from .channel.query import latest_exchange_aggregate
 from base.schemas import ResponseSchema
 from .models import ExchangeRate, ExchangeRateSchedule
 from .apis.v1.schemas import ExchangeRateSchema, ChartSchema

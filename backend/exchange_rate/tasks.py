@@ -10,7 +10,7 @@ from channel.base import channel_group_send
 from .channel.query import latest_exchange_aggregate
 from base.schemas import ResponseSchema
 from .models import ExchangeRate, ExchangeRateSchedule
-from .apis.v1.schemas import ExchangeRateSchema, ChartSchema
+from .channel.schemas import ExchangeRateSchema, ChartSchema
 
 
 class Currency:

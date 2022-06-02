@@ -1,7 +1,7 @@
 from base.schemas import ResponseSchema, ErrorSchema
 
 from channel.base import BaseWebSocket
-from ..apis.v1.schemas import ExchangeRateSchema, ChartSchema
+from .schemas import ExchangeRateSchema, ChartSchema
 from .query import latest_exchange, latest_exchange_aggregate
 
 
@@ -28,4 +28,10 @@ class ExchangeRateConsumer(BaseWebSocket):
         super().disconnect(close_code)
 
 
-
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
+class TestConsumer(AsyncJsonWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+        await self.send(
+            dict(a="123")
+        )

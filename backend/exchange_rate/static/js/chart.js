@@ -141,9 +141,11 @@ const chartVue = Vue.createApp({
                 const chartLength = data.chart_length
                 const hight_price = data.hight_price
                 const low_price = data.low_price
+                console.log(chartLength)
                 price.value = exchange.slice(-1)[0]["standard_price"]
                 exchange.forEach((v) => series[0].data.push({ x: v.created_at, y: v.standard_price }))
                 apexChart.updateSeries(series)
+                console.log(`${Math.max(minWidth, Math.min(series[0].data.length / chartLength * 100, 100))}%`)
                 apexChart.updateOptions({
                     chart: {
                         width: (() => `${Math.max(minWidth, Math.min(series[0].data.length / chartLength * 100, 100))}%`)()

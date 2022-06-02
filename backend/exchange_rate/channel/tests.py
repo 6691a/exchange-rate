@@ -2,11 +2,21 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.utils import timezone
 from datetime import date
+from channels.testing import HttpCommunicator
 
+from .query import latest_exchange_aggregate
+from .consumers import ExchangeRateConsumer, TestConsumer
 from ..models import ExchangeRate
-from .query import latest_exchange_aggregate, latest_date
 
-class ChannelQueryTest(TestCase):
+
+# class ChannelsConnectTest(TestCase):
+#     async def test_connect(self):
+#         communicator = HttpCommunicator(TestConsumer, "GET", "/test/")
+#         response = await communicator.get_response()
+#         print(response["body"])
+
+
+class ChannelsQueryTest(TestCase):
     def setUp(self) -> None:
         data = [
             ExchangeRate(fix_time=timezone.now(), currency="USD", country="미국", standard_price=1000),

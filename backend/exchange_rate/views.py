@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Country
 
-@login_required
+def main(request):
+    return render(request, "exchange_rate.html")
+
+# @login_required
 def exchange_rate(request, currency):
     print(Country.objects.get(currency__icontains=currency))
     context = {"currency": currency}
@@ -10,7 +13,7 @@ def exchange_rate(request, currency):
     return render(request, "exchange_rate.html", context)
 
 
-@login_required
+# @login_required
 def test(request):
     return render(request, "test.html")
 

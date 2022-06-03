@@ -167,8 +167,9 @@ pipeline {
                         export DJANGO_TAG=${DJANGO_DOCKER_TAG}; \
                         export NGINX_IMAGE=${NGINX_DOCKER_IMAGE}; \
                         export NGINX_TAG=${NGINX_DOCKER_TAG}; \
+                        docker-compose -f docker-compose.yml pull; \
                         docker-compose -f docker-compose.yml down; \
-                        docker-compose -f docker-compose.yml up -d --build; \
+                        docker-compose -f docker-compose.yml up -d; \
                         ${DOCKER_RMI_CMD};
                         '
                 """

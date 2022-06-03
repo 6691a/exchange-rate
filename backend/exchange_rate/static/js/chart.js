@@ -18,8 +18,7 @@ const chartVue = Vue.createApp({
             name: '가격',
             data: [],
         }]
-        const currency = Vue.ref()
-        const minWidth = window.innerWidth <= 500 ? 35 : 10
+        let minWidth = window.innerWidth <= 500 ? 35 : 15
 
         const renderChart = () => {
             const chartEl = document.querySelector('#chartEl')
@@ -69,7 +68,7 @@ const chartVue = Vue.createApp({
                     padding: {
                         top: -10,
                         left: 20,
-                        right: 35,
+                        right: 40,
                         bottom: 10
                     }
                 },
@@ -133,7 +132,6 @@ const chartVue = Vue.createApp({
         }
 
         const addSocketEvent = (socket) => {
-
             socket.onmessage = (e) => {
                 const res = JSON.parse(e.data)
                 const data = res.data
@@ -141,11 +139,11 @@ const chartVue = Vue.createApp({
                 const chartLength = data.chart_length
                 const hight_price = data.hight_price
                 const low_price = data.low_price
-                console.log(chartLength)
                 price.value = exchange.slice(-1)[0]["standard_price"]
+
                 exchange.forEach((v) => series[0].data.push({ x: v.created_at, y: v.standard_price }))
+
                 apexChart.updateSeries(series)
-                console.log(`${Math.max(minWidth, Math.min(series[0].data.length / chartLength * 100, 100))}%`)
                 apexChart.updateOptions({
                     chart: {
                         width: (() => `${Math.max(minWidth, Math.min(series[0].data.length / chartLength * 100, 100))}%`)()
@@ -175,7 +173,7 @@ const chartVue = Vue.createApp({
                                 y: hight_price.standard_price,
                                 marker: {
                                     offsetX: 0,
-                                    offsetY: -15,
+                                    offsetY: -7,
                                     fillColor: config.colors.primary,
                                     strokeColor: config.colors.primary,
                                     strokeWidth: 2,
@@ -185,7 +183,7 @@ const chartVue = Vue.createApp({
                                     borderWidth: 0,
                                     borderRadius: 0,
                                     offsetX: 0,
-                                    offsetY: -10,
+                                    offsetY: -1,
                                     opacity: 1,
                                     style: {
                                         color: axisColor,
@@ -193,7 +191,6 @@ const chartVue = Vue.createApp({
                                         fontSize: '13px',
                                     },
                                     text: `최고 ${hight_price.standard_price}원`,
-
                                 }
                             },
                             {
@@ -201,7 +198,7 @@ const chartVue = Vue.createApp({
                                 y: low_price.standard_price,
                                 marker: {
                                     offsetX: 0,
-                                    offsetY: 15,
+                                    offsetY: 7,
                                     fillColor: config.colors.primary,
                                     strokeColor: config.colors.primary,
                                     strokeWidth: 2,
@@ -211,7 +208,7 @@ const chartVue = Vue.createApp({
                                     borderWidth: 0,
                                     borderRadius: 0,
                                     offsetX: 0,
-                                    offsetY: 50,
+                                    offsetY: 40,
                                     style: {
                                         color: axisColor,
                                         background: bgColor,
@@ -230,12 +227,11 @@ const chartVue = Vue.createApp({
 
         Vue.onMounted(async () => {
             renderChart()
-            const group = currency.value.getAttribute("value")
+            const group = window.location.pathname.split("/").pop()
+            // const group = currency.value.getAttribute("value")
             socketConnect(group)
-            // const res = await getExchangeRate(currency.value.textContent)
-
         })
-        return { currency, price }
+        return { price }
     },
 })
 chartVue.mount('#chart')

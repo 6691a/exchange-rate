@@ -47,7 +47,6 @@ let assetsPath = document.documentElement.getAttribute('data-assets-path'),
   mode = document.documentElement.getAttribute('data-mode'),
   debug = document.documentElement.getAttribute('data-debug'),
   rtlSupport = true; // set true for rtl support (rtl + ltr), false for ltr only.
-
 /**
 * TemplateCustomizer
 * ! You must use(include) template-customizer.js to use TemplateCustomizer settings
@@ -88,6 +87,10 @@ const host = debug ? 'http://127.0.0.1:8000' : window.location.protocol + '//' +
 const path = '/api/v1/'
 const api_path = host + path
 const static_host = debug ? host + '/' : 'https://s3-exchange-rate.s3.ap-northeast-2.amazonaws.com/'
+const http = axios.create({
+  baseURL: api_path
+});
+
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
     cssPath: static_host + assetsPath + '/css/core' + '' + '/',

@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 from base.models import BaseModel
@@ -101,3 +102,12 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     class Meta:
         db_table = "user"
+
+
+class WatchList(BaseModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="watch_list", verbose_name="사용자")
+    currency = models.CharField(max_length=10, verbose_name="통화")
+    
+    class Meta:
+        db_table = "watch_list"
+        ordering = []

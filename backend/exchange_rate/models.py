@@ -1,12 +1,11 @@
 from django.db import models
-
 from base.models import BaseModel
 
 
 class ExchangeRate(BaseModel):
     fix_time = models.DateTimeField(verbose_name="환율 갱신일")
     country = models.CharField(max_length=25, verbose_name="국가", default="None")
-    currency = models.CharField(max_length=25, verbose_name="통화명", default="None")
+    currency = models.CharField(max_length=25, verbose_name="통화 단위", default="None")
     standard_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="매매 기준")
 
     class Meta:
@@ -21,3 +20,14 @@ class ExchangeRateSchedule(BaseModel):
     class Meta:
         db_table = "exchange_rate_schedule"
         ordering = []
+
+
+class Country(BaseModel):
+    country = models.CharField(max_length=25, verbose_name="국가")
+    name = models.CharField(max_length=25, verbose_name="통화 단위")
+    name_kr = models.CharField(max_length=25, verbose_name="한글 통화 단위", default="null")
+    standard_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="매매 기준", default="1")
+    class Meta:
+        db_table = "country"
+
+

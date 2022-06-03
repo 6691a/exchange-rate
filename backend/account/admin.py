@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import User, Setting
+from .models import User, Setting, WatchList
 
 @admin.register(Setting)
 class SeetingInline(admin.ModelAdmin):
-    pass
+    ...
     # model = Setting
     # can_delete = False
     # verbose_name_plural = 'setting'
@@ -16,4 +16,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ["email", "nickname", "gender"]
     # inlines = (SeetingInline, )
     
-   
+
+@admin.register(WatchList)
+class WatchListAdmin(admin.ModelAdmin):
+    ...

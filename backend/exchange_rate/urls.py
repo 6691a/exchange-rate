@@ -1,11 +1,11 @@
 from django.urls import path
 
-from .views import main, test
+from .views import exchange_rate, test
 
 app_name = "exchange_rate"
 
 urlpatterns = [
-    path("", main, name="main"),
-    path("test/", test, name="test"),
+    path("<str:currency>", exchange_rate, name="main"),
+    # path("test/", test, name="test"),
 
 ]

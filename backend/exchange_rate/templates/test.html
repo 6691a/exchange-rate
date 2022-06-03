@@ -14,8 +14,7 @@
     {% endblock %}
 
     {% block js %}
-    <script defer src="{% static 'libs/apex-charts/apexcharts.js' %}"></script>
-    <script defer src="{% static 'js/chart.js' %}"></script>
+    <script defer src="{% static 'js/test.js' %}"></script>
     {% endblock %}
 </head>
 
@@ -28,22 +27,53 @@
             <h6 class="text-muted d-block mb-1">0개</small>
         </div>
         <div class="card-body">
-            <ul class="p-0 m-0">
-            <li class="d-flex mb-4 pb-1">
-                <div class="avatar flex-shrink-0">
-                    <i class="bx bx-dollar bx-md" style="color: #FFDB33";></i>
-                {% comment %} <img src="../../assets/img/icons/unicons/paypal.png" alt="User" class="rounded" /> {% endcomment %}
-                </div>
-                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                    <h6 class="mb-0">Send money</h6>
-                </div>
-                <div class="user-progress d-flex align-items-center gap-1">
-                    <h6 class="mb-0">+82.6</h6>
-                    <span class="text-muted">USD</span>
-                </div>
-                </div>
-            </li>
+            <ul class="p-0 m-0", id="test">
+                <li class="d-flex mb-4 pb-1">
+                    <div class="avatar flex-shrink-0 me-3">
+                        {% comment %} <i class="bx bx-dollar bx-md" style="color: #FFDB33";></i> {% endcomment %}
+                        <img @click="greet" src={% static 'css/dollar.png' %} alt="User" /> 
+                    </div>
+                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <h6 class="mb-0">Send money</h6>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                        <h6 class="mb-0">+82.6</h6>
+                        <span class="text-muted">USD</span>
+                    </div>
+                    </div>
+                </li>
+                <li class="d-flex mb-4 pb-1">
+                    <div class="avatar flex-shrink-0 me-3">
+                        {% comment %} <i class="bx bx-dollar bx-md" style="color: #FFDB33";></i> {% endcomment %}
+                        <img  src={% static 'css/dollar3.png' %} alt="User" /> 
+                        
+                    </div>
+                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <h6 class="mb-0">Send money</h6>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                        <h6 class="mb-0">+82.6</h6>
+                        <span class="text-muted">USD</span>
+                    </div>
+                    </div>
+                </li>
+                <li class="d-flex mb-4 pb-1">
+                    <div class="avatar flex-shrink-0 me-3">
+                        {% comment %} <i class="bx bx-dollar bx-md" style="color: #FFDB33";></i> {% endcomment %}
+                        <img src={% static 'css/dollar2.png' %} alt="User" /> 
+                    </div>
+                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <h6 class="mb-0">Send money</h6>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                        <h6 class="mb-0">+82.6</h6>
+                        <span class="text-muted">USD</span>
+                    </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

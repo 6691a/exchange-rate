@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
 
 from .models import Country
 from account.models import WatchList
 
+
+@login_required
 def main(request):
-    return redirect('exchange_rate:main', "usd")
+    return render(request, "test.html")
+
 
 @login_required
 def exchange_rate(request, currency):
@@ -22,11 +24,6 @@ def exchange_rate(request, currency):
         context["watch"] = True
 
     return render(request, "exchange_rate.html", context)
-
-
-# @login_required
-def test(request):
-    return render(request, "test.html")
 
 
 @login_required

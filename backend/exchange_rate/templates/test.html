@@ -19,6 +19,9 @@
 </head>
 
 <body>
+    {% block header %}
+    {% include "menu.html" %}
+    {% endblock %}
     {% block content %}
     <!-- Transactions -->
     <div class="card h-100">

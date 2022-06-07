@@ -1,4 +1,4 @@
-const chartVue = Vue.createApp({
+const mainVue = Vue.createApp({
     delimiters: ['[[', ']]'],
     // data() {
     //     return {
@@ -18,9 +18,7 @@ const chartVue = Vue.createApp({
             catch (e) {
                 console.log(e)
             }
-
-
         }
     }
 })
-chartVue.mount('#test')
+mainVue.mount('#test')

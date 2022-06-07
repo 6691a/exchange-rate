@@ -41,18 +41,21 @@
     <script src="{% static 'js/core/config.js' %}"></script>
     {% comment %} <script defer src="{% static 'js/core/lib/jquery/jquery.js' %}"></script> {% endcomment %}
     <script defer src="{% static 'js/core/main.js' %}"></script> 
+
     {% block js %} {% endblock %}
   </head>
 
   <body>
     <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar layout-without-menu">
+    <div id="index" class="layout-wrapper layout-content-navbar layout-without-menu">
       <div class="layout-container">
         <!-- Layout container -->
         <div class="layout-page">
           <!-- navbar -->
           <div class="layout-container">
-              {% if request.user.is_authenticated %} {% include "menu.html" %}
+              {% if request.user.is_authenticated %} 
+              {% block header %}
+              {% endblock %}              
               {% endif %}
 
               <!-- Content wrapper -->

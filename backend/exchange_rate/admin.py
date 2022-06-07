@@ -17,5 +17,6 @@ class ExchangeRateScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ["country", "name", "name_kr"]
+    ...
+    # list_display = ["country", "name", "name_kr"]
     # search_fields = ["id", "username", "company_code__company_code"]

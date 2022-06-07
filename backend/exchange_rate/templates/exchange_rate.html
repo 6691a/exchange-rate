@@ -28,8 +28,13 @@
                 
                 <div class="col-md-12 mb-1">
                     <div class="card-header d-flex align-items-center justify-content-between p-0 pb-3">
-                        <h5 class="card-title m-0 me-2" value="usd">미국</h5>
+                        <h5 class="card-title m-0 me-2" value="usd">{{ country.name }}</h5>
+                        {% if watch %}
                         <i class="bx bxs-heart bx-sm light-red"></i>
+                        {% else%}
+                        <i class="bx bxs-heart bx-sm silver"></i>
+                        {% endif %}
+                        
                     </div> 
                     <div class="card-body p-0">
                     <div class="d-flex justify-content-start">

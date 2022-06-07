@@ -7,10 +7,11 @@ const chartVue = Vue.createApp({
     // },
 
     methods: {
-        async addWatch() {
+        async addWatch(currency) {
+            console.log(currency)
             try {
                 const r = await http.post("/watch", {
-                    currency: 'veneas'
+                    currency: currency
                 })
                 console.log(r.status)
             }

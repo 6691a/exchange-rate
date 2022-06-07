@@ -10,6 +10,7 @@ def get_like(request):
     ...
 
 
+
 @router.post("watch")
 def create_like(request, watch: WatchListSchema):
     watch = watch.dict()
@@ -19,6 +20,6 @@ def create_like(request, watch: WatchListSchema):
     return 200
 
 
-@router.delete("watch/{id}")
-def delete_like(request):
-    return 200
+# @router.delete("watch/{id}")
+# def delete_like(request):
+#     return 200

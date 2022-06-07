@@ -190,7 +190,7 @@ const chartVue = Vue.createApp({
                                         background: bgColor,
                                         fontSize: '13px',
                                     },
-                                    text: `최고 ${hight_price.standard_price}원`,
+                                    text: `${hight_price.standard_price}원`,
                                 }
                             },
                             {
@@ -208,13 +208,13 @@ const chartVue = Vue.createApp({
                                     borderWidth: 0,
                                     borderRadius: 0,
                                     offsetX: 0,
-                                    offsetY: 40,
+                                    offsetY: 41,
                                     style: {
                                         color: axisColor,
                                         background: bgColor,
                                         fontSize: '13px',
                                     },
-                                    text: `최저 ${low_price.standard_price}원`,
+                                    text: `${low_price.standard_price}원`,
 
                                 }
                             },
@@ -235,5 +235,3 @@ const chartVue = Vue.createApp({
     },
 })
 chartVue.mount('#chart')
-
-

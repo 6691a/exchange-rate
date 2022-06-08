@@ -14,45 +14,44 @@
     {% endblock %}
 
     {% block js %}
-    <script defer src="{% static 'libs/apex-charts/apexcharts.js' %}"></script>
-    <script defer src="{% static 'js/chart.js' %}"></script>
+    <script defer src="{% static 'js/test.js' %}"></script>
     {% endblock %}
 </head>
 
 <body>
+    {% block header %}
+    {% include "menu.html" %}
+    {% endblock %}
     {% block content %}
-    <div class="nav-align-top mb-4">
-      <ul class="nav nav-tabs nav-fill" role="tablist">
-        <li class="nav-item">
-          <button
-            type="button"
-            class="nav-link active"
-            role="tab"
-            data-bs-toggle="tab"
-            data-bs-target="#navs-justified-home"
-            aria-controls="navs-justified-home"
-            aria-selected="true"
-          >
-              
-          </svg>
-            <i class="fi fi-us  me-2"></i> 미국
-          </button>
-        </li>
-        <li class="nav-item">
-          <button
-            type="button"
-            class="nav-link"
-            role="tab"
-            data-bs-toggle="tab"
-            data-bs-target="#navs-justified-profile"
-            aria-controls="navs-justified-profile"
-            aria-selected="false"
-          >
-            <i class="tf-icons bx bx-user"></i> Profile
-          </button>
-        </li>
-      </ul>
-    
+    <!-- Transactions -->
+    <div class="card h-100">
+        <div class="card-header d-flex align-items-center ">
+            <h5 class="card-title m-0 me-2">관심 목록</h5>
+            <h6 class="text-muted d-block mb-1">{{ watchList|length }} 개</small>
+        </div>
+        <div class="card-body">
+            <ul class="p-0 m-0", id="test">
+                {% for w in watchList%}
+                <li  @click="addWatch('{{ w.country.currency }}')" class="btn d-flex mb-4 px-0">
+                    <div class="avatar flex-shrink-0 me-3">
+                        {% comment %} <i class="bx bx-dollar bx-md" style="color: #FFDB33";></i> {% endcomment %}
+                        <img  src={% static 'css/dollar.png' %} alt="User" /> 
+                    </div>
+                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <h6 class="mb-0">{{ w.country.name }}</h6>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                        <h6 class="mb-0">+82.6</h6>
+                        <span class="text-muted">USD</span>
+                    </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
+    <!--/ Transactions -->
     {% endblock %}
 </body>

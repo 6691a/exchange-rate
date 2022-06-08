@@ -28,6 +28,9 @@ class Country(BaseModel):
     currency_kr = models.CharField(max_length=25, verbose_name="한글 통화 단위", default="null")
     standard_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="매매 기준", default="1")
     
+    def __str__(self) -> str:
+        return f"{self.name}"
+        
     class Meta:
         db_table = "country"
 

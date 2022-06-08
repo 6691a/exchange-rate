@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from base.models import BaseModel
 from base.utils import destructuring
 
+from exchange_rate.models import Country
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -106,8 +107,11 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 class WatchList(BaseModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="watch_list", verbose_name="사용자")
-    currency = models.CharField(max_length=10, verbose_name="통화")
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, verbose_name="국가")
     
+    def __str__(self):
+        return f"{self.user.email}" 
+
     class Meta:
         db_table = "watch_list"
         ordering = []

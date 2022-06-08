@@ -7,7 +7,11 @@ from account.models import WatchList
 
 @login_required
 def main(request):
-    return render(request, "test.html")
+    user = request.user
+    context = {
+        "watchList": WatchList.objects.filter(user=user).select_related("country")
+    }
+    return render(request, "main.html", context)
 
 
 @login_required
@@ -19,8 +23,7 @@ def exchange_rate(request, currency):
         "country": country,
         "watch": False
     }
-
-    if WatchList.objects.exclude(user=user, currency=currency):
+    if WatchList.objects.filter(user=user, currency__icontains=currency).exists():
         context["watch"] = True
 
     return render(request, "exchange_rate.html", context)

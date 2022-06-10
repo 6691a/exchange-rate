@@ -228,7 +228,6 @@ const chartVue = Vue.createApp({
         Vue.onMounted(async () => {
             renderChart()
             const group = window.location.pathname.split("/").pop()
-            // const group = currency.value.getAttribute("value")
             socketConnect(group)
         })
         return { price }

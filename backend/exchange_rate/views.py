@@ -15,7 +15,7 @@ def main(request):
 
 
 @login_required
-def exchange_rate(request, currency):
+def currency(request, currency):
     user = request.user
     country = get_object_or_404(Country, currency__icontains=currency)
 
@@ -23,10 +23,11 @@ def exchange_rate(request, currency):
         "country": country,
         "watch": False
     }
-    if WatchList.objects.filter(user=user, currency__icontains=currency).exists():
+
+    if WatchList.objects.filter(user=user, country=country).exists():
         context["watch"] = True
 
-    return render(request, "exchange_rate.html", context)
+    return render(request, "currency.html", context)
 
 
 @login_required

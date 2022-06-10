@@ -1,12 +1,12 @@
 from django.urls import path
 
-from .views import exchange_rate, main
+from .views import currency, main
 
 app_name = "exchange_rate"
 
 urlpatterns = [
     path("", main, name="main"),
 
-    path("<str:currency>", exchange_rate, name="exchange_rate"),
+    path("<str:currency>", currency, name="currency"),
 
 ]

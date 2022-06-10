@@ -14,7 +14,7 @@
     {% endblock %}
 
     {% block js %}
-    <script defer src="{% static 'js/test.js' %}"></script>
+    <script defer src="{% static 'js/watch.js' %}"></script>
     {% endblock %}
 </head>
 
@@ -24,32 +24,36 @@
     {% endblock %}
     {% block content %}
     <!-- Transactions -->
-    <div class="card h-100">
-        <div class="card-header d-flex align-items-center ">
+    <div class="card h-100" id="watch">
+        {% comment %} <div class="card-header d-flex align-items-center ">
             <h5 class="card-title m-0 me-2">관심 목록</h5>
-            <h6 class="text-muted d-block mb-1">{{ watchList|length }} 개</small>
+            <h6 class="text-muted d-block mb-1">{{ watchList|length }}개</h6>
         </div>
         <div class="card-body">
-            <ul class="p-0 m-0", id="test">
-                {% for w in watchList%}
-                <li  @click="addWatch('{{ w.country.currency }}')" class="btn d-flex mb-4 px-0">
-                    <div class="avatar flex-shrink-0 me-3">
-                        {% comment %} <i class="bx bx-dollar bx-md" style="color: #FFDB33";></i> {% endcomment %}
-                        <img  src={% static 'css/dollar.png' %} alt="User" /> 
-                    </div>
-                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                    <div class="me-2">
-                        <h6 class="mb-0">{{ w.country.name }}</h6>
-                    </div>
-                    <div class="user-progress d-flex align-items-center gap-1">
-                        <h6 class="mb-0">+82.6</h6>
-                        <span class="text-muted">USD</span>
-                    </div>
-                    </div>
-                </li>
+            <ul class="p-0 m-0">
+                {% for w in watchList %}
+                <a href={% url 'exchange_rate:currency' currency=w.country.currency|lower  %}>
+                    <li class="btn d-flex mb-4 px-0">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <img  src={% static 'css/dollar.png' %} alt="User" /> 
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="me-2">
+                                <h6 class="mb-0">{{ w.country.name }}</h6>
+                            </div>
+                            <div class="user-progress d-flex align-items-center gap-1">
+                                <div>
+                                    <span class="text-muted">10%</span>
+                                    <h6 class="mt-1 mb-0">[[price]]원</h6>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </li>
+                </a>
                 {% endfor %}
             </ul>
-        </div>
+        </div> {% endcomment %}
     </div>
 
     <!--/ Transactions -->

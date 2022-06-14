@@ -4,23 +4,33 @@ const watchVue = Vue.createApp({
         return {
             watch_length: 0,
             watchList: [],
-            currencyList: [],
+            currencyList: {},
         }
     },
     methods: {
         socketConnect: function (name) {
             const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
-            const socketPath = protocol + window.location.host + '/ws/exchange_rate/'
+            const socketPath = protocol + window.location.host + '/ws/watch/'
             const socket = new WebSocket(
                 socketPath + name + '/'
             )
-            console.log(name)
             this.addSocketEvent(socket)
         },
         addSocketEvent: function (socket) {
             socket.onmessage = (e) => {
                 const res = JSON.parse(e.data)
                 console.log(res)
+                const data = res.data 
+                // console.log(data.last_exchange); 
+                // console.log(data.first_exchange); 
+                const first = data.first_exchange
+                const last = data.last_exchange
+
+                this.currencyList[first.currency] = {
+                    first,
+                    last   
+                }
+                console.log(this.currencyList);
             }
         },
     },
@@ -32,7 +42,6 @@ const watchVue = Vue.createApp({
 
         this.watchList = res.data.data
         this.watch_length = this.watchList.length
-        console.log(this.watchList)
 
         for (let i of this.watchList) {
             this.socketConnect(i.currency)
@@ -46,6 +55,8 @@ const watchVue = Vue.createApp({
     <div class="card-body">
         <ul class="p-0 m-0">
             <a v-for="w in watchList" v-bind:href="'${host}/' + w.currency" v-bind:data-currency=w.currency >
+                [[  this.currencyList[w.currency].first.standard_price ]]
+                [[this.currencyList[w.currency].last.standard_price]]
                 <li class="btn d-flex mb-4 px-0">
                     <div class="avatar flex-shrink-0 me-3">
                         <img src="#" /> 
@@ -57,7 +68,7 @@ const watchVue = Vue.createApp({
                         <div class="user-progress d-flex align-items-center gap-1">
                             <div>
                                 <span class="text-muted">10%</span>
-                                <h6 class="mt-1 mb-0">[[ w.price ]]원</h6>
+                                <h6 class="mt-1 mb-0"> [[ this.currencyList[w.currency].last.standard_price ]]원</h6>
                             </div>
                         </div>
                     </div>

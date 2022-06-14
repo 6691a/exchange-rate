@@ -20,3 +20,8 @@ class ChartSchema(BaseSchema):
     hight_price: ExchangeRateSchema 
     low_price: ExchangeRateSchema 
     chart_length: int = 55
+
+
+class WatchListSchema(BaseSchema):
+    first_exchange: ExchangeRateSchema
+    last_exchange: ExchangeRateSchema

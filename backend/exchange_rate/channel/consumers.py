@@ -1,14 +1,14 @@
 from base.schemas import ResponseSchema, ErrorSchema
 
 from channel.base import BaseWebSocket
-from .schemas import ExchangeRateSchema, ChartSchema
-from .query import latest_exchange, latest_exchange_aggregate
+from .schemas import ExchangeRateSchema, ChartSchema, WatchListSchema
+from .query import latest_exchange, latest_exchange_aggregate, first_and_last_exchange
 
 
 class ExchangeRateConsumer(BaseWebSocket):
     async def connect(self):
         await super().connect()
-        currency = self.group_name.upper()
+        currency = self.group_name
         if exchange := await latest_exchange(currency__icontains=currency):
             low, high = await latest_exchange_aggregate(currency=currency)
             return await self.send(
@@ -28,10 +28,20 @@ class ExchangeRateConsumer(BaseWebSocket):
         super().disconnect(close_code)
 
 
-from channels.generic.websocket import AsyncJsonWebsocketConsumer
-class TestConsumer(AsyncJsonWebsocketConsumer):
+class WatchListConsumer(BaseWebSocket):
     async def connect(self):
-        await self.accept()
+        await super().connect()
+        currency = self.group_name
+        first, last = await first_and_last_exchange(currency__icontains=currency)
+        if first and last:
+            return await self.send(
+                ResponseSchema(
+                    data=WatchListSchema(
+                        first_exchange=first,
+                        last_exchange=last
+                    )
+                ).json()
+            )
         await self.send(
-            dict(a="123")
+            ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
         )

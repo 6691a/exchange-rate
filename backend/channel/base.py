@@ -26,7 +26,7 @@ class BaseWebSocket(AsyncJsonWebsocketConsumer):
     async def connect(self):
         """
         using:
-        call the first `await super().connect()` method
+            call the first `await super().connect()` method
 
         send:
             pydantic:
@@ -35,11 +35,11 @@ class BaseWebSocket(AsyncJsonWebsocketConsumer):
                 await self.send_json()
         """
         self.user = self.scope["user"]
-        self.group_name = self.scope["url_route"]["kwargs"]["currency"]
+        self.group_name = self.scope["url_route"]["kwargs"]["currency"].upper()
 
-        # if not self.user.is_authenticated:
-        #     return
-        
+        if not self.user.is_authenticated:
+            return
+            
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         # await self.__save_channel_data(self.user, self.group_name, self.channel_name)
         await self.accept()

@@ -27,7 +27,7 @@ class ChannelsQueryTest(TestCase):
         ]
         ExchangeRate.objects.bulk_create(data)
 
-    @patch("exchange_rate.channel.query.latest_date", date.today)
+    @patch("exchange_rate.channel.query._latest_date", date.today)
     async def test_latest_exchange_aggregate(self):
         min, max = await latest_exchange_aggregate("USD")
         self.assertEqual(990, min.standard_price)

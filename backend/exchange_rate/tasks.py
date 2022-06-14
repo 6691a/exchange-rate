@@ -98,7 +98,7 @@ def send_exchange_rate(data: list[ExchangeRate]):
     for i in data:
         low, high = async_to_sync(latest_exchange_aggregate)(currency=i.currency)
 
-        group_name = i.currency
+        group_name = i.currency.upper()
         async_to_sync(channel_group_send)(
             group_name=group_name, 
             data=ResponseSchema(

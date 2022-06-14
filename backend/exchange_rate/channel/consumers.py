@@ -8,7 +8,7 @@ from .query import latest_exchange, latest_exchange_aggregate
 class ExchangeRateConsumer(BaseWebSocket):
     async def connect(self):
         await super().connect()
-        currency = self.group_name
+        currency = self.group_name.upper()
         if exchange := await latest_exchange(currency__icontains=currency):
             low, high = await latest_exchange_aggregate(currency=currency)
             return await self.send(

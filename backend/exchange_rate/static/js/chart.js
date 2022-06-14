@@ -134,6 +134,7 @@ const chartVue = Vue.createApp({
         const addSocketEvent = (socket) => {
             socket.onmessage = (e) => {
                 const res = JSON.parse(e.data)
+                console.log(res)
                 const data = res.data
                 const exchange = data.exchange_rate
                 const chartLength = data.chart_length

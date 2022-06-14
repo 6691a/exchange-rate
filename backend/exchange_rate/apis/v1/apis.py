@@ -1,29 +1,28 @@
 from ninja import Router
-from ninja.security import django_auth
-from asgiref.sync import sync_to_async
+from django.forms.models import model_to_dict
 
-from .schemas import WatchListSchema
-from .query import watch_list_query
+from account.models import WatchList
+from base.schemas import ErrorSchema, ResponseSchema
+from .schemas import CountrySchema
 router = Router()
 
 
-@router.get("watch", auth=django_auth)
-async def get_like(request):
-    a = sync_to_async(request.auth)()
-    print(a)
-    # print(request.user)
-    # watch_list = await watch_list_query(request.user)
-    # print(watch_list)
-    return 201
+# @router.get("watch", response={200: ResponseSchema[CountrySchema]})
+@router.get("watch")
+def get_like(request):
+    watch_list = WatchList.objects.filter(user_id=4).select_related("country")
+    return 200, ResponseSchema(
+        data=[CountrySchema(**model_to_dict(i.country)) for i in watch_list]
+    )
 
 
-@router.post("watch")
-def create_like(request, watch: WatchListSchema):
-    watch = watch.dict()
-    print(watch)
-    print(request.user)
-    # user = request.user
-    return 200
+# @router.post("watch")
+# def create_like(request, watch: WatchListSchema):
+#     watch = watch.dict()
+#     print(watch)
+#     print(request.user)
+#     # user = request.user
+#     return 200
 
 
 # @router.delete("watch/{id}")

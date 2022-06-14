@@ -1,7 +1,12 @@
 from datetime import datetime
 from base.schemas import BaseSchema
 from pydantic import validator
+from ninja import Schema
 
-class WatchListSchema(BaseSchema):
+
+class CountrySchema(BaseSchema):
     currency: str
+    name: str
+    currency_kr: str
+    standard_price: float
     

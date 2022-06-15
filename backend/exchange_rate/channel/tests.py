@@ -1,19 +1,11 @@
 from unittest.mock import patch
 from django.test import TestCase
 from django.utils import timezone
-from datetime import date
-from channels.testing import HttpCommunicator
+from datetime import date, datetime
 
-from .query import latest_exchange_aggregate
-from .consumers import ExchangeRateConsumer, TestConsumer
+from .query import latest_exchange_aggregate, fluctuation_rate
+
 from ..models import ExchangeRate
-
-
-# class ChannelsConnectTest(TestCase):
-#     async def test_connect(self):
-#         communicator = HttpCommunicator(TestConsumer, "GET", "/test/")
-#         response = await communicator.get_response()
-#         print(response["body"])
 
 
 class ChannelsQueryTest(TestCase):
@@ -27,12 +19,21 @@ class ChannelsQueryTest(TestCase):
         ]
         ExchangeRate.objects.bulk_create(data)
 
-    @patch("exchange_rate.channel.query._latest_date", date.today)
+    @patch("exchange_rate.channel.query.date", date.today())
     async def test_latest_exchange_aggregate(self):
         min, max = await latest_exchange_aggregate("USD")
         self.assertEqual(990, min.standard_price)
         self.assertEqual(1190, max.standard_price)
-
-
-
-
+    
+    async def test_fluctuation_rate(self):
+        with patch("exchange_rate.channel.query.date") as mock:
+            mock.today.return_value = date(2022, 6, 10)
+            await fluctuation_rate("USD")
+        
+        with patch("exchange_rate.channel.query.date") as mock:
+            mock.today.return_value = date(2022, 6, 12)
+            await fluctuation_rate("USD")
+        
+        with patch("exchange_rate.channel.query.date") as mock:
+            mock.today.return_value = date(2022, 6, 11)
+            await fluctuation_rate("USD")

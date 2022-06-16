@@ -30,13 +30,13 @@ const watchVue = Vue.createApp({
                 return `
                 <strong class="text-primary">${price}</strong>
                 <strong class="text-primary">(${fluctuation}%)</strong>
-                <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price}원</h6>
+                <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price.toFixed(float_digit)}원</h6>
                 `
             }
             return `
             <strong class="text-danger">${price}</strong>
             <strong class="text-danger">(${fluctuation}%)</strong>
-            <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price}원</h6>
+            <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price.toFixed(float_digit)}원</h6>
             `
 
         },

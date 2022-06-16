@@ -17,19 +17,28 @@ const watchVue = Vue.createApp({
             this.watch_length = this.watchList.length
         },
         getFluctuation: function (yester, last) {
+            console.log(yester, last)
             // #(오늘종가 – 어제종가) / 어제종가 * 100.
             return [(last - yester).toFixed(float_digit), ((last - yester) / yester * 100).toFixed(float_digit)]
         },
 
         renderWatchList: function (currencyList) {
-            const [last, yester] = this.getFluctuation(currencyList.last.standard_price, currencyList.yester.standard_price)
-
-
+            const [price, fluctuation] = this.getFluctuation(currencyList.yester.standard_price, currencyList.last.standard_price)
+            console.log(price)
+            console.log(fluctuation)
+            if (0 > price) {
+                return `
+                <strong class="text-primary">${price}</strong>
+                <strong class="text-primary">(${fluctuation}%)</strong>
+                <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price}원</h6>
+                `
+            }
             return `
-            <span class="mx-1 text-muted">[[]]</span>
-            <span class="mx-1 text-muted">[[this.getFluctuation(this.currencyList[w.currency])]]%</span>
-            <h6 class="mt-1 mx-1 mb-0">[[ this.currencyList[w.currency].last.standard_price ]]원</h6>
+            <strong class="text-danger">${price}</strong>
+            <strong class="text-danger">(${fluctuation}%)</strong>
+            <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price}원</h6>
             `
+
         },
         socketConnect: function (name) {
             const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
@@ -61,8 +70,6 @@ const watchVue = Vue.createApp({
             this.socketConnect(i.currency)
         }
     },
-    // [[this.currencyList[w.currency].first.standard_price]]
-    // [[this.currencyList[w.currency].last.standard_price]]
     template: `
     <div class="card-header d-flex align-items-center ">
         <h5 class="card-title m-0 me-2">관심 목록</h5>
@@ -85,8 +92,8 @@ const watchVue = Vue.createApp({
                                     <div v-html="renderWatchList(currencyList[w.currency])"></div>
                                 </template>
                                 <template v-else>
-                                    <span class="text-muted">0</span>
-                                    <span class="text-muted">0%</span>
+                                    <strong class="text-muted">0</strong>
+                                    <strong class="text-muted">(0%)</sstrongpan>
                                     <h6 class="mt-1 mb-0">0원</h6>
                                 </template>
                             </div>

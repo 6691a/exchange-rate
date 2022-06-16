@@ -30,10 +30,10 @@ class ChannelsQueryTest(TestCase):
             mock.today.return_value = date(2022, 6, 10)
             await fluctuation_rate("USD")
         
-        with patch("exchange_rate.channel.query.date") as mock:
-            mock.today.return_value = date(2022, 6, 12)
-            await fluctuation_rate("USD")
+        # with patch("exchange_rate.channel.query.date") as mock:
+        #     mock.today.return_value = date(2022, 6, 12)
+        #     await fluctuation_rate("USD")
         
-        with patch("exchange_rate.channel.query.date") as mock:
-            mock.today.return_value = date(2022, 6, 11)
-            await fluctuation_rate("USD")
+        # with patch("exchange_rate.channel.query.date") as mock:
+        #     mock.today.return_value = date(2022, 6, 11)
+        #     await fluctuation_rate("USD")

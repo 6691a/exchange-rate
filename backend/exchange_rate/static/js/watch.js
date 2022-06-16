@@ -8,6 +8,29 @@ const watchVue = Vue.createApp({
         }
     },
     methods: {
+        getWatchList: async function (options) {
+            const res = await http.get("watch")
+            if (res.status !== 200) {
+                return
+            }
+            this.watchList = res.data.data
+            this.watch_length = this.watchList.length
+        },
+        getFluctuation: function (yester, last) {
+            // #(오늘종가 – 어제종가) / 어제종가 * 100.
+            return [(last - yester).toFixed(float_digit), ((last - yester) / yester * 100).toFixed(float_digit)]
+        },
+
+        renderWatchList: function (currencyList) {
+            const [last, yester] = this.getFluctuation(currencyList.last.standard_price, currencyList.yester.standard_price)
+
+
+            return `
+            <span class="mx-1 text-muted">[[]]</span>
+            <span class="mx-1 text-muted">[[this.getFluctuation(this.currencyList[w.currency])]]%</span>
+            <h6 class="mt-1 mx-1 mb-0">[[ this.currencyList[w.currency].last.standard_price ]]원</h6>
+            `
+        },
         socketConnect: function (name) {
             const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
             const socketPath = protocol + window.location.host + '/ws/watch/'
@@ -21,27 +44,18 @@ const watchVue = Vue.createApp({
                 const res = JSON.parse(e.data)
                 console.log(res)
                 const data = res.data
-                // console.log(data.last_exchange); 
-                // console.log(data.first_exchange); 
-                const first = data.first_exchange
+                const yester = data.yester_exchange
                 const last = data.last_exchange
 
-                this.currencyList[first.currency] = {
-                    first,
+                this.currencyList[last.currency] = {
+                    yester,
                     last
                 }
-                console.log(this.currencyList);
             }
         },
     },
     async created() {
-        const res = await http.get("watch")
-        if (res.status !== 200) {
-            return
-        }
-
-        this.watchList = res.data.data
-        this.watch_length = this.watchList.length
+        await this.getWatchList()
 
         for (let i of this.watchList) {
             this.socketConnect(i.currency)
@@ -67,8 +81,14 @@ const watchVue = Vue.createApp({
                         </div>
                         <div class="user-progress d-flex align-items-center gap-1">
                             <div>
-                                <span class="text-muted">10%</span>
-                                <h6 class="mt-1 mb-0"> [[ this.currencyList[w.currency].last.standard_price ]]원</h6>
+                                <template v-if="currencyList[w.currency]">
+                                    <div v-html="renderWatchList(currencyList[w.currency])"></div>
+                                </template>
+                                <template v-else>
+                                    <span class="text-muted">0</span>
+                                    <span class="text-muted">0%</span>
+                                    <h6 class="mt-1 mb-0">0원</h6>
+                                </template>
                             </div>
                         </div>
                     </div>

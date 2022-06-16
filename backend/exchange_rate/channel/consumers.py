@@ -2,7 +2,7 @@ from base.schemas import ResponseSchema, ErrorSchema
 
 from channel.base import BaseWebSocket
 from .schemas import ExchangeRateSchema, ChartSchema, WatchListSchema
-from .query import latest_exchange, latest_exchange_aggregate, first_and_last_exchange, fluctuation_rate
+from .query import latest_exchange, latest_exchange_aggregate, fluctuation_rate
 
 
 class ExchangeRateConsumer(BaseWebSocket):
@@ -32,17 +32,17 @@ class WatchListConsumer(BaseWebSocket):
     async def connect(self):
         await super().connect()
         currency = self.group_name
-        await fluctuation_rate(currency)
-        # first, last = await first_and_last_exchange(currency__icontains=currency)
-        # if first and last:
-        #     return await self.send(
-        #         ResponseSchema(
-        #             data=WatchListSchema(
-        #                 first_exchange=first,
-        #                 last_exchange=last
-        #             )
-        #         ).json()
-        #     )
-        # await self.send(
-        #     ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
-        # )
+        yester, last = await fluctuation_rate(currency)
+        if yester and last:
+            return await self.send(
+                ResponseSchema(
+                    data=WatchListSchema(
+                        yester_exchange=yester,
+                        last_exchange=last
+                    )
+                ).json()
+            )
+
+        await self.send(
+            ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
+        )

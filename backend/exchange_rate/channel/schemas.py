@@ -23,5 +23,5 @@ class ChartSchema(BaseSchema):
 
 
 class WatchListSchema(BaseSchema):
-    first_exchange: ExchangeRateSchema
+    yester_exchange: ExchangeRateSchema
     last_exchange: ExchangeRateSchema

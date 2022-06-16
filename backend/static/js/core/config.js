@@ -90,6 +90,7 @@ const static_host = debug ? host + '/' : 'https://s3-exchange-rate.s3.ap-northea
 const http = axios.create({
   baseURL: api_path
 });
+const float_digit = 1;
 
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({

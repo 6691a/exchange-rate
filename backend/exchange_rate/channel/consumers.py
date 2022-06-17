@@ -23,9 +23,9 @@ class ExchangeRateConsumer(BaseWebSocket):
         await self.send(
             ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
         )
-
+    
     async def disconnect(self, close_code):
-        super().disconnect(close_code)
+        await super().disconnect(close_code)
 
 
 class WatchListConsumer(BaseWebSocket):

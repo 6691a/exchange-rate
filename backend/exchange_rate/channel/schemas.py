@@ -10,6 +10,7 @@ class ExchangeRateSchema(BaseSchema):
     fix_time: datetime
     created_at: datetime
 
+
     @validator("fix_time")
     def validate_fix_time(cls, v):
         return cls.kst_time(v)
@@ -19,7 +20,7 @@ class ChartSchema(BaseSchema):
     exchange_rate: list[ExchangeRateSchema]
     hight_price: ExchangeRateSchema 
     low_price: ExchangeRateSchema 
-    chart_length: int = 55
+    chart_length: int = 60
 
 
 class WatchListSchema(BaseSchema):

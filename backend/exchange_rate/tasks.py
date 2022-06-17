@@ -83,6 +83,27 @@ def is_day_off():
     return False
 
 
+def send_exchange_rate(data: ExchangeRate):
+    low, high = async_to_sync(latest_exchange_aggregate)(currency=data.currency)
+
+    group_name = data.currency.upper()
+    async_to_sync(channel_group_send)(
+        group_name=group_name, 
+        data=ResponseSchema(
+            data=ChartSchema(
+                exchange_rate=[ExchangeRateSchema(**data.dict)],
+                hight_price=ExchangeRateSchema(**high.dict),
+                low_price=ExchangeRateSchema(**low.dict)
+            ),
+        ).json()
+    )
+
+
+def group_send(data: list[ExchangeRate]): 
+    for exchage in data:
+        send_exchange_rate(exchage)
+
+
 @shared_task
 def exchange_rate():
     if not is_day_off():
@@ -94,18 +115,3 @@ def exchange_rate():
     return -1
 
 
-def send_exchange_rate(data: list[ExchangeRate]):
-    for i in data:
-        low, high = async_to_sync(latest_exchange_aggregate)(currency=i.currency)
-
-        group_name = i.currency.upper()
-        async_to_sync(channel_group_send)(
-            group_name=group_name, 
-            data=ResponseSchema(
-                data=ChartSchema(
-                    exchange_rate=[ExchangeRateSchema(**i.dict)],
-                    hight_price=ExchangeRateSchema(**high.dict),
-                    low_price=ExchangeRateSchema(**low.dict)
-                ),
-            ).json()
-        )

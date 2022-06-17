@@ -18,7 +18,7 @@ const chartVue = Vue.createApp({
             name: '가격',
             data: [],
         }]
-        let minWidth = window.innerWidth <= 500 ? 35 : 15
+        let minWidth = window.innerWidth <= 500 ? 30 : 10
 
         const renderChart = () => {
             const chartEl = document.querySelector('#chartEl')
@@ -65,12 +65,6 @@ const chartVue = Vue.createApp({
                 colors: [config.colors.primary],
                 grid: {
                     show: false,
-                    padding: {
-                        top: -10,
-                        left: 20,
-                        right: 40,
-                        bottom: 10
-                    }
                 },
                 xaxis: {
                     axisBorder: {
@@ -121,13 +115,6 @@ const chartVue = Vue.createApp({
             const socket = new WebSocket(
                 socketPath + name + '/'
             )
-            // else if (socket.url.indexOf(name) === -1) {
-            //     socket.close()
-            //     socket = new WebSocket(
-            //         p + name + '/'
-            //     )
-            // }
-
             addSocketEvent(socket)
         }
 
@@ -174,7 +161,7 @@ const chartVue = Vue.createApp({
                                 y: hight_price.standard_price,
                                 marker: {
                                     offsetX: 0,
-                                    offsetY: -7,
+                                    offsetY: -10,
                                     fillColor: config.colors.primary,
                                     strokeColor: config.colors.primary,
                                     strokeWidth: 2,
@@ -184,7 +171,7 @@ const chartVue = Vue.createApp({
                                     borderWidth: 0,
                                     borderRadius: 0,
                                     offsetX: 0,
-                                    offsetY: -1,
+                                    offsetY: -3,
                                     opacity: 1,
                                     style: {
                                         color: axisColor,
@@ -199,7 +186,7 @@ const chartVue = Vue.createApp({
                                 y: low_price.standard_price,
                                 marker: {
                                     offsetX: 0,
-                                    offsetY: 7,
+                                    offsetY: 10,
                                     fillColor: config.colors.primary,
                                     strokeColor: config.colors.primary,
                                     strokeWidth: 2,
@@ -209,7 +196,7 @@ const chartVue = Vue.createApp({
                                     borderWidth: 0,
                                     borderRadius: 0,
                                     offsetX: 0,
-                                    offsetY: 41,
+                                    offsetY: 43,
                                     style: {
                                         color: axisColor,
                                         background: bgColor,

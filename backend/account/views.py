@@ -61,7 +61,6 @@ def _get_user(access_token) -> dict | None:
 def _get_or_user(**kwargs) -> User:
     email = kwargs.get("email")
     try:
-        print(kwargs["avatar_url"])
         user = User.objects.get(email=email)
         user.update(**kwargs)
     except User.DoesNotExist:

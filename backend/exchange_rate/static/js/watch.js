@@ -93,7 +93,7 @@ const watchVue = Vue.createApp({
                                 </template>
                                 <template v-else>
                                     <strong class="text-muted">0</strong>
-                                    <strong class="text-muted">(0%)</sstrongpan>
+                                    <strong class="text-muted">(0%)</strong>
                                     <h6 class="mt-1 mb-0">0원</h6>
                                 </template>
                             </div>

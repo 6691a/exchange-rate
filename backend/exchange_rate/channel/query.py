@@ -1,4 +1,5 @@
 from datetime import date, timedelta, datetime
+from venv import create
 from channels.db import database_sync_to_async
 from django.core.cache import cache
 
@@ -42,15 +43,20 @@ def latest_exchange(*args, **kwargs) -> list[ExchangeRate]:
 @database_sync_to_async
 def fluctuation_rate(currency) -> tuple[YesterExchanteRate, LastExchanteRate]:
     today = _work_date(date=date.today())
-    yester_day = today - timedelta(1)
-    
-    yester_exchange = ExchangeRate.objects.filter(
-        currency__icontains=currency, created_at__date=yester_day
-    ).last()
+    yester_day = _work_date(date=today - timedelta(1))
 
-    today_exchange = ExchangeRate.objects.filter(
-        currency__icontains=currency, created_at__date=today
-    ).last()
+    data = list(ExchangeRate.objects.filter(currency__icontains=currency, created_at__range=[yester_day, today]))
+
+    yester_exchange = data[0]
+    today_exchange = data[-1]
+
+    # yester_exchange = ExchangeRate.objects.filter(
+    #     currency__icontains=currency, created_at__date=yester_day
+    # ).last()
+
+    # today_exchange = ExchangeRate.objects.filter(
+    #     currency__icontains=currency, created_at__date=today
+    # ).last()
 
     return (yester_exchange, today_exchange)
 

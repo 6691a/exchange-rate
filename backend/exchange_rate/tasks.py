@@ -113,5 +113,3 @@ def exchange_rate():
             return datetime.today().date()
         return -2
     return -1
-
-

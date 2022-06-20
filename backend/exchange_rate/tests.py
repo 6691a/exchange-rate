@@ -35,7 +35,6 @@ class TaskTest(TestCase):
         )
 
     async def test_send_exchange_rate(self):
-
         communicator = AuthWebsocketCommunicator(application, "/ws/exchange_rate/USD/", self.user)
         connected, _ = await communicator.connect()
 
@@ -44,7 +43,9 @@ class TaskTest(TestCase):
         # connect send pop
         await communicator.receive_json_from()
 
-        data = await sync_to_async(ExchangeRate.objects.create)(fix_time=timezone.now(), currency="USD", country="미국", standard_price=900.0)
+        data = await sync_to_async(ExchangeRate.objects.create)(
+            fix_time=timezone.now(), currency="USD", country="미국", standard_price=900.0
+        )
         await sync_to_async(send_exchange_rate)(data)
 
         res = await communicator.receive_json_from()        
@@ -56,7 +57,7 @@ class TaskTest(TestCase):
 
         await communicator.disconnect()
 
-    # def test_group_send(self):
-    #     ...
+    def test_group_send(self):
+        ...
 
 

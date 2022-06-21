@@ -8,7 +8,7 @@ from channels.auth import AuthMiddlewareStack
 
 from base.tests import BaseTest, AuthWebsocketCommunicator
 from .routing import websocket_urlpatterns
-from .query import latest_exchange_aggregate, fluctuation_rate
+from .query import latest_exchange_aggregate, fluctuation_rate, closing_price
 from ..models import ExchangeRate
 
 application = AuthMiddlewareStack(URLRouter(websocket_urlpatterns))
@@ -129,7 +129,6 @@ class ChannelsQueryTest(TestCase):
             mock.today.return_value = BaseTest.mock_now(year=2022, month=6, day=17)
             yester, last = await fluctuation_rate("USD")
 
-
             yester_answer = self.__max_price(self.MOCK_EXCHAGERATE_2022_06_16)
             last_answer = self.__max_price(self.MOCK_EXCHAGERATE_2022_06_17)
 
@@ -145,3 +144,8 @@ class ChannelsQueryTest(TestCase):
 
             self.assertEqual(yester_answer.standard_price, yester.standard_price)
             self.assertEqual(last_answer.standard_price, last.standard_price)
+    
+    # async def test_closing_price(self):
+    #     price = await closing_price()
+
+    #     print(price)

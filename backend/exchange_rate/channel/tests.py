@@ -219,13 +219,12 @@ class ChannelsQueryTest(TestCase):
             self.assertEqual(yester_answer.standard_price, yester.standard_price)
             self.assertEqual(last_answer.standard_price, last.standard_price)
 
-    # async def test_closing_price(self):
-    #     with patch(
-    #         "exchange_rate.channel.query._work_date",
-    #         return_value=BaseTest.mock_now(year=2022, month=6, day=20),
-    #     ):
-    #         closing = await closing_price("USD")
-    #         print(closing)
-    # closing_answer = BaseTest.exchange_max_price("미국", self.MOCK_EXCHAGERATE_2022_06_20)
+    async def test_closing_price(self):
+        with patch(
+            "exchange_rate.channel.query._work_date",
+            return_value=BaseTest.mock_now(year=2022, month=6, day=20),
+        ):
+            closing = await closing_price("USD")
+            closing_answer = BaseTest.exchange_max_price("미국", self.MOCK_EXCHAGERATE_2022_06_20)
 
-    #         self.assertEqual(closing_answer.standard_price, closing.standard_price)
+            self.assertEqual(closing_answer.standard_price, closing.standard_price)

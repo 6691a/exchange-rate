@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0015_alter_exchangeratelist_country_and_more'),
+        ("exchange_rate", "0015_alter_exchangeratelist_country_and_more"),
     ]
 
     operations = [
         migrations.AlterModelTable(
-            name='exchangeratelist',
-            table='exchangeRateList',
+            name="exchangeratelist",
+            table="exchangeRateList",
         ),
     ]

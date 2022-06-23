@@ -1,6 +1,6 @@
-from re import (sub as re_sub)
-from json import (loads as json_loads)
-from httpx import (get as httpx_get)
+from re import sub as re_sub
+from json import loads as json_loads
+from httpx import get as httpx_get
 from celery import shared_task
 from datetime import datetime
 from django.core.cache import cache
@@ -50,10 +50,10 @@ class Currency:
                     fix_time=fix_time,
                     country=country,
                     currency=currency,
-                    standard_price=standard_price
+                    standard_price=standard_price,
                 )
             )
-    
+
         return ExchangeRate.objects.bulk_create(data)
 
 
@@ -88,18 +88,18 @@ def send_exchange_rate(data: ExchangeRate):
 
     group_name = data.currency.upper()
     async_to_sync(channel_group_send)(
-        group_name=group_name, 
+        group_name=group_name,
         data=ResponseSchema(
             data=ChartSchema(
                 exchange_rate=[ExchangeRateSchema(**data.dict)],
                 hight_price=ExchangeRateSchema(**high.dict),
-                low_price=ExchangeRateSchema(**low.dict)
+                low_price=ExchangeRateSchema(**low.dict),
             ),
-        ).json()
+        ).json(),
     )
 
 
-def group_send(data: list[ExchangeRate]): 
+def group_send(data: list[ExchangeRate]):
     for exchage in data:
         send_exchange_rate(exchage)
 

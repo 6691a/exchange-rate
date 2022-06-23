@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0010_exchangerate_country_alter_exchangerate_currency'),
+        ("exchange_rate", "0010_exchangerate_country_alter_exchangerate_currency"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='exchangerate',
-            options={'ordering': ['created_at']},
+            name="exchangerate",
+            options={"ordering": ["created_at"]},
         ),
     ]

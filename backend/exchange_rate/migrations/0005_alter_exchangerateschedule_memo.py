@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0004_exchangerateschedule'),
+        ("exchange_rate", "0004_exchangerateschedule"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='exchangerateschedule',
-            name='memo',
-            field=models.TextField(blank=True, null=True, verbose_name='메모'),
+            model_name="exchangerateschedule",
+            name="memo",
+            field=models.TextField(blank=True, null=True, verbose_name="메모"),
         ),
     ]

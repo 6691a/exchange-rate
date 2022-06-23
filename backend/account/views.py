@@ -90,7 +90,11 @@ def kakao_login_callback(request):
     gender = kakao_user.get("gender")
     age_range = kakao_user.get("age_range")
     user = _get_or_user(
-        nickname=nickname, email=email, gender=gender, age_range=age_range, avatar_url=avatar_url
+        nickname=nickname,
+        email=email,
+        gender=gender,
+        age_range=age_range,
+        avatar_url=avatar_url,
     )
     login(request, user)
     return redirects.main()

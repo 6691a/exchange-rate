@@ -1,3 +1,6 @@
+from unittest.mock import patch
+from time import sleep
+from datetime import timedelta
 from asgiref.sync import sync_to_async
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -13,14 +16,51 @@ application = AuthMiddlewareStack(URLRouter(websocket_urlpatterns))
 
 User = get_user_model()
 
+SLEEP_TIME = 0.001
+
+
 class TaskTest(TestCase):
     def setUp(self):
+        yester_data = [
+            ExchangeRate(
+                fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=100
+            ),
+        ]
+        with patch("django.utils.timezone.now") as mock:
+            mock.return_value = BaseTest.mock_now() - timedelta(1)
+            ExchangeRate.objects.bulk_create(yester_data)
+
         data = [
-            ExchangeRate(fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=1000),
-            ExchangeRate(fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=1060),
-            ExchangeRate(fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=1120),
-            ExchangeRate(fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=1190),            
-            ExchangeRate(fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=990),
+            ExchangeRate(
+                fix_time=BaseTest.mock_now(),
+                currency="USD",
+                country="미국",
+                standard_price=1000,
+            ),
+            ExchangeRate(
+                fix_time=BaseTest.mock_now(),
+                currency="USD",
+                country="미국",
+                standard_price=1060,
+            ),
+            ExchangeRate(
+                fix_time=BaseTest.mock_now(),
+                currency="USD",
+                country="미국",
+                standard_price=1120,
+            ),
+            ExchangeRate(
+                fix_time=BaseTest.mock_now(),
+                currency="USD",
+                country="미국",
+                standard_price=1190,
+            ),
+            ExchangeRate(
+                fix_time=BaseTest.mock_now(),
+                currency="USD",
+                country="미국",
+                standard_price=990,
+            ),
         ]
         ExchangeRate.objects.bulk_create(data)
         self.user = User.objects.create(
@@ -32,29 +72,27 @@ class TaskTest(TestCase):
         )
 
     async def test_send_exchange_rate(self):
-        communicator = AuthWebsocketCommunicator(application, "/ws/exchange_rate/USD/", self.user)
-        connected, _ = await communicator.connect()
+        async with AuthWebsocketCommunicator(
+            application, "/ws/exchange_rate/USD/", self.user
+        ) as wc:
+            # connect send pop
+            await wc.receive_json_from()
 
-        self.assertTrue(connected)
-        
-        # connect send pop
-        await communicator.receive_json_from()
+            data = await sync_to_async(ExchangeRate.objects.create)(
+                fix_time=BaseTest.mock_now(),
+                currency="USD",
+                country="미국",
+                standard_price=900.0,
+            )
+            await sync_to_async(send_exchange_rate)(data)
 
-        data = await sync_to_async(ExchangeRate.objects.create)(
-            fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=900.0
-        )
-        await sync_to_async(send_exchange_rate)(data)
+            res = await wc.receive_json_from()
+            res = res["data"]["exchange_rate"][0]
 
-        res = await communicator.receive_json_from()        
-        res = res["data"]["exchange_rate"][0]
-
-        self.assertEqual(res["country"], data.country)
-        self.assertEqual(res["standard_price"], data.standard_price)
-        self.assertEqual(res["currency"], data.currency)
-
-        await communicator.disconnect()
-
-    def test_group_send(self):
-        ...
+            self.assertEqual(res["country"], data.country)
+            self.assertEqual(res["standard_price"], data.standard_price)
+            self.assertEqual(res["currency"], data.currency)
 
 
+#     def test_group_send(self):
+#         ...

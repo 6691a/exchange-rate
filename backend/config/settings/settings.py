@@ -21,11 +21,10 @@ INSTALLED_APPS = [
     "channel",
     "account",
     "exchange_rate",
-
 ]
 
 INTERNAL_IPS = [
-    '127.0.0.1',
+    "127.0.0.1",
 ]
 
 MIDDLEWARE = [

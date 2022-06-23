@@ -7,4 +7,3 @@ __all__ = ("celery_app",)
 
 if not settings.DEBUG:
     setup()
-

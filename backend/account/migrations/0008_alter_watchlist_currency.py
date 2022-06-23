@@ -7,14 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0003_rename_country_country_name'),
-        ('account', '0007_watchlist'),
+        ("exchange_rate", "0003_rename_country_country_name"),
+        ("account", "0007_watchlist"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='watchlist',
-            name='currency',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='exchange_rate.country', verbose_name='국가'),
+            model_name="watchlist",
+            name="currency",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="exchange_rate.country",
+                verbose_name="국가",
+            ),
         ),
     ]

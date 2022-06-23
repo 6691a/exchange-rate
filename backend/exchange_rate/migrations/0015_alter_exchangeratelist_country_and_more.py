@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0014_delete_watchlist'),
+        ("exchange_rate", "0014_delete_watchlist"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='exchangeratelist',
-            name='country',
-            field=models.CharField(max_length=25, verbose_name='국가'),
+            model_name="exchangeratelist",
+            name="country",
+            field=models.CharField(max_length=25, verbose_name="국가"),
         ),
         migrations.AlterField(
-            model_name='exchangeratelist',
-            name='currency',
-            field=models.CharField(max_length=25, verbose_name='통화명'),
+            model_name="exchangeratelist",
+            name="currency",
+            field=models.CharField(max_length=25, verbose_name="통화명"),
         ),
     ]

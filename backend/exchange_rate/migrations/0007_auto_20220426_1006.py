@@ -6,18 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0006_auto_20220423_1944'),
+        ("exchange_rate", "0006_auto_20220423_1944"),
     ]
 
     operations = [
         migrations.AlterModelManagers(
-            name='exchangerate',
-            managers=[
-            ],
+            name="exchangerate",
+            managers=[],
         ),
         migrations.AlterModelManagers(
-            name='exchangerateschedule',
-            managers=[
-            ],
+            name="exchangerateschedule",
+            managers=[],
         ),
     ]

@@ -6,27 +6,27 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0017_exchangeratelist_currency_kr_and_more'),
+        ("exchange_rate", "0017_exchangeratelist_currency_kr_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='exchangeratelist',
-            old_name='currency',
-            new_name='name',
+            model_name="exchangeratelist",
+            old_name="currency",
+            new_name="name",
         ),
         migrations.RenameField(
-            model_name='exchangeratelist',
-            old_name='currency_kr',
-            new_name='name_kr',
+            model_name="exchangeratelist",
+            old_name="currency_kr",
+            new_name="name_kr",
         ),
         migrations.RenameField(
-            model_name='exchangeratelist',
-            old_name='price_base',
-            new_name='standard_price',
+            model_name="exchangeratelist",
+            old_name="price_base",
+            new_name="standard_price",
         ),
         migrations.AlterModelTable(
-            name='exchangeratelist',
-            table='country',
+            name="exchangeratelist",
+            table="country",
         ),
     ]

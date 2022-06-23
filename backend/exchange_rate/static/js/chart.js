@@ -18,7 +18,7 @@ const chartVue = Vue.createApp({
             name: '가격',
             data: [],
         }]
-        let minWidth = window.innerWidth <= 500 ? 30 : 10
+        let minWidth = window.innerWidth <= 500 ? 33 : 13
 
         const renderChart = () => {
             const chartEl = document.querySelector('#chartEl')

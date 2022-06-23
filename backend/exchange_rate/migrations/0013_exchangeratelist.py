@@ -6,21 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0012_watchlist'),
+        ("exchange_rate", "0012_watchlist"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ExchangeRateList',
+            name="ExchangeRateList",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True, verbose_name='생성일')),
-                ('updated_at', models.DateTimeField(auto_now=True, null=True, verbose_name='수정일')),
-                ('country', models.CharField(default='None', max_length=25, verbose_name='국가')),
-                ('currency', models.CharField(default='None', max_length=25, verbose_name='통화명')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, null=True, verbose_name="생성일"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, null=True, verbose_name="수정일"),
+                ),
+                (
+                    "country",
+                    models.CharField(default="None", max_length=25, verbose_name="국가"),
+                ),
+                (
+                    "currency",
+                    models.CharField(default="None", max_length=25, verbose_name="통화명"),
+                ),
             ],
             options={
-                'db_table': 'ExchangeRateList',
+                "db_table": "ExchangeRateList",
             },
         ),
     ]

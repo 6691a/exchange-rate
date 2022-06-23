@@ -1,11 +1,16 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
 
 from base.models import BaseModel
 from base.utils import destructuring
 
 from exchange_rate.models import Country
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -52,7 +57,10 @@ class Setting(BaseModel):
         ("dark", "dark"),
     ]
     mode = models.CharField(
-        max_length=10, choices=MODE_CHOICES, default=MODE_CHOICES[0][0], verbose_name="환경 모드"
+        max_length=10,
+        choices=MODE_CHOICES,
+        default=MODE_CHOICES[0][0],
+        verbose_name="환경 모드",
     )
 
     class Meta:
@@ -106,11 +114,16 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 
 class WatchList(BaseModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="watch_list", verbose_name="사용자")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="watch_list",
+        verbose_name="사용자",
+    )
     country = models.ForeignKey(Country, on_delete=models.CASCADE, verbose_name="국가")
-    
+
     def __str__(self):
-        return f"{self.user.email}" 
+        return f"{self.user.email}"
 
     class Meta:
         db_table = "watch_list"

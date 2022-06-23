@@ -6,11 +6,11 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0013_exchangeratelist'),
+        ("exchange_rate", "0013_exchangeratelist"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='WatchList',
+            name="WatchList",
         ),
     ]

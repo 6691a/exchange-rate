@@ -7,20 +7,20 @@ import django.db.models.manager
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0005_alter_exchangerateschedule_memo'),
+        ("exchange_rate", "0005_alter_exchangerateschedule_memo"),
     ]
 
     operations = [
         migrations.AlterModelManagers(
-            name='exchangerate',
+            name="exchangerate",
             managers=[
-                ('asyncs', django.db.models.manager.Manager()),
+                ("asyncs", django.db.models.manager.Manager()),
             ],
         ),
         migrations.AlterModelManagers(
-            name='exchangerateschedule',
+            name="exchangerateschedule",
             managers=[
-                ('asyncs', django.db.models.manager.Manager()),
+                ("asyncs", django.db.models.manager.Manager()),
             ],
         ),
     ]

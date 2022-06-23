@@ -7,18 +7,20 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0002_exchangerate_call_date'),
+        ("exchange_rate", "0002_exchangerate_call_date"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='exchangerate',
-            name='call_date',
+            model_name="exchangerate",
+            name="call_date",
         ),
         migrations.AddField(
-            model_name='exchangerate',
-            name='fix_time',
-            field=models.DateTimeField(default=django.utils.timezone.now, verbose_name='환율 갱신 시간'),
+            model_name="exchangerate",
+            name="fix_time",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now, verbose_name="환율 갱신 시간"
+            ),
             preserve_default=False,
         ),
     ]

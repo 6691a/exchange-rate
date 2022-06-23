@@ -12,4 +12,3 @@ class Channel(BaseModel):
     class Meta:
         db_table = "channel"
         ordering = []
-

@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0004_setting'),
+        ("account", "0004_setting"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='setting',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='account.setting'),
+            model_name="user",
+            name="setting",
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="account.setting",
+            ),
         ),
     ]

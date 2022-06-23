@@ -6,18 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0016_alter_exchangeratelist_table'),
+        ("exchange_rate", "0016_alter_exchangeratelist_table"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exchangeratelist',
-            name='currency_kr',
-            field=models.CharField(default='null', max_length=25, verbose_name='한글 통화명'),
+            model_name="exchangeratelist",
+            name="currency_kr",
+            field=models.CharField(
+                default="null", max_length=25, verbose_name="한글 통화명"
+            ),
         ),
         migrations.AddField(
-            model_name='exchangeratelist',
-            name='price_base',
-            field=models.DecimalField(decimal_places=2, default='1', max_digits=10, verbose_name='매매 기준'),
+            model_name="exchangeratelist",
+            name="price_base",
+            field=models.DecimalField(
+                decimal_places=2, default="1", max_digits=10, verbose_name="매매 기준"
+            ),
         ),
     ]

@@ -19,10 +19,7 @@ def currency(request, currency):
     user = request.user
     country = get_object_or_404(Country, currency__icontains=currency)
     print(country)
-    context = {
-        "country": country,
-        "watch": False
-    }
+    context = {"country": country, "watch": False}
 
     if WatchList.objects.filter(user=user, country=country).exists():
         context["watch"] = True

@@ -7,22 +7,34 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ExchangeRate',
+            name="ExchangeRate",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('currency', models.CharField(max_length=25, verbose_name='통화')),
-                ('sales_rate', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='매매 기준')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("updated_at", models.DateTimeField(auto_now=True, null=True)),
+                ("currency", models.CharField(max_length=25, verbose_name="통화")),
+                (
+                    "sales_rate",
+                    models.DecimalField(
+                        decimal_places=2, max_digits=10, verbose_name="매매 기준"
+                    ),
+                ),
             ],
             options={
-                'db_table': 'exchange_rate',
-                'ordering': [],
+                "db_table": "exchange_rate",
+                "ordering": [],
             },
         ),
     ]

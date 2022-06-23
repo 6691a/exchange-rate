@@ -6,20 +6,44 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0003_auto_20220502_2139'),
+        ("account", "0003_auto_20220502_2139"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Setting',
+            name="Setting",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True, verbose_name='생성일')),
-                ('updated_at', models.DateTimeField(auto_now=True, null=True, verbose_name='수정일')),
-                ('mode', models.CharField(choices=[('light', 'light'), ('dark', 'dark')], default='light', max_length=10, verbose_name='환경 모드')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, null=True, verbose_name="생성일"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, null=True, verbose_name="수정일"),
+                ),
+                (
+                    "mode",
+                    models.CharField(
+                        choices=[("light", "light"), ("dark", "dark")],
+                        default="light",
+                        max_length=10,
+                        verbose_name="환경 모드",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'setting',
+                "db_table": "setting",
             },
         ),
     ]

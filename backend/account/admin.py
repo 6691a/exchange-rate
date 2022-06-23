@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import User, Setting, WatchList
 
+
 @admin.register(Setting)
 class SeetingInline(admin.ModelAdmin):
     ...
@@ -15,7 +16,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ["email", "nickname", "gender", "age_range"]
     search_fields = ["email", "nickname", "gender"]
     # inlines = (SeetingInline, )
-    
+
 
 @admin.register(WatchList)
 class WatchListAdmin(admin.ModelAdmin):

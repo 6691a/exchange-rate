@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0008_alter_watchlist_currency'),
+        ("account", "0008_alter_watchlist_currency"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='watchlist',
-            old_name='currency',
-            new_name='country',
+            model_name="watchlist",
+            old_name="currency",
+            new_name="country",
         ),
     ]

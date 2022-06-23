@@ -30,7 +30,7 @@ def latest_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchan
     )
     return (
         today_exchange.order_by("standard_price")[0],
-        today_exchange.order_by("-standard_price")[0]
+        today_exchange.order_by("-standard_price")[0],
     )
 
 
@@ -48,7 +48,7 @@ def fluctuation_rate(currency) -> tuple[YesterExchanteRate, LastExchanteRate]:
     yester_exchange = ExchangeRate.objects.filter(
         currency__icontains=currency, created_at__date=yester_day
     ).last()
-    
+
     today_exchange = ExchangeRate.objects.filter(
         currency__icontains=currency, created_at__date=today
     ).last()
@@ -57,8 +57,9 @@ def fluctuation_rate(currency) -> tuple[YesterExchanteRate, LastExchanteRate]:
 
 
 @database_sync_to_async
-def closing_price(date: date, currency: str) -> ExchangeRate:
-    date = _work_date(date)
+def closing_price(currency: str) -> ExchangeRate:
+    created = _work_date(date.today() - timedelta(1))
+
     return ExchangeRate.objects.filter(
-        currency__icontains=currency, created_at__date=date
+        currency__icontains=currency, created_at__date=created
     ).last()

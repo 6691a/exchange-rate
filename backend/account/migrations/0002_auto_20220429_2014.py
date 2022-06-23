@@ -7,19 +7,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0001_initial'),
+        ("account", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelManagers(
-            name='user',
+            name="user",
             managers=[
-                ('objects', account.models.UserManager()),
+                ("objects", account.models.UserManager()),
             ],
         ),
         migrations.AddField(
-            model_name='user',
-            name='is_admin',
+            model_name="user",
+            name="is_admin",
             field=models.BooleanField(default=False),
         ),
     ]

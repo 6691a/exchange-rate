@@ -7,14 +7,16 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange_rate', '0001_initial'),
+        ("exchange_rate", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exchangerate',
-            name='call_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, verbose_name='환율 호출 시간'),
+            model_name="exchangerate",
+            name="call_date",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now, verbose_name="환율 호출 시간"
+            ),
             preserve_default=False,
         ),
     ]

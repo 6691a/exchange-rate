@@ -1,10 +1,9 @@
-
 import time
 import functools
 from django.db import connection, reset_queries
 
 
-def destructuring(dict:dict, *args:str):
+def destructuring(dict: dict, *args: str):
     """
     ex) foo, blah = pluck(things, 'foo', 'blah')
     https://stackoverflow.com/a/17074606/15126990
@@ -28,4 +27,5 @@ def query_debugger(func):
         print(f"Finished in : {(end - start):.2f}s")
         print("-------------------------------------------------------------------")
         return result
+
     return wrapper

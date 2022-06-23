@@ -59,7 +59,6 @@ def fluctuation_rate(currency) -> tuple[YesterExchanteRate, LastExchanteRate]:
 @database_sync_to_async
 def closing_price(currency: str) -> ExchangeRate:
     created = _work_date(date.today() - timedelta(1))
-
     return ExchangeRate.objects.filter(
         currency__icontains=currency, created_at__date=created
     ).last()

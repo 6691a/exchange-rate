@@ -11,6 +11,7 @@ from .channel.query import latest_exchange_aggregate
 from base.schemas import ResponseSchema
 from .models import ExchangeRate, ExchangeRateSchedule
 from .channel.schemas import ExchangeRateSchema, ChartSchema
+from .channel.base import exchange_rate_msg
 
 
 class Currency:
@@ -84,18 +85,10 @@ def is_day_off():
 
 
 def send_exchange_rate(data: ExchangeRate):
-    low, high = async_to_sync(latest_exchange_aggregate)(currency=data.currency)
-
     group_name = data.currency.upper()
     async_to_sync(channel_group_send)(
         group_name=group_name,
-        data=ResponseSchema(
-            data=ChartSchema(
-                exchange_rate=[ExchangeRateSchema(**data.dict)],
-                hight_price=ExchangeRateSchema(**high.dict),
-                low_price=ExchangeRateSchema(**low.dict),
-            ),
-        ).json(),
+        data=async_to_sync(exchange_rate_msg)(data, data.currency),
     )
 
 

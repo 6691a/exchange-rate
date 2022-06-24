@@ -2,7 +2,7 @@ from unittest.mock import patch
 from time import sleep
 from datetime import timedelta
 from asgiref.sync import sync_to_async
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.contrib.auth import get_user_model
 from channels.routing import URLRouter
 from channels.auth import AuthMiddlewareStack
@@ -19,7 +19,7 @@ User = get_user_model()
 SLEEP_TIME = 0.001
 
 
-class TaskTest(TestCase):
+class TaskTest(TransactionTestCase):
     def setUp(self):
         yester_data = [
             ExchangeRate(

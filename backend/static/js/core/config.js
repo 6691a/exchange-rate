@@ -92,6 +92,7 @@ const http = axios.create({
 });
 const float_digit = 2;
 
+
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
     cssPath: static_host + assetsPath + '/css/core' + '' + '/',

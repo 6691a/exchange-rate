@@ -92,9 +92,14 @@ def send_exchange_rate(data: ExchangeRate):
     )
 
 
+def send_watch_list(data: ExchangeRate):
+    group_name = data.currency.upper()
+
+
 def group_send(data: list[ExchangeRate]):
     for exchage in data:
         send_exchange_rate(exchage)
+        send_watch_list(exchage)
 
 
 @shared_task
@@ -102,7 +107,7 @@ def exchange_rate():
     if not is_day_off():
         c = Currency()
         if data := c.update():
-            send_exchange_rate(data)
+            group_send(data)
             return datetime.today().date()
         return -2
     return -1

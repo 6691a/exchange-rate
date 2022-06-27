@@ -62,3 +62,8 @@ if (document.getElementById('layout-menu')) {
 
 // })();
 
+const getFluctuation = (yester, last) => {
+  // #(오늘종가 – 어제종가) / 어제종가 * 100.
+  return [(last - yester).toFixed(float_digit), ((last - yester) / yester * 100).toFixed(float_digit)]
+}
+

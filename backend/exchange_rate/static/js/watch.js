@@ -8,7 +8,7 @@ const watchVue = Vue.createApp({
         }
     },
     methods: {
-        getWatchList: async function (options) {
+        async getWatchList(options) {
             const res = await http.get("watch")
             if (res.status !== 200) {
                 return
@@ -16,31 +16,26 @@ const watchVue = Vue.createApp({
             this.watchList = res.data.data
             this.watch_length = this.watchList.length
         },
-        getFluctuation: function (yester, last) {
-            console.log(yester, last)
-            // #(오늘종가 – 어제종가) / 어제종가 * 100.
-            return [(last - yester).toFixed(float_digit), ((last - yester) / yester * 100).toFixed(float_digit)]
-        },
 
-        renderWatchList: function (currencyList) {
-            const [price, fluctuation] = this.getFluctuation(currencyList.yester.standard_price, currencyList.last.standard_price)
-            console.log(price)
-            console.log(fluctuation)
+
+        renderWatchList(currency) {
+            const [price, fluctuation] = getFluctuation(currency.yester.standard_price, currency.last.standard_price)
+
             if (0 > price) {
                 return `
-                <strong class="text-primary">${price}</strong>
+                <strong class="text-primary">${price}원</strong>
                 <strong class="text-primary">(${fluctuation}%)</strong>
-                <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price.toFixed(float_digit)}원</h6>
+                <h6 class="mt-1 mx-1 mb-0">${currency.last.standard_price.toFixed(float_digit)}원</h6>
                 `
             }
             return `
-            <strong class="text-danger">${price}</strong>
+            <strong class="text-danger">${price}원</strong>
             <strong class="text-danger">(${fluctuation}%)</strong>
-            <h6 class="mt-1 mx-1 mb-0">${currencyList.last.standard_price.toFixed(float_digit)}원</h6>
+            <h6 class="mt-1 mx-1 mb-0">${currency.last.standard_price.toFixed(float_digit)}원</h6>
             `
 
         },
-        socketConnect: function (name) {
+        socketConnect(name) {
             const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
             const socketPath = protocol + window.location.host + '/ws/watch/'
             const socket = new WebSocket(
@@ -48,7 +43,7 @@ const watchVue = Vue.createApp({
             )
             this.addSocketEvent(socket)
         },
-        addSocketEvent: function (socket) {
+        addSocketEvent(socket) {
             socket.onmessage = (e) => {
                 const res = JSON.parse(e.data)
                 console.log(res)
@@ -70,6 +65,7 @@ const watchVue = Vue.createApp({
             this.socketConnect(i.currency)
         }
     },
+
     template: `
     <div class="card-header d-flex align-items-center ">
         <h5 class="card-title m-0 me-2">관심 목록</h5>
@@ -92,7 +88,7 @@ const watchVue = Vue.createApp({
                                     <div v-html="renderWatchList(currencyList[w.currency])"></div>
                                 </template>
                                 <template v-else>
-                                    <strong class="text-muted">0</strong>
+                                    <strong class="text-muted">0원</strong>
                                     <strong class="text-muted">(0%)</strong>
                                     <h6 class="mt-1 mb-0">0원</h6>
                                 </template>

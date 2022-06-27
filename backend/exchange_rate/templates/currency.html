@@ -32,11 +32,11 @@
             <div class="card-header d-flex align-items-center justify-content-between p-0 pb-3">
               <h5 class="card-title m-0 me-2">{{ country.name }}</h5>
               {% if watch %}
-                <button class="btn px-0">
+                <button v-on:click.prevent="setWatchList" class="btn px-0">
                   <i class="bx bxs-heart bx-sm light-red"></i>
                 </button>
                 {% else%}
-                <button class="btn px-0">
+                <button ! v-on:click.prevent="setWatchList" class="btn px-0">
                   <i class="bx bxs-heart bx-sm silver"></i>
                 </button>
               {% endif %}
@@ -51,8 +51,8 @@
                     </span>
                   </div>
                   <div>
-                    <h6 class="mb-0">[[price]]</h6>
-                    <small>매매기준율</small>
+                    <h6 class="mb-0" >[[price]]</h6>
+                    <small v-html="fluctuation"></small>
                   </div>
                 </div>
               </div>

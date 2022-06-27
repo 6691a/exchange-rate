@@ -10,17 +10,33 @@ if (isDarkStyle) {
 
 const chartVue = Vue.createApp({
     delimiters: ['[[', ']]'],
+    data() {
+        return {
+            fluctuation: `0원 (0%)`,
+            price: Vue.ref(0),
+            apexChart: null,
+            series: [{
+                name: '가격',
+                data: [],
+            }],
+            minWidth: window.innerWidth <= 500 ? 33 : 13,
+            watchListClick: false,
+        }
+    },
+    methods: {
+        async setWatchList() {
+            if (this.watchListClick) {
+                return;
+            }
+            this.watchListClick = true;
+            // await http.get("watch")
+            console.log("click")
 
-    setup() {
-        let price = Vue.ref(0)
-        let apexChart = null
-        let series = [{
-            name: '가격',
-            data: [],
-        }]
-        let minWidth = window.innerWidth <= 500 ? 33 : 13
-
-        const renderChart = () => {
+            setTimeout(() => {
+                this.watchListClick = false;
+            }, 1000);
+        },
+        renderChart() {
             const chartEl = document.querySelector('#chartEl')
             const chartConfig = {
                 series: [],
@@ -106,35 +122,47 @@ const chartVue = Vue.createApp({
                 apexChart = new ApexCharts(chartEl, chartConfig);
                 apexChart.render();
             }
-        }
-
-        const socketConnect = (name) => {
+        },
+        socketConnect(name) {
             const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
             const socketPath = protocol + window.location.host + '/ws/exchange_rate/'
 
             const socket = new WebSocket(
                 socketPath + name + '/'
             )
-            addSocketEvent(socket)
-        }
+            this.addSocketEvent(socket)
+        },
+        render_price(current_price, closing_price) {
+            const [price, fluctuation] = getFluctuation(closing_price, current_price)
 
-        const addSocketEvent = (socket) => {
+            if (0 > price) {
+                return `
+                <small class="text-primary">${price}원 (${fluctuation}%)</small>
+                `
+            }
+            return `
+            <small class="text-danger">${price}원 (${fluctuation}%)</small>
+            `
+        },
+        addSocketEvent(socket) {
             socket.onmessage = (e) => {
                 const res = JSON.parse(e.data)
-                console.log(res)
                 const data = res.data
                 const exchange = data.exchange_rate
                 const chartLength = data.chart_length
                 const hight_price = data.hight_price
                 const low_price = data.low_price
-                price.value = exchange.slice(-1)[0]["standard_price"]
+                const closing = data.closing_price
+                const current_price = exchange.slice(-1)[0]["standard_price"]
 
-                exchange.forEach((v) => series[0].data.push({ x: v.created_at, y: v.standard_price }))
+                this.price = `${current_price}원`
+                this.fluctuation = this.render_price(current_price, closing.standard_price)
 
-                apexChart.updateSeries(series)
+                exchange.forEach((v) => this.series[0].data.push({ x: v.created_at, y: v.standard_price }))
+                apexChart.updateSeries(this.series)
                 apexChart.updateOptions({
                     chart: {
-                        width: (() => `${Math.max(minWidth, Math.min(series[0].data.length / chartLength * 100, 100))}%`)()
+                        width: (() => `${Math.max(this.minWidth, Math.min(this.series[0].data.length / chartLength * 100, 100))}%`)()
                     },
                     markers: {
                         size: 6,
@@ -144,7 +172,7 @@ const chartVue = Vue.createApp({
                         discrete: [{
                             fillColor: config.colors.white,
                             seriesIndex: 0,
-                            dataPointIndex: series[0].data.length - 1,
+                            dataPointIndex: this.series[0].data.length - 1,
                             strokeColor: config.colors.primary,
                             strokeWidth: 8,
                             size: 5,
@@ -203,7 +231,6 @@ const chartVue = Vue.createApp({
                                         fontSize: '13px',
                                     },
                                     text: `${low_price.standard_price}원`,
-
                                 }
                             },
                         ]
@@ -211,14 +238,12 @@ const chartVue = Vue.createApp({
                 })
             };
         }
+    },
 
-
-        Vue.onMounted(async () => {
-            renderChart()
-            const group = window.location.pathname.split("/").pop()
-            socketConnect(group)
-        })
-        return { price }
+    mounted() {
+        this.renderChart()
+        const group = window.location.pathname.split("/").pop()
+        this.socketConnect(group)
     },
 })
 chartVue.mount('#chart')

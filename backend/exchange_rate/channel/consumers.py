@@ -11,9 +11,7 @@ class ExchangeRateConsumer(BaseWebSocket):
         await super().connect()
         currency = self.group_name
         if exchange := await latest_exchange(currency__icontains=currency):
-            return await self.send(
-                await exchange_rate_msg(exchange, currency)
-            )
+            return await self.send(await exchange_rate_msg(exchange, currency))
         await self.send(
             ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
         )

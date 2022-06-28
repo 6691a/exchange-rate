@@ -1,7 +1,7 @@
 from base.schemas import ResponseSchema, ErrorSchema
 
 from channel.base import BaseWebSocket
-from .schemas import ExchangeRateSchema, ChartSchema, WatchListSchema
+from .schemas import WatchListSchema
 from .query import latest_exchange, latest_exchange_aggregate, fluctuation_rate, closing_price
 from .base import exchange_rate_msg
 

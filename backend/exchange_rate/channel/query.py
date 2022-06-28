@@ -37,6 +37,8 @@ def latest_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchan
 @database_sync_to_async
 def latest_exchange(*args, **kwargs) -> list[ExchangeRate]:
     kwargs["created_at__date"] = _work_date(date=date.today())
+    # kwargs["created_at__date"] = _work_date(date=date(2022, 6, 27))
+
     return list(ExchangeRate.objects.filter(*args, **kwargs))
 
 

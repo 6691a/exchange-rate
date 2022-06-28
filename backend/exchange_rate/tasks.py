@@ -7,11 +7,11 @@ from django.core.cache import cache
 from asgiref.sync import async_to_sync
 
 from channel.base import channel_group_send
-from .channel.query import latest_exchange_aggregate
-from base.schemas import ResponseSchema
 from .models import ExchangeRate, ExchangeRateSchedule
-from .channel.schemas import ExchangeRateSchema, ChartSchema
 from .channel.base import exchange_rate_msg
+
+# 14시간
+TIME_OUT = 50400
 
 
 class Currency:
@@ -62,9 +62,9 @@ class Currency:
 def day_off():
     today = datetime.today().date()
     if ExchangeRateSchedule.objects.filter(day_off=datetime.today()).exists():
-        cache.set("day_off", today)
+        cache.set("day_off", today, TIME_OUT)
         return today
-    cache.set("day_off", -1)
+    cache.set("day_off", -1, TIME_OUT)
     return -1
 
 
@@ -74,9 +74,9 @@ def is_day_off():
 
     if not day_off:
         if ExchangeRateSchedule.objects.filter(day_off=today).exists():
-            cache.set("day_off", today)
+            cache.set("day_off", today, TIME_OUT)
             return True
-        cache.set("day_off", -1)
+        cache.set("day_off", -1, TIME_OUT)
         return False
 
     if day_off == today:

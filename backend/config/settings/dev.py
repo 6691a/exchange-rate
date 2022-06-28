@@ -49,15 +49,12 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#         # "OPTIONS": {
-#         #     "timeout": 20,
-#         # },
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
@@ -80,6 +77,25 @@ CHANNEL_LAYERS = {
         # },
     },
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}
+
+# celery
+CELERY_ALWAYS_EAGER = True
+# CELERY_BROKER_URL = 'amqp://[user_name]:[password]@localhost/[vhost_name]'
+CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "django-cache"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = env.TIME_ZONE
+
 
 # # aws s3
 # DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

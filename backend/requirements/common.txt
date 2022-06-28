@@ -7,8 +7,6 @@ attrs==21.4.0
 autobahn==22.4.2
 Automat==20.2.0
 billiard==3.6.4.0
-boto3==1.22.9
-botocore==1.25.9
 celery==5.2.6
 certifi==2021.10.8
 cffi==1.15.0
@@ -28,7 +26,6 @@ django-celery-beat==2.3.0
 django-celery-results==2.3.0
 django-debug-toolbar==3.2.4
 django-ninja==0.18.0
-django-storages==1.12.3
 django-timezone-field==5.0.0
 gunicorn==20.1.0
 h11==0.12.0
@@ -39,7 +36,6 @@ httpx==0.21.3
 hyperlink==21.0.0
 idna==3.3
 incremental==21.3.0
-jmespath==1.0.0
 kombu==5.2.4
 msgpack==1.0.3
 prompt-toolkit==3.0.29
@@ -55,7 +51,6 @@ python-dotenv==0.19.2
 pytz==2022.1
 PyYAML==6.0
 rfc3986==1.5.0
-s3transfer==0.5.2
 service-identity==21.1.0
 six==1.16.0
 sniffio==1.2.0
@@ -64,7 +59,6 @@ Twisted==22.4.0
 txaio==22.2.1
 typing_extensions==4.0.1
 tzdata==2021.5
-urllib3==1.26.9
 uvicorn==0.17.0
 uvloop==0.16.0
 vine==5.0.0
@@ -72,3 +66,8 @@ watchgod==0.8.2
 wcwidth==0.2.5
 websockets==10.3
 zope.interface==5.4.0
+Deprecated==1.2.13
+packaging==21.3
+pyparsing==3.0.9
+redis==4.3.4
+wrapt==1.14.1

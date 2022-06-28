@@ -9,3 +9,7 @@ class CountrySchema(BaseSchema):
     name: str
     currency_kr: str
     standard_price: float
+
+
+class WatchListSchema(BaseSchema):
+    currency: str

@@ -94,13 +94,13 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # cashe
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
-        "TIMEOUT": 86400,
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#         "LOCATION": "unique-snowflake",
+#         "TIMEOUT": 86400,
+#     }
+# }
 
 # channels
 ASGI_APPLICATION = "config.asgi.application"
@@ -110,3 +110,5 @@ AUTH_USER_MODEL = "account.User"
 LOGIN_URL = "/account/login"
 
 DATE_TIME_FORMATE = "%Y.%m.%d %H:%M"
+
+THIRTY_DAY_TO_SECOND = 2592000

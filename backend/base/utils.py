@@ -1,5 +1,7 @@
-import time
-import functools
+from time import perf_counter
+from functools import wraps
+from typing import Literal
+
 from django.db import connection, reset_queries
 
 
@@ -13,13 +15,13 @@ def destructuring(dict: dict, *args: str):
 
 
 def query_debugger(func):
-    @functools.wraps(func)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         reset_queries()
         number_of_start_queries = len(connection.queries)
-        start = time.perf_counter()
+        start = perf_counter()
         result = func(*args, **kwargs)
-        end = time.perf_counter()
+        end = perf_counter()
         number_of_end_queries = len(connection.queries)
         print("-------------------------------------------------------------------")
         print(f"Function : {func.__name__}")

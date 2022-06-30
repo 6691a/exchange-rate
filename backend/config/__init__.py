@@ -5,5 +5,5 @@ from django import setup
 
 __all__ = ("celery_app",)
 
-if not settings.DEBUG:
-    setup()
+# if not settings.DEBUG:
+setup()

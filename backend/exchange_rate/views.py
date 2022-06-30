@@ -8,9 +8,9 @@ from account.models import WatchList
 @login_required
 def main(request):
     user = request.user
-    context = {
-        "watchList": WatchList.objects.filter(user=user).select_related("country")
-    }
+
+    context = {"watchList": WatchList.objects.filter(user=user).select_related("country")}
+
     return render(request, "main.html", context)
 
 

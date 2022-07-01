@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from django.test import TestCase, TransactionTestCase
+from django.test import TransactionTestCase
 from time import sleep
 from datetime import timedelta
 

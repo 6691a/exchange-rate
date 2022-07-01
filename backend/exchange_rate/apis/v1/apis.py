@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from ninja import Router
 from django.forms.models import model_to_dict
 from django.conf import settings
@@ -38,6 +39,12 @@ def add_watch_list(request, watch: WatchListSchema):
     return 200, None
 
 
-@router.delete("watch")
+@router.delete("watch", response={204: None, 404: None})
 def delete_watch_list(request, watch: WatchListSchema):
-    ...
+    # 30일 캐싱
+    country = cache_model(
+        Country, watch.currency, settings.THIRTY_DAY_TO_SECOND, currency=watch.currency
+    )
+    watch_list = get_object_or_404(WatchList, user=request.user, country=country)
+    watch_list.delete
+    return 204, None

@@ -32,13 +32,13 @@
             <div class="card-header d-flex align-items-center justify-content-between p-0 pb-3">
               <h5 class="card-title m-0 me-2">{{ country.name }}</h5>
               {% if watch %}
-                <button v-on:click.prevent="setWatchList" class="btn px-0">
-                  <i class="bx bxs-heart bx-sm light-red"></i>
-                </button>
+                <div class="btn px-0 py-0">
+                  <i v-on:click="setHeart" data-watch="true" class="bx bxs-heart bx-sm light-red"></i>
+                </div>
                 {% else%}
-                <button ! v-on:click.prevent="setWatchList" class="btn px-0">
-                  <i class="bx bxs-heart bx-sm silver"></i>
-                </button>
+                <div class="btn px-0 py-0">
+                  <i v-on:click="setHeart" data-watch="false" class="bx bxs-heart bx-sm silver"></i>
+                </div>
               {% endif %}
 
             </div>

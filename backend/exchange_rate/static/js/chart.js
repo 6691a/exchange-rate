@@ -21,20 +21,37 @@ const chartVue = Vue.createApp({
             }],
             minWidth: window.innerWidth <= 500 ? 33 : 13,
             watchListClick: false,
+            clickAttribute: "data-watch",
+            nonLikeCss: "bx bxs-heart bx-sm silver",
+            likeCss: "bx bxs-heart bx-sm light-red",
+
         }
     },
     methods: {
-        async setWatchList() {
+        async addWatchList() {
+            await http.post("watch")
+        },
+        async delWatchList() {
+            await http.delete("watch")
+        },
+        async setHeart(event) {
             if (this.watchListClick) {
                 return;
             }
+            if (event.target.getAttribute(this.clickAttribute) === "true") {
+                event.target.className = this.nonLikeCss
+                event.target.setAttribute(this.clickAttribute, "false")
+            }
+            else {
+                event.target.className = this.likeCss
+                event.target.setAttribute(this.clickAttribute, "true")
+            }
             this.watchListClick = true;
-            // await http.get("watch")
-            console.log("click")
+
 
             setTimeout(() => {
                 this.watchListClick = false;
-            }, 1000);
+            }, 500);
         },
         renderChart() {
             const chartEl = document.querySelector('#chartEl')

@@ -24,15 +24,22 @@ const chartVue = Vue.createApp({
             clickAttribute: "data-watch",
             nonLikeCss: "bx bxs-heart bx-sm silver",
             likeCss: "bx bxs-heart bx-sm light-red",
+            lastPath: window.location.pathname.split("/").pop(),
 
         }
     },
     methods: {
         async addWatchList() {
-            await http.post("watch")
+            res = await http.post("watch", { "currency": this.lastPath })
+            if (res.status != 200) {
+                // Modal 안내 출력
+            }
         },
         async delWatchList() {
-            await http.delete("watch")
+            res = await http.delete("watch", { data: { "currency": this.lastPath } })
+            if (res.status != 204) {
+                // Modal 안내 출력
+            }
         },
         async setHeart(event) {
             if (this.watchListClick) {
@@ -47,7 +54,6 @@ const chartVue = Vue.createApp({
                 event.target.setAttribute(this.clickAttribute, "true")
             }
             this.watchListClick = true;
-
 
             setTimeout(() => {
                 this.watchListClick = false;

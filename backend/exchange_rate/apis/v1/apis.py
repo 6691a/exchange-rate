@@ -46,5 +46,5 @@ def delete_watch_list(request, watch: WatchListSchema):
         Country, watch.currency, settings.THIRTY_DAY_TO_SECOND, currency=watch.currency
     )
     watch_list = get_object_or_404(WatchList, user=request.user, country=country)
-    watch_list.delete
+    watch_list.delete()
     return 204, None

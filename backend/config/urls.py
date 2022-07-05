@@ -24,6 +24,7 @@ urlpatterns = [
     path("", include("exchange_rate.urls")),
     path("api/", v1_api.urls),
     path("account/", include("account.urls")),
+    path("alert/", include("alert.urls")),
 ]
 
 if settings.DEBUG:

@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "channels",
     "channel",
     "account",
+    "alert",
     "exchange_rate",
 ]
 

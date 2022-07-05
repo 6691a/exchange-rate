@@ -1,8 +1,10 @@
+from asyncio import exceptions
 import httpx
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 
 from base.utils import destructuring
 from base import redirects
@@ -18,6 +20,8 @@ else:
 
 def kakao_login(request):
     url = f"https://kauth.kakao.com/oauth/authorize?client_id={key}&redirect_uri={redirect_url}&response_type=code"
+    # if "KAKAOTALK" in request.META["HTTP_USER_AGENT"]:
+    #     url = f"/oauth/authorize?client_id=${key}&redirect_uri=${redirect_url}&response_type=code&prompt=none"
     return redirect(url)
 
 
@@ -65,6 +69,8 @@ def _get_or_user(**kwargs) -> User:
         user.update(**kwargs)
     except User.DoesNotExist:
         user = User.objects.create(**kwargs)
+    except IntegrityError:
+        return None
 
     return user
 
@@ -72,7 +78,6 @@ def _get_or_user(**kwargs) -> User:
 def kakao_login_callback(request):
     if request.user.is_authenticated:
         return redirects.main()
-
     kakao_token = _get_kakao_token(request)
     if not kakao_token:
         return redirects.login()
@@ -82,13 +87,14 @@ def kakao_login_callback(request):
     kakao_user = _get_user(access_token)
     if not kakao_user:
         return redirects.login()
-
     kakao_user = kakao_user.get("kakao_account")
     nickname = kakao_user.get("profile").get("nickname")
     avatar_url = kakao_user.get("profile").get("profile_image_url")
     email = kakao_user.get("email")
     gender = kakao_user.get("gender")
     age_range = kakao_user.get("age_range")
+
+    # if
     user = _get_or_user(
         nickname=nickname,
         email=email,
@@ -96,5 +102,10 @@ def kakao_login_callback(request):
         age_range=age_range,
         avatar_url=avatar_url,
     )
+    print(user)
+    if not user:
+        url = f"https://kauth.kakao.com/oauth/authorize?client_id=${key}&redirect_uri=${redirect_url}&response_type=code&scope=gender,age_range"
+        return redirect(url)
+
     login(request, user)
     return redirects.main()

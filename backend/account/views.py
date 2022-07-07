@@ -1,4 +1,3 @@
-from asyncio import exceptions
 import httpx
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -6,9 +5,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
-from base.utils import destructuring
 from base import redirects
-from .models import User, Setting
+from .models import User
 
 key = settings.KAKAO_LOGIN_REST_KEY
 
@@ -79,12 +77,14 @@ def kakao_login_callback(request):
     if request.user.is_authenticated:
         return redirects.main()
     kakao_token = _get_kakao_token(request)
+
     if not kakao_token:
         return redirects.login()
 
     access_token = kakao_token.get("access_token")
 
     kakao_user = _get_user(access_token)
+    print(kakao_user)
     if not kakao_user:
         return redirects.login()
     kakao_user = kakao_user.get("kakao_account")
@@ -94,7 +94,10 @@ def kakao_login_callback(request):
     gender = kakao_user.get("gender")
     age_range = kakao_user.get("age_range")
 
-    # if
+    if not gender or not age_range:
+        url = f"https://kauth.kakao.com/oauth/authorize?client_id={key}&redirect_uri={redirect_url}&response_type=code&scope=gender,age_range,talk_message"
+        return redirect(url)
+
     user = _get_or_user(
         nickname=nickname,
         email=email,
@@ -102,10 +105,9 @@ def kakao_login_callback(request):
         age_range=age_range,
         avatar_url=avatar_url,
     )
-    print(user)
-    if not user:
-        url = f"https://kauth.kakao.com/oauth/authorize?client_id=${key}&redirect_uri=${redirect_url}&response_type=code&scope=gender,age_range"
-        return redirect(url)
 
     login(request, user)
     return redirects.main()
+
+
+

@@ -7,3 +7,8 @@ from .models import WatchList
 def insert_watch_list(**kwargs) -> int:
     watch, _ = WatchList.objects.get_or_create(**kwargs)
     return watch.id
+
+
+@shared_task
+def kakao_refresh_token():
+    ...

@@ -2,6 +2,7 @@ from ninja import NinjaAPI
 from django.conf import settings
 
 from exchange_rate.apis.v1.apis import router as exchange_rate_router
+from alert.apis.v1.apis import router as alert_router
 
 docs_url = ""
 
@@ -13,3 +14,4 @@ api = NinjaAPI(title="Exchange_rate", version="1.0.0", docs_url=docs_url)
 
 
 api.add_router("v1/", exchange_rate_router, tags=["exchange_rate"])
+api.add_router("v1/alert", alert_router, tags=["alert"])

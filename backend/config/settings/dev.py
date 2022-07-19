@@ -143,6 +143,7 @@ CELERY_TIMEZONE = env.TIME_ZONE
 #         }
 #     }
 # }
+
 # LOGGING = {
 #     'version': 1,
 #     'handlers': {

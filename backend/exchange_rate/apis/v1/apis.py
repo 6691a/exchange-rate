@@ -7,9 +7,7 @@ from account.models import WatchList
 from base.utils import cache_model
 from base.schemas import ErrorSchema, ResponseSchema
 from .schemas import CountrySchema, WatchListSchema
-from exchange_rate.models import Country
-
-# from account.tasks import insert_watch_list, delete_watch_list
+from exchange_rate.models import Country, ExchangeRate
 
 router = Router()
 
@@ -35,7 +33,6 @@ def add_watch_list(request, watch: WatchListSchema):
     if not WatchList.objects.get_or_create(user=request.user, country=country):
         return 404, ResponseSchema(data=ErrorSchema(error="watch list not found"), status=404)
 
-    # insert_watch_list.delay(user_id=request.user.id, country_id=country.id)
     return 200, None
 
 

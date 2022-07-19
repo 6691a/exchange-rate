@@ -1,9 +1,11 @@
+from weakref import ref
 import httpx
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from operator import is_, itemgetter
 
 from base import redirects
 from .models import User
@@ -60,15 +62,33 @@ def _get_user(access_token) -> dict | None:
     return None
 
 
-def _get_or_user(**kwargs) -> User:
+def _update_user(user: User, **kwargs):
+    keys = list(kwargs.keys())
+
+    is_update = False
+
+    for i in keys:
+        if (attr := getattr(user, i)) != (attr2 := kwargs.get(i)):
+            if not (attr and attr2):
+                return
+            is_update = True
+            print(attr, attr2)
+            setattr(user, i, attr2)
+
+    if is_update:
+        user.save()
+
+
+def _get_or_create_user(**kwargs) -> User:
     email = kwargs.get("email")
     try:
         user = User.objects.get(email=email)
-        user.update(**kwargs)
+        _update_user(user, **kwargs)
+
     except User.DoesNotExist:
         user = User.objects.create(**kwargs)
-    except IntegrityError:
-        return None
+    # except IntegrityError:
+    #     return None
 
     return user
 
@@ -82,11 +102,12 @@ def kakao_login_callback(request):
         return redirects.login()
 
     access_token = kakao_token.get("access_token")
-
+    refresh_token = kakao_token.get("refresh_token")
     kakao_user = _get_user(access_token)
-    print(kakao_user)
+
     if not kakao_user:
         return redirects.login()
+
     kakao_user = kakao_user.get("kakao_account")
     nickname = kakao_user.get("profile").get("nickname")
     avatar_url = kakao_user.get("profile").get("profile_image_url")
@@ -98,16 +119,15 @@ def kakao_login_callback(request):
         url = f"https://kauth.kakao.com/oauth/authorize?client_id={key}&redirect_uri={redirect_url}&response_type=code&scope=gender,age_range,talk_message"
         return redirect(url)
 
-    user = _get_or_user(
+    user = _get_or_create_user(
         nickname=nickname,
         email=email,
         gender=gender,
         age_range=age_range,
         avatar_url=avatar_url,
+        refresh_token=refresh_token,
     )
 
     login(request, user)
+
     return redirects.main()
-
-
-

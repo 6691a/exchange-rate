@@ -8,3 +8,5 @@ urlpatterns = [
     path("", main, name="main"),
     path("<str:currency>", currency, name="currency"),
 ]
+
+

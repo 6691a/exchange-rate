@@ -79,18 +79,21 @@ def _update_user(user: User, **kwargs):
         user.save()
 
 
-def _get_or_create_user(**kwargs) -> User:
+def _get_or_create_user(**kwargs) -> tuple(User, bool):
     email = kwargs.get("email")
+    is_create = False
     try:
         user = User.objects.get(email=email)
         _update_user(user, **kwargs)
 
     except User.DoesNotExist:
         user = User.objects.create(**kwargs)
+        is_create = True
+
     # except IntegrityError:
     #     return None
 
-    return user
+    return (user, is_create)
 
 
 def kakao_login_callback(request):
@@ -119,7 +122,7 @@ def kakao_login_callback(request):
         url = f"https://kauth.kakao.com/oauth/authorize?client_id={key}&redirect_uri={redirect_url}&response_type=code&scope=gender,age_range,talk_message"
         return redirect(url)
 
-    user = _get_or_create_user(
+    user, is_create = _get_or_create_user(
         nickname=nickname,
         email=email,
         gender=gender,
@@ -127,7 +130,7 @@ def kakao_login_callback(request):
         avatar_url=avatar_url,
         refresh_token=refresh_token,
     )
-
+    print(is_create)
     login(request, user)
 
     return redirects.main()

@@ -1,6 +1,5 @@
 from json import dumps
 from httpx import post
-from inspect import cleandoc
 
 from django.template.loader import render_to_string
 
@@ -15,27 +14,15 @@ class KakaoTalk:
         }
 
     @classmethod
-    def text(cls, currency: str, price: int) -> str:
-        # text는 최대 200자
-        return cleandoc(
-            """
-            [환율 알리미]
-            안녕하세요 환율 알리미 입니다
-            {currency} {price:,}원🔔
-            원하는 가격에 도달했어요
-            """.format(
-                currency=currency, price=price
-            )
-        )
-
-    @classmethod
-    def send(cls, token: str, text: str, url_path: str) -> int:
+    def send(cls, token: str, currency: str, price: int, url_path: str) -> int:
         # text는 최대 200자
         data = {
             "template_object": dumps(
                 {
                     "object_type": "text",
-                    "text": text,
+                    "text": render_to_string(
+                        "kakao/alert.txt", {"currency": currency, "price": price}
+                    ),
                     "link": {
                         "web_url": f"https://finance.1ife.kr/{url_path.upper()}",
                         "mobile_web_url": f"https://finance.1ife.kr/{url_path.upper()}",
@@ -50,19 +37,11 @@ class KakaoTalk:
     @classmethod
     def welcome(cls, token: str) -> int:
         """text는 최대 200자"""
-        text = render_to_string("kakao/welcome.txt")
-        # text = cleandoc(
-        #     """
-        #     [환율 알리미]
-        #     안녕하세요 환율 알리미 입니다
-        #     여러 환율에 알림을 설정해 받아보실 수 있습니다😊
-        #     """
-        # )
         data = {
             "template_object": dumps(
                 {
                     "object_type": "text",
-                    "text": text,
+                    "text": render_to_string("kakao/welcome.txt"),
                     "link": {
                         "web_url": "https://finance.1ife.kr",
                         "mobile_web_url": "https://finance.1ife.kr",

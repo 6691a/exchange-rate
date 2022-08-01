@@ -24,6 +24,7 @@ def kakao_refresh_token():
     end = now + relativedelta(days=1)
 
     users = User.objects.filter(last_login__range=[start, end])
+
     for user in users:
         if not user.refresh_token:
             continue

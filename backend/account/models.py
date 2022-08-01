@@ -1,3 +1,5 @@
+from typing import TypeVar
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -10,6 +12,21 @@ from base.models import BaseModel
 from base.utils import destructuring
 
 from exchange_rate.models import Country
+
+class Setting(BaseModel):
+    MODE_CHOICES = [
+        ("light", "light"),
+        ("dark", "dark"),
+    ]
+    mode = models.CharField(
+        max_length=10,
+        choices=MODE_CHOICES,
+        default=MODE_CHOICES[0][0],
+        verbose_name="환경 모드",
+    )
+
+    class Meta:
+        db_table = "setting"
 
 
 class UserManager(BaseUserManager):
@@ -51,22 +68,6 @@ class UserManager(BaseUserManager):
         return user
 
 
-class Setting(BaseModel):
-    MODE_CHOICES = [
-        ("light", "light"),
-        ("dark", "dark"),
-    ]
-    mode = models.CharField(
-        max_length=10,
-        choices=MODE_CHOICES,
-        default=MODE_CHOICES[0][0],
-        verbose_name="환경 모드",
-    )
-
-    class Meta:
-        db_table = "setting"
-
-
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=50)
@@ -90,8 +91,10 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         return self.is_admin
 
     def update(self, **kwargs):
+        print("call User")
         if not kwargs:
             return
+
         nickname, gender, age_range, avatar_url = destructuring(
             kwargs, "nickname", "gender", "age_range", "avatar_url"
         )
@@ -109,6 +112,17 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
             self.avatar_url = avatar_url
 
         self.save()
+
+    def get_and_update_or_create(self, **kwargs) -> tuple["User", bool]:
+        email = kwargs.get("email")
+        is_create = False
+        try:
+            user = self.objects.get(email=email)
+            user.update(**kwargs)
+        except self.DoesNotExist:
+            user = User.objects.create(**kwargs)
+            is_create = True
+        return user, is_create
 
     class Meta:
         db_table = "user"

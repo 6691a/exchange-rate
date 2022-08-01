@@ -66,15 +66,16 @@ STATICFILES_DIRS = [
 TIME_ZONE = env.TIME_ZONE
 
 KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()
+KAKAO_LOGIN_REDIRECT_URL = "https://finance.1ife.kr/account/login/kakao/callback/"
 
 # channels
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-        # "BACKEND": "channels_redis.core.RedisChannelLayer",
-        # "CONFIG": {
-        #     "hosts": [("127.0.0.1", 6379)],
-        # },
+        # "BACKEND": "channels.layers.InMemoryChannelLayer"
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     },
 }
 
@@ -160,3 +161,4 @@ CELERY_TIMEZONE = env.TIME_ZONE
 #         'handlers': ['console'],
 #     }
 # }
+

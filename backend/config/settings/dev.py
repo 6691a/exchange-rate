@@ -39,15 +39,15 @@ INSTALLED_APPS += [
 
 MIDDLEWARE += []
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": env.DB_HOST,
-        "USER": env.DB_USERNAME,
-        "PASSWORD": env.DB_PASSWORD.get_secret_value(),
-        "NAME": env.DB_NAME,
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "HOST": env.DB_HOST,
+#         "USER": env.DB_USERNAME,
+#         "PASSWORD": env.DB_PASSWORD.get_secret_value(),
+#         "NAME": env.DB_NAME,
+#     }
+# }
 
 DATABASES = {
     "default": {
@@ -66,7 +66,7 @@ STATICFILES_DIRS = [
 TIME_ZONE = env.TIME_ZONE
 
 KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()
-KAKAO_LOGIN_REDIRECT_URL = "https://finance.1ife.kr/account/login/kakao/callback/"
+KAKAO_LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/account/login/kakao/callback/"
 
 # channels
 CHANNEL_LAYERS = {

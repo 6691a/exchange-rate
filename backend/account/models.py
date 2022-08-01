@@ -1,4 +1,3 @@
-from typing import TypeVar
 
 from django.db import models
 from django.conf import settings
@@ -9,8 +8,6 @@ from django.contrib.auth.models import (
 )
 
 from base.models import BaseModel
-from base.utils import destructuring
-
 from exchange_rate.models import Country
 
 class Setting(BaseModel):
@@ -52,20 +49,23 @@ class UserManager(BaseUserManager):
         return user
 
     def create(self, *args, **kwargs):
-        nickname, email, gender, age_range, avatar_url = destructuring(
-            kwargs, "nickname", "email", "gender", "age_range", "avatar_url"
-        )
-
-        user = super().create(
-            email=email,
-            nickname=nickname,
-            gender=gender,
-            age_range=age_range,
-            avatar_url=avatar_url,
+        user: User = super().create(
             setting=Setting.objects.create(),
+            **kwargs
         )
         user.set_unusable_password()
         return user
+
+    def get_and_update_or_create(self, **kwargs) -> tuple["User", bool]:
+        email = kwargs.get("email")
+        is_create = False
+        try:
+            user: User = self.model.objects.get(email=email)
+            user.field_update(**kwargs)
+        except self.model.DoesNotExist:
+            user: User = self.model.objects.create(**kwargs)
+            is_create = True
+        return user, is_create
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
@@ -90,39 +90,24 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     def is_staff(self):
         return self.is_admin
 
-    def update(self, **kwargs):
-        print("call User")
+    def field_update(self, **kwargs):
+        """
+        기존 사용자와 다른 값이 존재하면 갱신
+        """
         if not kwargs:
-            return
+            raise TypeError("required model fields ")
 
-        nickname, gender, age_range, avatar_url = destructuring(
-            kwargs, "nickname", "gender", "age_range", "avatar_url"
-        )
+        keys = list(kwargs.keys())
 
-        if self.nickname != nickname:
-            self.nickname = nickname
+        is_update = False
 
-        if self.gender != gender:
-            self.gender = gender
+        for i in keys:
+            if (attr := kwargs.get(i)) != getattr(self, i):
+                setattr(self, i, attr)
+                is_update = True
 
-        if self.age_range != age_range:
-            self.age_range = age_range
-
-        if self.avatar_url != avatar_url:
-            self.avatar_url = avatar_url
-
-        self.save()
-
-    def get_and_update_or_create(self, **kwargs) -> tuple["User", bool]:
-        email = kwargs.get("email")
-        is_create = False
-        try:
-            user = self.objects.get(email=email)
-            user.update(**kwargs)
-        except self.DoesNotExist:
-            user = User.objects.create(**kwargs)
-            is_create = True
-        return user, is_create
+        if is_update:
+            self.save()
 
     class Meta:
         db_table = "user"

@@ -74,7 +74,7 @@ CELERY_TIMEZONE = env.TIME_ZONE
 
 # kakao login
 KAKAO_LOGIN_REST_KEY = env.KAKAO_LOGIN_REST_KEY.get_secret_value()
-KAKAO_LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/account/login/kakao/callback/"
+KAKAO_LOGIN_REDIRECT_URL = "https://finance.1ife.kr/account/login/kakao/callback/"
 
 # channels
 CHANNEL_LAYERS = {

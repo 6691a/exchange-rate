@@ -59,8 +59,8 @@ def kakao_login_callback(request):
     if not gender or not age_range:
         url = f"https://kauth.kakao.com/oauth/authorize?client_id={KEY}&redirect_uri={REDIRECT_URL}&response_type=code&scope=gender,age_range,talk_message"
         return redirect(url)
-
-    user, is_create = User.get_and_update_or_create(
+    
+    user, is_create = User.objects.get_and_update_or_create(
         nickname=nickname,
         email=email,
         gender=gender,
@@ -69,6 +69,7 @@ def kakao_login_callback(request):
         refresh_token=refresh_token
     )
 
+    print(is_create)
     if is_create:
         kakao_welcome.delay(user.refresh_token)
 

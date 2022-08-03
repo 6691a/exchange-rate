@@ -1,13 +1,16 @@
 from celery import shared_task
 
-from .talk import KakaoTalk
 from account.base import kakao_account_token
+from .models import Alert
+from .talk import KakaoTalk
 
 
 @shared_task
-def send_kakao_talk(refresh_token: str, currency: str, price: int, url_path: str):
+def send_kakao_talk(refresh_token: str, currency: str, price: int, url_path: str) -> bool:
     if token := kakao_account_token(refresh_token):
         KakaoTalk.send(token, currency, price, url_path)
+        return True
+    return False
 
 
 @shared_task

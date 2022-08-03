@@ -77,19 +77,19 @@ class TaskTest(TransactionTestCase):
             # connect send pop
             await wc.receive_json_from()
 
-            data = await sync_to_async(ExchangeRate.objects.create)(
+            query_set = await sync_to_async(ExchangeRate.objects.create)(
                 fix_time=BaseTest.mock_now(),
                 currency="USD",
                 country="미국",
                 standard_price=900.0,
             )
-            await sync_to_async(update_exchange_rate)(data)
+
+            await sync_to_async(update_exchange_rate)(query_set)
 
             res = await wc.receive_json_from()
             res = res["data"]["exchange_rate"][0]
 
-            self.assertEqual(res["country"], data.country)
-            self.assertEqual(res["standard_price"], data.standard_price)
-            self.assertEqual(res["currency"], data.currency)
-
+            self.assertEqual(res["country"], query_set.country)
+            self.assertEqual(res["standard_price"], query_set.standard_price)
+            self.assertEqual(res["currency"], query_set.currency)
 

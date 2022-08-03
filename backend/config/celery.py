@@ -31,7 +31,7 @@ if settings.DEBUG:
         # 9:00 ~ 15:00
         "exchange_rate": {
             "task": "exchange_rate.tasks.exchange_rate",
-            "schedule": crontab(hour="9-14", minute="*/1", day_of_week="1-5"),
+            "schedule": crontab(minute="*/1", day_of_week="1-5"),
         },
         # 15:00 ~ 15:30
         # "_exchange_rate": {

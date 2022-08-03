@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
-from alert.tasks import kakao_welcome
+from alert.tasks import send_kakao_welcome
 from base import redirects
 from .models import User
 from .base import get_kakao_token, get_kakao_user
@@ -59,7 +59,7 @@ def kakao_login_callback(request):
     if not gender or not age_range:
         url = f"https://kauth.kakao.com/oauth/authorize?client_id={KEY}&redirect_uri={REDIRECT_URL}&response_type=code&scope=gender,age_range,talk_message"
         return redirect(url)
-    
+
     user, is_create = User.objects.get_and_update_or_create(
         nickname=nickname,
         email=email,
@@ -69,9 +69,8 @@ def kakao_login_callback(request):
         refresh_token=refresh_token
     )
 
-    print(is_create)
     if is_create:
-        kakao_welcome.delay(user.refresh_token)
+        send_kakao_welcome.delay(user.refresh_token)
 
     login(request, user)
 

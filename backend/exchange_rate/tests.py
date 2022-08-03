@@ -1,15 +1,14 @@
 from unittest.mock import patch
-from time import sleep
 from datetime import timedelta
 from asgiref.sync import sync_to_async
-from django.test import TestCase, TransactionTestCase
+from django.test import TransactionTestCase
 from django.contrib.auth import get_user_model
 from channels.routing import URLRouter
 from channels.auth import AuthMiddlewareStack
 
 from base.tests import AuthWebsocketCommunicator, BaseTest
 from .models import ExchangeRate
-from .tasks import send_exchange_rate
+from .tasks import update_exchange_rate
 from .channel.routing import websocket_urlpatterns
 
 application = AuthMiddlewareStack(URLRouter(websocket_urlpatterns))
@@ -71,7 +70,7 @@ class TaskTest(TransactionTestCase):
             avatar_url="None",
         )
 
-    async def test_send_exchange_rate(self):
+    async def test_update_exchange_rate(self):
         async with AuthWebsocketCommunicator(
             application, "/ws/exchange_rate/USD/", self.user
         ) as wc:
@@ -84,7 +83,7 @@ class TaskTest(TransactionTestCase):
                 country="미국",
                 standard_price=900.0,
             )
-            await sync_to_async(send_exchange_rate)(data)
+            await sync_to_async(update_exchange_rate)(data)
 
             res = await wc.receive_json_from()
             res = res["data"]["exchange_rate"][0]
@@ -94,5 +93,3 @@ class TaskTest(TransactionTestCase):
             self.assertEqual(res["currency"], data.currency)
 
 
-#     def test_group_send(self):
-#         ...

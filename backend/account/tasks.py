@@ -1,10 +1,11 @@
-from email import contentmanager
-from celery import shared_task
-
-from .models import WatchList, User
 from httpx import post
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+
+from celery import shared_task
+
+from .models import User
+from exchange_rate.models import WatchList
 
 from django.conf import settings
 

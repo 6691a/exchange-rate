@@ -21,7 +21,7 @@ def kakao_account_token(refresh_token: str) -> str | None:
     res = post(url, data=data, headers=headers)
 
     if res.status_code != 200:
-        raise KakaoTokenException
+        raise KakaoTokenException()
 
     res = res.json()
     return res.get("access_token")
@@ -31,7 +31,7 @@ def get_kakao_token(request) -> dict:
     code = request.GET.get("code", None)
 
     if not code:
-        raise KakaoCallbackException
+        raise KakaoCallbackException()
 
     url: str = "https://kauth.kakao.com/oauth/token"
     data: dict = {
@@ -43,7 +43,7 @@ def get_kakao_token(request) -> dict:
     headers: dict = {"Content-type": "application/x-www-form-urlencoded;charset=utf-8"}
     response = post(url, data=data, headers=headers)
     if response.status_code != 200:
-        raise KakaoTokenException
+        raise KakaoTokenException()
     return response.json()
 
 
@@ -54,5 +54,5 @@ def get_kakao_user(access_token) -> dict:
         headers=headers,
     )
     if response.status_code != 200:
-        raise KakaoUserException
+        raise KakaoUserException()
     return response.json()

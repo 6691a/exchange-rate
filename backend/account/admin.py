@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Setting, WatchList
+from .models import User, Setting
 
 
 @admin.register(Setting)
@@ -18,6 +18,3 @@ class UserAdmin(admin.ModelAdmin):
     # inlines = (SeetingInline, )
 
 
-@admin.register(WatchList)
-class WatchListAdmin(admin.ModelAdmin):
-    ...

@@ -1,6 +1,5 @@
 
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -97,7 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         if not kwargs:
             raise TypeError("required model fields ")
 
-        keys = list(kwargs.keys())
+        keys: list[str] = list(kwargs.keys())
 
         is_update = False
 
@@ -113,18 +112,4 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         db_table = "user"
 
 
-class WatchList(BaseModel):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="watch_list",
-        verbose_name="사용자",
-    )
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, verbose_name="국가")
 
-    def __str__(self):
-        return f"{self.user.email}"
-
-    class Meta:
-        db_table = "watch_list"
-        ordering = []

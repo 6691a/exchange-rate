@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ExchangeRate, ExchangeRateSchedule, Country
+from .models import ExchangeRate, ExchangeRateSchedule, Country, WatchList
 
 
 @admin.register(ExchangeRate)
@@ -19,3 +19,8 @@ class ExchangeRateScheduleAdmin(admin.ModelAdmin):
 class CountryAdmin(admin.ModelAdmin):
     list_display = ["name", "currency", "currency_kr", "standard_price"]
     # search_fields = ["id", "username", "company_code__company_code"]
+
+
+@admin.register(WatchList)
+class WatchListAdmin(admin.ModelAdmin):
+    ...

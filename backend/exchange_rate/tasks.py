@@ -84,7 +84,7 @@ def is_day_off():
     return False
 
 
-def send_exchange_rate(data: ExchangeRate):
+def update_exchange_rate(data: ExchangeRate):
     group_name = data.currency.upper()
     async_to_sync(channel_group_send)(
         group_name=group_name,
@@ -92,14 +92,26 @@ def send_exchange_rate(data: ExchangeRate):
     )
 
 
-def send_watch_list(data: ExchangeRate):
+def update_watch_list(data: ExchangeRate):
     group_name = data.currency.upper()
+    # async_to_sync()(
+    #     group_name=group_name,
+    # )
 
 
-def group_send(data: list[ExchangeRate]):
+def send_alert():
+    ...
+
+
+def jabs(data: list[ExchangeRate]):
     for exchage in data:
-        send_exchange_rate(exchage)
-        send_watch_list(exchage)
+        # 환율 그래프 갱신
+        update_exchange_rate(exchage)
+        #
+        # 좋아요 목록 환율 갱신
+        update_watch_list(exchage)
+
+        # 알림 보내기
 
 
 @shared_task
@@ -107,7 +119,7 @@ def exchange_rate():
     if not is_day_off():
         c = Currency()
         if data := c.update():
-            group_send(data)
+            jabs(data)
             return datetime.today().date()
         return -2
     return -1

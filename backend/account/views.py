@@ -11,9 +11,11 @@ from .exceptions import KakaoTokenException, KakaoUserException
 
 KEY = settings.KAKAO_LOGIN_REST_KEY
 REDIRECT_URL = settings.KAKAO_LOGIN_REDIRECT_URL
-print(REDIRECT_URL, settings.DEBUG)
+
 
 def kakao_login(request):
+    print(REDIRECT_URL)
+    print(settings.DEBUG)
     url = f"https://kauth.kakao.com/oauth/authorize?client_id={KEY}&redirect_uri={REDIRECT_URL}&response_type=code"
     # if "KAKAOTALK" in request.META["HTTP_USER_AGENT"]:
     #     url = f"/oauth/authorize?client_id=${key}&redirect_uri=${redirect_url}&response_type=code&prompt=none"

@@ -61,6 +61,14 @@ TIME_ZONE = env.TIME_ZONE
 
 EXCHANGE_RATE_API_URL = env.EXCHANGE_RATE_API_URL
 
+# cache
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"redis:{env.REDIS_URL.get_secret_value()}:{env.REDIS_PORT}",
+    }
+}
+
 # celery
 CELERY_ALWAYS_EAGER = True
 # CELERY_BROKER_URL = 'amqp://[user_name]:[password]@localhost/[vhost_name]'

@@ -98,7 +98,7 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = env.TIME_ZONE
 
 
-# # aws s3
+# aws s3
 # DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 # STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
 

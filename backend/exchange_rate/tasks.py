@@ -7,6 +7,8 @@ from django.core.cache import cache
 from asgiref.sync import async_to_sync
 
 from channel.base import channel_group_send
+from alert.query import alert_query
+from alert.tasks import send_kakao_talk
 from .models import ExchangeRate, ExchangeRateSchedule
 from .channel.base import exchange_rate_msg
 
@@ -31,8 +33,8 @@ class Currency:
         req = re_sub(r",(\s)+]", "]", req)
         return json_loads(req)
 
-    def __str_to_datetime(self, str: str, format: str) -> datetime:
-        return datetime.strptime(str, format)
+    def __str_to_datetime(self, string: str, formatting: str) -> datetime:
+        return datetime.strptime(string, formatting)
 
     def update(self) -> list[ExchangeRate]:
         res = self.get()
@@ -84,7 +86,7 @@ def is_day_off():
     return False
 
 
-def send_exchange_rate(data: ExchangeRate):
+def update_exchange_rate(data: ExchangeRate):
     group_name = data.currency.upper()
     async_to_sync(channel_group_send)(
         group_name=group_name,
@@ -92,14 +94,43 @@ def send_exchange_rate(data: ExchangeRate):
     )
 
 
-def send_watch_list(data: ExchangeRate):
+def update_watch_list(data: ExchangeRate):
     group_name = data.currency.upper()
+    # async_to_sync()(
+    #     group_name=group_name,
+    # )
 
 
-def group_send(data: list[ExchangeRate]):
+def send_alert(data: ExchangeRate):
+    price: float = data.standard_price
+    country: str = data.country
+    currency: str = data.currency
+
+    query_set = alert_query(price, country)
+    if query_set:
+        for i in query_set:
+            is_send = send_kakao_talk.delay(
+                refresh_token=i.user.refresh_token,
+                currency=currency,
+                price=price,
+                url_path=country
+            )
+            if is_send:
+                i.send = True
+                i.save()
+
+
+def jabs(data: list[ExchangeRate]):
     for exchage in data:
-        send_exchange_rate(exchage)
-        send_watch_list(exchage)
+        # 환율 그래프 갱신
+        update_exchange_rate(exchage)
+
+        # 좋아요 목록 환율 갱신
+        update_watch_list(exchage)
+
+        # 알림 보내기
+        send_alert(exchage)
+
 
 
 @shared_task
@@ -107,7 +138,7 @@ def exchange_rate():
     if not is_day_off():
         c = Currency()
         if data := c.update():
-            group_send(data)
+            jabs(data)
             return datetime.today().date()
         return -2
     return -1

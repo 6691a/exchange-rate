@@ -28,14 +28,30 @@
     <a href="https://finance.1ife.kr/">
     환율 알리미
     </a>
-  </h3>
 
-  <p align="center">
-    내가 원하는 환율을 확인하고 
-    <br />
-    필요에 따라 알림을 받을 수 있습니다.
-    <br />
-  </p>
+  </h3>
+<a href="https://lace-push-56f.notion.site/3381aaf90d974e8f9f908239c9efb934?v=b3a37c9a4f634a149886785260bd13bc">
+    <img src="https://img.shields.io/badge/환율 알리미-ffffff?style=flat-square&logo=notion&logoColor=black"/>
+</a>
+
+<a href="https://lace-push-56f.notion.site/ALL-IN-d91c049ba3c847489156c26828b5c14e">
+    <img src="https://img.shields.io/badge/Notion-ffffff?style=flat-square&logo=notion&logoColor=black"/>
+</a>
+
+
+
+
+[//]: # (  <p align="center">)
+
+[//]: # (    내가 원하는 환율을 확인하고 )
+
+[//]: # (    <br />)
+
+[//]: # (    필요에 따라 알림을 받을 수 있습니다.)
+
+[//]: # (    <br />)
+
+[//]: # (  </p>)
 </div>
 
 

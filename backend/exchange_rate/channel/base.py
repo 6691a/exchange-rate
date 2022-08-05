@@ -9,8 +9,12 @@ Json = str
 async def exchange_rate_msg(exchange: list[ExchangeRate] | ExchangeRate, currency: str) -> Json:
     low, high = await latest_exchange_aggregate(currency=currency)
     closing = await closing_price(currency=currency)
+
     if not isinstance(exchange, list):
         exchange = [exchange]
+
+    if not closing:
+        return
 
     return ResponseSchema(
         data=ChartSchema(

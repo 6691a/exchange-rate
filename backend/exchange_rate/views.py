@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .models import Country
-from account.models import WatchList
+from exchange_rate.models import WatchList
 
 
 @login_required

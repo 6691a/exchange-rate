@@ -1,3 +1,13 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Alert, Alert_beat
+
+
+@admin.register(Alert)
+class AlertAdmin(admin.ModelAdmin):
+    ...
+
+
+@admin.register(Alert_beat)
+class AlertBeatAdmin(admin.ModelAdmin):
+    ...

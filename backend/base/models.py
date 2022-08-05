@@ -61,6 +61,7 @@ class AsyncBaseModel(models.Model):
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name="생성일")
     updated_at = models.DateTimeField(auto_now=True, null=True, verbose_name="수정일")
+    objects = models.Manager()
 
     @property
     def dict(self) -> dict:

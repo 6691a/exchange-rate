@@ -60,3 +60,5 @@ class KakaoTalk:
         }
         res = post(cls.url, headers=cls.__headers(cls, token), data=data)
         return res.status_code
+
+

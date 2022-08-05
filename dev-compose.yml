@@ -66,4 +66,7 @@ services:
     # command: celery -A config beat --loglevel=info
     # depends_on:
     #   - postgres
+
+  # celery -A config.celery worker --loglevel=info --pool=solo
+  # celery -A celery worker --loglevel=info --pool=eventlet
   # celery -A config worker -l info -P eventlet

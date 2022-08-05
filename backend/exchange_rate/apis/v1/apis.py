@@ -3,7 +3,7 @@ from ninja import Router
 from django.forms.models import model_to_dict
 from django.conf import settings
 
-from account.models import WatchList
+from exchange_rate.models import WatchList
 from base.utils import cache_model
 from base.schemas import ErrorSchema, ResponseSchema
 from .schemas import CountrySchema, WatchListSchema
@@ -16,7 +16,7 @@ router = Router()
     "watch", response={200: ResponseSchema[list[CountrySchema]], 400: ResponseSchema[ErrorSchema]}
 )
 def get_watch_list(request):
-    watch_list = WatchList.objects.filter(user=request.user).select_related("country")
+    watch_list: WatchList = WatchList.objects.filter(user=request.user).select_related("country")
 
     if not watch_list:
         return 400, ResponseSchema(data=ErrorSchema(error="watch list not found"), status=400)

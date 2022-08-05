@@ -1,5 +1,5 @@
+
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -7,9 +7,22 @@ from django.contrib.auth.models import (
 )
 
 from base.models import BaseModel
-from base.utils import destructuring
-
 from exchange_rate.models import Country
+
+class Setting(BaseModel):
+    MODE_CHOICES = [
+        ("light", "light"),
+        ("dark", "dark"),
+    ]
+    mode = models.CharField(
+        max_length=10,
+        choices=MODE_CHOICES,
+        default=MODE_CHOICES[0][0],
+        verbose_name="환경 모드",
+    )
+
+    class Meta:
+        db_table = "setting"
 
 
 class UserManager(BaseUserManager):
@@ -35,36 +48,23 @@ class UserManager(BaseUserManager):
         return user
 
     def create(self, *args, **kwargs):
-        nickname, email, gender, age_range, avatar_url = destructuring(
-            kwargs, "nickname", "email", "gender", "age_range", "avatar_url"
-        )
-
-        user = super().create(
-            email=email,
-            nickname=nickname,
-            gender=gender,
-            age_range=age_range,
-            avatar_url=avatar_url,
+        user: User = super().create(
             setting=Setting.objects.create(),
+            **kwargs
         )
         user.set_unusable_password()
         return user
 
-
-class Setting(BaseModel):
-    MODE_CHOICES = [
-        ("light", "light"),
-        ("dark", "dark"),
-    ]
-    mode = models.CharField(
-        max_length=10,
-        choices=MODE_CHOICES,
-        default=MODE_CHOICES[0][0],
-        verbose_name="환경 모드",
-    )
-
-    class Meta:
-        db_table = "setting"
+    def get_and_update_or_create(self, **kwargs) -> tuple["User", bool]:
+        email = kwargs.get("email")
+        is_create = False
+        try:
+            user: User = self.model.objects.get(email=email)
+            user.field_update(**kwargs)
+        except self.model.DoesNotExist:
+            user: User = self.model.objects.create(**kwargs)
+            is_create = True
+        return user, is_create
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
@@ -89,43 +89,27 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     def is_staff(self):
         return self.is_admin
 
-    def update(self, **kwargs):
+    def field_update(self, **kwargs):
+        """
+        기존 사용자와 다른 값이 존재하면 갱신
+        """
         if not kwargs:
-            return
-        nickname, gender, age_range, avatar_url = destructuring(
-            kwargs, "nickname", "gender", "age_range", "avatar_url"
-        )
+            raise TypeError("required model fields ")
 
-        if self.nickname != nickname:
-            self.nickname = nickname
+        keys: list[str] = list(kwargs.keys())
 
-        if self.gender != gender:
-            self.gender = gender
+        is_update = False
 
-        if self.age_range != age_range:
-            self.age_range = age_range
+        for i in keys:
+            if (attr := kwargs.get(i)) != getattr(self, i):
+                setattr(self, i, attr)
+                is_update = True
 
-        if self.avatar_url != avatar_url:
-            self.avatar_url = avatar_url
-
-        self.save()
+        if is_update:
+            self.save()
 
     class Meta:
         db_table = "user"
 
 
-class WatchList(BaseModel):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="watch_list",
-        verbose_name="사용자",
-    )
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, verbose_name="국가")
 
-    def __str__(self):
-        return f"{self.user.email}"
-
-    class Meta:
-        db_table = "watch_list"
-        ordering = []

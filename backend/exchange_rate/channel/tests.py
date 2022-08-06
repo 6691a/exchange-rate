@@ -53,7 +53,7 @@ class ChannelsTest(TransactionTestCase):
         ]
         with patch("django.utils.timezone.now") as mock:
             for i in self.yester_data:
-                mock.return_value = BaseTest.mock_now() - timedelta(1)
+                mock.return_value = BaseTest.mock_now(year=2022, month=8, day=5) - timedelta(1)
                 sleep(SLEEP_TIME)
                 ExchangeRate.objects.create(**i.dict)
 
@@ -80,36 +80,41 @@ class ChannelsTest(TransactionTestCase):
                 fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=990
             ),
         ]
-        ExchangeRate.objects.bulk_create(self.today_data)
+        with patch("django.utils.timezone.now") as mock:
+            mock.return_value = BaseTest.mock_now(year=2022, month=8, day=5)
+            ExchangeRate.objects.bulk_create(self.today_data)
 
     async def test_connect_msg(self):
-        async with AuthWebsocketCommunicator(
-            application, "/ws/exchange_rate/USD/", self.user
-        ) as wc:
-            res = await wc.receive_json_from()
-            self.assertEqual(200, res.get("status"))
+        with patch("exchange_rate.channel.query.date") as mock:
+            mock.today.return_value = BaseTest.mock_now(year=2022, month=8, day=5)
+            async with AuthWebsocketCommunicator(
+                application, "/ws/exchange_rate/USD/", self.user
+            ) as wc:
 
-            res = res.get("data")
-            exchage = res.get("exchange_rate")
-            hight = res.get("hight_price")
-            low = res.get("low_price")
-            closing = res.get("closing_price")
+                res = await wc.receive_json_from()
+                self.assertEqual(200, res.get("status"))
 
-            exchage_answer = list(filter(lambda i: i.country == "미국", self.today_data))
-            hight_answer = BaseTest.exchange_max_price("미국", self.today_data)
-            low_answer = BaseTest.exchange_min_price("미국", self.today_data)
-            closing_answer = self.yester_data[-1]
+                res = res.get("data")
+                exchage = res.get("exchange_rate")
+                hight = res.get("hight_price")
+                low = res.get("low_price")
+                closing = res.get("closing_price")
 
-            for i in range(len(exchage_answer)):
-                self.assertEqual(exchage_answer[i].standard_price, exchage[i].get("standard_price"))
-                self.assertEqual(exchage_answer[i].country, exchage[i].get("country"))
+                exchage_answer = list(filter(lambda i: i.country == "미국", self.today_data))
+                hight_answer = BaseTest.exchange_max_price("미국", self.today_data)
+                low_answer = BaseTest.exchange_min_price("미국", self.today_data)
+                closing_answer = self.yester_data[-1]
 
-            self.assertEqual(hight_answer.standard_price, hight.get("standard_price"))
-            self.assertEqual(hight_answer.country, hight.get("country"))
-            self.assertEqual(low_answer.standard_price, low.get("standard_price"))
-            self.assertEqual(low_answer.country, low.get("country"))
-            self.assertEqual(closing_answer.standard_price, closing.get("standard_price"))
-            self.assertEqual(closing_answer.country, closing.get("country"))
+                for i in range(len(exchage_answer)):
+                    self.assertEqual(exchage_answer[i].standard_price, exchage[i].get("standard_price"))
+                    self.assertEqual(exchage_answer[i].country, exchage[i].get("country"))
+                
+                self.assertEqual(hight_answer.standard_price, hight.get("standard_price"))
+                self.assertEqual(hight_answer.country, hight.get("country"))
+                self.assertEqual(low_answer.standard_price, low.get("standard_price"))
+                self.assertEqual(low_answer.country, low.get("country"))
+                self.assertEqual(closing_answer.standard_price, closing.get("standard_price"))
+                self.assertEqual(closing_answer.country, closing.get("country"))
 
 
 class ChannelsQueryTest(TransactionTestCase):
@@ -139,7 +144,7 @@ class ChannelsQueryTest(TransactionTestCase):
                 mock.return_value = BaseTest.mock_now(year=2022, month=6, day=16)
                 sleep(SLEEP_TIME)
                 ExchangeRate.objects.create(**i.dict)
-
+#
         with patch("django.utils.timezone.now") as mock:
             self.MOCK_EXCHAGERATE_2022_06_17 = [
                 ExchangeRate(

@@ -24,3 +24,5 @@ async def exchange_rate_msg(exchange: list[ExchangeRate] | ExchangeRate, currenc
             closing_price=ExchangeRateSchema(**closing.dict),
         ),
     ).json()
+
+

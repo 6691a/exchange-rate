@@ -35,7 +35,7 @@ EXCHANGE_RATE_API_URL = ENV.EXCHANGE_RATE_API_URL
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"redis:{ENV.REDIS_URL.get_secret_value()}:{ENV.REDIS_PORT}",
+        "LOCATION": f"redis://{ENV.REDIS_URL.get_secret_value()}:{ENV.REDIS_PORT}",
     }
 }
 

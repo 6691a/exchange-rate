@@ -30,7 +30,7 @@ class Env(BaseSettings):
 
     class Config:
         secrets_dir = "../"
-        env_file = ".env"
+        env_file = "dev.env"
         env_file_encoding = "utf-8"
 
 

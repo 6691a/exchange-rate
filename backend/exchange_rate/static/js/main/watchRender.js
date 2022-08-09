@@ -1,4 +1,4 @@
-const watchVue = Vue.createApp({
+const watchRenderVue = Vue.createApp({
     delimiters: ['[[', ']]'],
     data() {
         return {
@@ -17,6 +17,40 @@ const watchVue = Vue.createApp({
             this.watch_length = this.watchList.length
         },
 
+        async addWatchList() {
+            res = await http.post("watch", { "currency": this.lastPath })
+            if (res.status != 200) {
+                // Modal 안내 출력
+            }
+        },
+
+        async delWatchList() {
+            res = await http.delete("watch", { data: { "currency": this.lastPath } })
+            if (res.status != 204) {
+                // Modal 안내 출력
+            }
+        },
+
+        async setHeart(event) {
+            if (this.watchListClick) {
+                return;
+            }
+            if (event.target.getAttribute(this.clickAttribute) === "true") {
+                event.target.className = this.nonLikeCss
+                event.target.setAttribute(this.clickAttribute, "false")
+                this.delWatchList()
+            }
+            else {
+                event.target.className = this.likeCss
+                event.target.setAttribute(this.clickAttribute, "true")
+                this.addWatchList()
+            }
+            this.watchListClick = true;
+
+            setTimeout(() => {
+                this.watchListClick = false;
+            }, 500);
+        },
 
         renderWatchList(currency) {
             const [price, fluctuation] = getFluctuation(currency.yester.standard_price, currency.last.standard_price)
@@ -102,5 +136,5 @@ const watchVue = Vue.createApp({
     `,
 
 })
-watchVue.mount('#watch')
+watchRenderVue.mount('#watch-render')
 

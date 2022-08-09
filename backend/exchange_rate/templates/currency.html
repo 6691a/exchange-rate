@@ -14,7 +14,12 @@
 
   {% block js %}
     <script defer="defer" src="{% static 'libs/apex-charts/apexcharts.js' %}"></script>
-    <script defer="defer" src="{% static 'js/chart.js' %}"></script>
+    <script defer="defer" type="module" src="{% static 'js/currency/vue.js' %}"></script>
+
+<!--    <script defer="defer" src="{% static 'js/chart.js' %}"></script>-->
+<!--    <script defer="defer" src="{% static 'js/watch.js' %}"></script>-->
+<!--    <script defer="defer" src="{% static 'js/alert.js' %}"></script>-->
+
   {% endblock %}
 </head>
 
@@ -26,21 +31,23 @@
   {% block content %}
     <div class="nav-align-top mb-4">
       <div class="tab-content">
-        <div class="tab-pane fade show active" id="chart" role="tabpanel">
+        <div class="tab-pane fade show active" role="tabpanel">
           <!-- Total Balance -->
           <div class="col-md-12 mb-1">
             <div class="card-header d-flex align-items-center justify-content-between p-0 pb-3">
               <h5 class="card-title m-0 me-2">{{ country.name }}</h5>
-              {% if watch %}
                 <div class="btn px-0 py-0">
-                  <i v-on:click="setHeart" data-watch="true" class="bx bxs-heart bx-sm light-red"></i>
+                  <span class="m-2">
+                    <i v-on:click="watchFuncs.setAlert" data-alert="true" class="bx bxs-bell bx-sm silver"></i>
+                  </span>
+                  <span class="m-2" id="watch">
+                  {% if watch %}
+                    <i v-on:click="watchFuncs.setHeart" data-watch="true" class="bx bxs-heart bx-sm light-red"></i>
+                  {% else%}
+                    <i v-on:click="watchFuncs.setHeart" data-watch="false" class="bx bxs-heart bx-sm silver"></i>
+                  {% endif %}
+                  <span>
                 </div>
-                {% else%}
-                <div class="btn px-0 py-0">
-                  <i v-on:click="setHeart" data-watch="false" class="bx bxs-heart bx-sm silver"></i>
-                </div>
-              {% endif %}
-
             </div>
             <div class="card-body p-0">
               <div class="d-flex justify-content-start">

@@ -14,7 +14,7 @@
     {% endblock %}
 
     {% block js %}
-    <script defer src="{% static 'js/watch.js' %}"></script>
+    <script defer src="{% static 'js/watchRender.js' %}"></script>
     {% endblock %}
 </head>
 
@@ -24,7 +24,7 @@
     {% endblock %}
     {% block content %}
     <!-- Transactions -->
-    <div class="card h-100" id="watch">
+    <div class="card h-100" id="watch-render">
         {% comment %} <div class="card-header d-flex align-items-center ">
             <h5 class="card-title m-0 me-2">관심 목록</h5>
             <h6 class="text-muted d-block mb-1">{{ watchList|length }}개</h6>

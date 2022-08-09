@@ -30,7 +30,7 @@
     </a>
 
   </h3>
-<a href="https://lace-push-56f.notion.site/3381aaf90d974e8f9f908239c9efb934?v=b3a37c9a4f634a149886785260bd13bc">
+<a href="https://lace-push-56f.notion.site/240737b8f45f4b8c9e06cc7265cd8e8d">
     <img src="https://img.shields.io/badge/환율 알리미-ffffff?style=flat-square&logo=notion&logoColor=black"/>
 </a>
 
@@ -41,17 +41,10 @@
 
 
 
-[//]: # (  <p align="center">)
 
-[//]: # (    내가 원하는 환율을 확인하고 )
-
-[//]: # (    <br />)
-
-[//]: # (    필요에 따라 알림을 받을 수 있습니다.)
-
-[//]: # (    <br />)
-
-[//]: # (  </p>)
+  <p align="center">
+    자세한 내용은 환율알리미 슬랙을 확인해 주세요.
+  </p>
 </div>
 
 

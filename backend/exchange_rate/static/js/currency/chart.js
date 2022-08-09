@@ -1,12 +1,20 @@
-let axisColor
 if (isDarkStyle) {
-    axisColor = config.colors_dark.axisColor;
-    bgColor = config.colors_dark.cardColor;
+    let axisColor = config.colors_dark.axisColor;
+    let bgColor = config.colors_dark.cardColor;
 
 } else {
-    axisColor = config.colors.axisColor;
-    bgColor = config.colors.white;
+    let axisColor = config.colors.axisColor;
+    let bgColor = config.colors.white;
 }
+
+const fluctuation = `0원 (0%)`
+const price = 0
+const apexChart = null
+const series = Vue.ref([{
+    name: '가격',
+    data: [],
+}])
+const minWidth = window.innerWidth <= 500 ? 33 : 13
 
 const chartVue = Vue.createApp({
     delimiters: ['[[', ']]'],
@@ -15,54 +23,18 @@ const chartVue = Vue.createApp({
             fluctuation: `0원 (0%)`,
             price: Vue.ref(0),
             apexChart: null,
-            series: [{
+            series: Vue.ref([{
                 name: '가격',
                 data: [],
-            }],
+            }]),
             minWidth: window.innerWidth <= 500 ? 33 : 13,
-            watchListClick: false,
-            clickAttribute: "data-watch",
-            nonLikeCss: "bx bxs-heart bx-sm silver",
-            likeCss: "bx bxs-heart bx-sm light-red",
-            lastPath: window.location.pathname.split("/").pop(),
-
         }
     },
     methods: {
-        async addWatchList() {
-            res = await http.post("watch", { "currency": this.lastPath })
-            if (res.status != 200) {
-                // Modal 안내 출력
-            }
-        },
-        async delWatchList() {
-            res = await http.delete("watch", { data: { "currency": this.lastPath } })
-            if (res.status != 204) {
-                // Modal 안내 출력
-            }
-        },
-        async setHeart(event) {
-            if (this.watchListClick) {
-                return;
-            }
-            if (event.target.getAttribute(this.clickAttribute) === "true") {
-                event.target.className = this.nonLikeCss
-                event.target.setAttribute(this.clickAttribute, "false")
-            }
-            else {
-                event.target.className = this.likeCss
-                event.target.setAttribute(this.clickAttribute, "true")
-            }
-            this.watchListClick = true;
-
-            setTimeout(() => {
-                this.watchListClick = false;
-            }, 500);
-        },
         renderChart() {
             const chartEl = document.querySelector('#chartEl')
             const chartConfig = {
-                series: [],
+                series: this.series,
                 chart: {
                     height: "225",
                     width: "100%",
@@ -72,14 +44,6 @@ const chartVue = Vue.createApp({
                         enabled: false
                     },
                     type: 'line',
-                    dropShadow: {
-                        enabled: false,
-                        top: 10,
-                        left: 5,
-                        blur: 3,
-                        color: config.colors.primary,
-                        opacity: 0.15
-                    },
                     toolbar: {
                         show: false
                     },
@@ -104,6 +68,12 @@ const chartVue = Vue.createApp({
                 colors: [config.colors.primary],
                 grid: {
                     show: false,
+                    padding: {
+                        top: 0,
+                        right: 25,
+                        bottom: 0,
+                        left: 0
+                    },
                 },
                 xaxis: {
                     axisBorder: {
@@ -117,7 +87,7 @@ const chartVue = Vue.createApp({
                         style: {
                             fontSize: '1px',
                             colors: bgColor
-                        }
+                        },
                     },
                     tooltip: {
                         enabled: false
@@ -129,7 +99,7 @@ const chartVue = Vue.createApp({
                         style: {
                             fontSize: '1px',
                             colors: bgColor
-                        }
+                        },
                     },
                 },
                 noData: {
@@ -269,4 +239,4 @@ const chartVue = Vue.createApp({
         this.socketConnect(group)
     },
 })
-chartVue.mount('#chart')
+// chartVue.mount('#chart')

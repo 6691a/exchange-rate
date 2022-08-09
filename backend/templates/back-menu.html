@@ -1,8 +1,6 @@
 {% load static %}
 <html>
   <head>
-    <!-- core JS -->
-    <script defer src="{% static 'js/back-menu.js' %}"></script> 
   </head>
 
   <body>
@@ -13,7 +11,7 @@
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center w-100">
           <div class="nav-item d-flex align-items-center w-100">
-              <button @click="back" class="btn px-0">
+              <button @click="backMenuFuncs.back" class="btn px-0">
                 <i class='bx bx-arrow-back fs-4 lh-0 gray'></i>
               </button>
               {% comment %} <i class="bx bx-search fs-4 lh-0"></i> {% endcomment %}

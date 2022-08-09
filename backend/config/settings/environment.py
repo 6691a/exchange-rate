@@ -1,7 +1,6 @@
 
 from pydantic import BaseSettings, SecretStr
 
-
 class Env(BaseSettings):
     # DB
     DB_USERNAME: str
@@ -30,7 +29,7 @@ class Env(BaseSettings):
 
     class Config:
         secrets_dir = "../"
-        env_file = "dev.env"
+        env_file = ".env"
         env_file_encoding = "utf-8"
 
 

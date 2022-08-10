@@ -1,3 +1,11 @@
-const alertFunc = {
+
+
+function addAlert(){
 
 }
+
+const alertFuncs = {
+    addAlert,
+}
+
+export  {AlertFuncs}

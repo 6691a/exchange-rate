@@ -59,8 +59,8 @@ function renderChart() {
             padding: {
                 top: 0,
                 right: 25,
-                bottom: 0,
-                left: 0
+                bottom: 10,
+                left: 5
             },
         },
         xaxis: {
@@ -236,28 +236,3 @@ const chartFuncs = {
 
 
 export  {chartVars, chartFuncs}
-// const chartVue = Vue.createApp({
-//     delimiters: ['[[', ']]'],
-//     data() {
-//         return {
-//             fluctuation: `0원 (0%)`,
-//             price: Vue.ref(0),
-//             apexChart: null,
-//             series: Vue.ref([{
-//                 name: '가격',
-//                 data: [],
-//             }]),
-//             minWidth: window.innerWidth <= 500 ? 33 : 13,
-//         }
-//     },
-//     methods: {
-//
-//     },
-//
-//     mounted() {
-//         this.renderChart()
-//         const group = window.location.pathname.split("/").pop()
-//         this.socketConnect(group)
-//     },
-// })
-// chartVue.mount('#chart')

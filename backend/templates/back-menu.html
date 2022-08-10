@@ -11,12 +11,12 @@
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center w-100">
           <div class="nav-item d-flex align-items-center w-100">
-              <button @click="backMenuFuncs.back" class="btn px-0">
-                <i class='bx bx-arrow-back fs-4 lh-0 gray'></i>
-              </button>
+                <a href="{{request.META.HTTP_REFERER}}">
+                  <i class='bx bx-arrow-back fs-4 lh-0 gray'></i>
+                </a>
               {% comment %} <i class="bx bx-search fs-4 lh-0"></i> {% endcomment %}
               {% comment %} <input type="text" class="form-control border-0 shadow-none" placeholder="'국가'를 입력해주세요"
-                  aria-label="'국가'를 입력해주세요" /> {% endcomment %}
+                aria-label="'국가'를 입력해주세요" /> {% endcomment %}
           </div>
         </div>
         <!-- /Search -->

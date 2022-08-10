@@ -5,7 +5,7 @@ pipeline {
         booleanParam(name: "BUILD", defaultValue: true, description: "DOCKER_IMAGE_BUILD")
         booleanParam(name: "TEST", defaultValue: true, description: "RUN_TEST")
         booleanParam(name: "PUSH", defaultValue: true, description: "DOCKER_IMAGE_PUSH")
-        booleanParam(name : 'DEPLOY', defaultValue : true, description : 'DEPLOY_WORKLOAD')
+        booleanParam(name : 'DEPLOY', defaultValue : false, description : 'DEPLOY_WORKLOAD')
         booleanParam(name : 'PROMPT_FOR_DEPLOY', defaultValue : false, description : 'PROMPT_FOR_DEPLOY')
 
         // SETTINGS

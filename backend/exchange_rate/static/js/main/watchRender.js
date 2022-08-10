@@ -92,7 +92,7 @@ const watchRenderVue = Vue.createApp({
             }
         },
     },
-    async created() {
+    async mounted() {
         await this.getWatchList()
 
         for (let i of this.watchList) {

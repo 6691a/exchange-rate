@@ -9,12 +9,12 @@
     {% block css %}
     <link rel="stylesheet" href="{% static 'css/icon/flag-icons.css' %}" />
     <link rel="stylesheet" href="{% static 'libs/apex-charts/apex-charts.css' %}" />
-    
+
 
     {% endblock %}
 
     {% block js %}
-    <script defer src="{% static 'js/watchRender.js' %}"></script>
+    <script defer type="module" src="{% static 'js/main/vue.js' %}"></script>
     {% endblock %}
 </head>
 
@@ -24,36 +24,42 @@
     {% endblock %}
     {% block content %}
     <!-- Transactions -->
-    <div class="card h-100" id="watch-render">
-        {% comment %} <div class="card-header d-flex align-items-center ">
+    <div class="card h-100">
+        <div class="card-header d-flex align-items-center ">
             <h5 class="card-title m-0 me-2">관심 목록</h5>
             <h6 class="text-muted d-block mb-1">{{ watchList|length }}개</h6>
         </div>
         <div class="card-body">
             <ul class="p-0 m-0">
                 {% for w in watchList %}
-                <a href={% url 'exchange_rate:currency' currency=w.country.currency|lower  %}>
+                <a href={% url 'exchange_rate:currency' currency=w.country.currency|upper %}  class="watch-list" >
                     <li class="btn d-flex mb-4 px-0">
                         <div class="avatar flex-shrink-0 me-3">
-                            <img  src={% static 'css/dollar.png' %} alt="User" /> 
+                            <img src={% static 'img/currency/' %}{{w.country.currency|lower}}.png alt="User" />
                         </div>
                         <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                             <div class="me-2">
                                 <h6 class="mb-0">{{ w.country.name }}</h6>
                             </div>
                             <div class="user-progress d-flex align-items-center gap-1">
-                                <div>
-                                    <span class="text-muted">10%</span>
-                                    <h6 class="mt-1 mb-0">[[price]]원</h6>
-                                </div>
-                                
+                                <template v-if="watchRenderVars.htmls.value.{{w.country.currency|upper}}">
+                                        <div v-html="watchRenderVars.htmls.value.{{w.country.currency|upper}}"></div>
+                                </template>
+                                <template v-else>
+                                    <div>
+                                        <strong class="text-muted">0원</strong>
+                                        <strong class="text-muted">(0%)</strong>
+                                        <h6 class="mb-0">100원</h6>
+                                    </div>
+                                </template>
+
                             </div>
                         </div>
                     </li>
                 </a>
                 {% endfor %}
             </ul>
-        </div> {% endcomment %}
+        </div>
     </div>
 
     <!--/ Transactions -->

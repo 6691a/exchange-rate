@@ -2,7 +2,7 @@ let watchListClick = false
 const clickAttribute= "data-watch"
 const nonLikeCss= "bx bxs-heart bx-sm silver"
 const likeCss= "bx bxs-heart bx-sm light-red"
-const lastPath= window.location.pathname.split("/").pop()
+const lastPath= window.location.pathname.split("/").pop().toUpperCase()
 
 
 async function addWatchList() {
@@ -48,42 +48,4 @@ const watchFuncs = {
 
 
 export default watchFuncs
-// const watchVue = Vue.createApp({
-//     delimiters: ['[[', ']]'],
-//     methods: {
-//         async addWatchList() {
-//             res = await http.post("watch", { "currency": this.lastPath })
-//             if (res.status != 200) {
-//                 // Modal 안내 출력
-//             }
-//         },
-//         async delWatchList() {
-//             res = await http.delete("watch", { data: { "currency": this.lastPath } })
-//             if (res.status != 204) {
-//                 // Modal 안내 출력
-//             }
-//         },
-//         async setHeart(event) {
-//             if (this.watchListClick) {
-//                 return;
-//             }
-//             if (event.target.getAttribute(this.clickAttribute) === "true") {
-//                 event.target.className = this.nonLikeCss
-//                 event.target.setAttribute(this.clickAttribute, "false")
-//                 this.delWatchList()
-//             }
-//             else {
-//                 event.target.className = this.likeCss
-//                 event.target.setAttribute(this.clickAttribute, "true")
-//                 this.addWatchList()
-//             }
-//             this.watchListClick = true;
-//
-//             setTimeout(() => {
-//                 this.watchListClick = false;
-//             }, 500);
-//         },
-//     },
-// })
-// watchVue.mount('#watch')
-//
+

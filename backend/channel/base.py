@@ -12,6 +12,10 @@ async def channel_group_send(group_name: str, data: dict, type: str = "base_mess
 
 
 class BaseWebSocket(AsyncJsonWebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.group_name = None
+
     @database_sync_to_async
     def __save_channel_data(self, user, group_name, channel_name) -> None:
         Channel.objects.create(
@@ -22,10 +26,10 @@ class BaseWebSocket(AsyncJsonWebsocketConsumer):
     def __delete_channel_data(self, group_name: str, channel_name: str) -> None:
         Channel.objects.get(group_name=group_name, channel_name=channel_name).delete()
 
-    async def connect(self):
+    async def connect(self, group_name: str):
         """
         using:
-            call the first `await super().connect()` method
+            1. call the first`await super().connect(group_name="~")` method
 
         send:
             pydantic:
@@ -33,8 +37,8 @@ class BaseWebSocket(AsyncJsonWebsocketConsumer):
             other:
                 await self.send_json()
         """
+        self.group_name = group_name
         self.user = self.scope["user"]
-        self.group_name = self.scope["url_route"]["kwargs"]["currency"].upper()
 
         if not self.user.is_authenticated:
             return

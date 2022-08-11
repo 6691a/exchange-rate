@@ -8,14 +8,14 @@ const lastPath= window.location.pathname.split("/").pop().toUpperCase()
 async function addWatchList() {
     const res = await http.post("watch", { "currency": lastPath })
     if (res.status !== 200) {
-        // Modal 안내 출력
+        // 실패 안내 출력
     }
 }
 
 async function delWatchList() {
     const res = await http.delete("watch", {data: {"currency":  lastPath}})
     if (res.status !== 204) {
-        // Modal 안내 출력
+        // 실패 안내 출력
     }
 }
 async function setHeart(event) {

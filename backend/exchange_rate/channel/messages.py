@@ -1,6 +1,7 @@
 from base.schemas import ResponseSchema
-from .schemas import ExchangeRateSchema, ChartSchema
-from .query import latest_exchange_aggregate, closing_price
+from .exceptions import ClosingPriceException, FluctuationException
+from .schemas import ExchangeRateSchema, ChartSchema, WatchListSchema
+from .query import latest_exchange_aggregate, closing_price, fluctuation_rate
 from ..models import ExchangeRate
 
 Json = str
@@ -14,7 +15,7 @@ async def exchange_rate_msg(exchange: list[ExchangeRate] | ExchangeRate, currenc
         exchange = [exchange]
 
     if not closing:
-        return
+        raise ClosingPriceException
 
     return ResponseSchema(
         data=ChartSchema(
@@ -24,5 +25,18 @@ async def exchange_rate_msg(exchange: list[ExchangeRate] | ExchangeRate, currenc
             closing_price=ExchangeRateSchema(**closing.dict),
         ),
     ).json()
+
+
+async def watch_msg(currency: str) -> Json:
+    yester, last = await fluctuation_rate(currency)
+
+    if not yester or not last:
+        raise FluctuationException
+
+    return ResponseSchema(
+        data=WatchListSchema(yester_exchange=yester, last_exchange=last)
+    ).json()
+
+
 
 

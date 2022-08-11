@@ -1,20 +1,25 @@
 from base.schemas import ResponseSchema, ErrorSchema
 
 from channel.base import BaseWebSocket
+from .exceptions import ClosingPriceException, FluctuationException
 from .schemas import WatchListSchema
-from .query import latest_exchange, latest_exchange_aggregate, fluctuation_rate, closing_price
-from .base import exchange_rate_msg
+from .query import latest_exchange, fluctuation_rate
+from .messages import exchange_rate_msg, watch_msg
 
 
 class ExchangeRateConsumer(BaseWebSocket):
     async def connect(self):
-        await super().connect()
-        currency = self.group_name
-        if exchange := await latest_exchange(currency__icontains=currency):
-            return await self.send(await exchange_rate_msg(exchange, currency))
-        await self.send(
-            ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
-        )
+        currency = self.scope["url_route"]["kwargs"]["currency"].upper()
+        group_name = currency
+        await super().connect(group_name=group_name)
+
+        try:
+            if exchange := await latest_exchange(currency__icontains=currency):
+                return await self.send(await exchange_rate_msg(exchange, currency))
+        except ClosingPriceException:
+            await self.send(
+                ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
+            )
 
     async def disconnect(self, close_code):
         await super().disconnect(close_code)
@@ -22,16 +27,12 @@ class ExchangeRateConsumer(BaseWebSocket):
 
 class WatchListConsumer(BaseWebSocket):
     async def connect(self):
-        await super().connect()
-        currency = self.group_name
-        yester, last = await fluctuation_rate(currency)
-        if yester and last:
-            return await self.send(
-                ResponseSchema(
-                    data=WatchListSchema(yester_exchange=yester, last_exchange=last)
-                ).json()
-            )
+        currency = self.scope["url_route"]["kwargs"]["currency"].upper()
+        await super().connect(f'watch_{currency}')
 
-        await self.send(
-            ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
-        )
+        try:
+            return await self.send(await watch_msg(currency))
+        except FluctuationException:
+            await self.send(
+                ResponseSchema(data=ErrorSchema(error="currency not found"), status=400).json()
+            )

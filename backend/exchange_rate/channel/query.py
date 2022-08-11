@@ -1,8 +1,7 @@
-from datetime import date, timedelta, datetime
-from venv import create
+from datetime import date, timedelta
 from channels.db import database_sync_to_async
-from django.core.cache import cache
 
+from ..base import work_date
 from ..models import ExchangeRate
 
 
@@ -12,21 +11,13 @@ YesterExchanteRate = ExchangeRate
 LastExchanteRate = ExchangeRate
 
 
-def date_offset(date: date, offset: int) -> date:
-    return date - timedelta(days=offset)
 
-
-def _work_date(date: date) -> date:
-    offset = date.weekday() - 4
-    if 0 < offset:
-        return date_offset(date, offset)
-    return date
 
 
 @database_sync_to_async
 def latest_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchanteRate]:
     today_exchange = ExchangeRate.objects.filter(
-        currency__icontains=currency, created_at__date=_work_date(date=date.today())
+        currency__icontains=currency, created_at__date=work_date(date=date.today())
     )
     return (
         today_exchange.order_by("standard_price")[0],
@@ -36,14 +27,14 @@ def latest_exchange_aggregate(currency: str) -> tuple[MinExchanteRate, MaxExchan
 
 @database_sync_to_async
 def latest_exchange(*args, **kwargs) -> list[ExchangeRate]:
-    kwargs["created_at__date"] = _work_date(date=date.today())
+    kwargs["created_at__date"] = work_date(date=date.today())
     return list(ExchangeRate.objects.filter(*args, **kwargs))
 
 
 @database_sync_to_async
 def fluctuation_rate(currency) -> tuple[YesterExchanteRate, LastExchanteRate]:
-    today = _work_date(date=date.today())
-    yester_day = _work_date(date=today - timedelta(1))
+    today = work_date(date=date.today())
+    yester_day = work_date(date=today - timedelta(1))
 
     yester_exchange = ExchangeRate.objects.filter(
         currency__icontains=currency, created_at__date=yester_day
@@ -58,7 +49,7 @@ def fluctuation_rate(currency) -> tuple[YesterExchanteRate, LastExchanteRate]:
 
 @database_sync_to_async
 def closing_price(currency: str) -> ExchangeRate:
-    created = _work_date(date.today() - timedelta(1))
+    created = work_date(date.today() - timedelta(1))
     return ExchangeRate.objects.filter(
         currency__icontains=currency, created_at__date=created
     ).last()

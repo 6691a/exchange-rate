@@ -10,7 +10,7 @@ from channel.base import channel_group_send
 from alert.query import alert_query
 from alert.tasks import send_kakao_talk
 from .models import ExchangeRate, ExchangeRateSchedule
-from .channel.base import exchange_rate_msg
+from .channel.messages import exchange_rate_msg, watch_msg
 
 # 14시간
 TIME_OUT = 50400
@@ -71,6 +71,9 @@ def day_off():
 
 
 def is_day_off():
+    """
+    day_off: -1 (쉬는날 아님), date (쉬는날)
+    """
     day_off = cache.get("day_off")
     today = datetime.today().date()
 
@@ -95,10 +98,11 @@ def update_exchange_rate(data: ExchangeRate):
 
 
 def update_watch_list(data: ExchangeRate):
-    group_name = data.currency.upper()
-    # async_to_sync()(
-    #     group_name=group_name,
-    # )
+    group_name = f"watch_{data.currency.upper()}"
+    async_to_sync(channel_group_send)(
+        group_name=group_name,
+        data=async_to_sync(watch_msg)(data.currency)
+    )
 
 
 def send_alert(data: ExchangeRate):

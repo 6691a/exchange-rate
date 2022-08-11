@@ -1,4 +1,4 @@
-import {watchRenderFuncs, watchRenderVars} from "./watchRender1.js";
+import {watchRenderFuncs, watchRenderVars} from "./watchRender.js";
 
 const indexVue = Vue.createApp({
     delimiters: ['[[', ']]'],

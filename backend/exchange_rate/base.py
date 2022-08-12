@@ -5,32 +5,30 @@ from exchange_rate.models import ExchangeRateSchedule
 
 
 def date_offset(date: date, offset: int) -> date:
+    """
+    offset:
+        - 양수(data - offset)
+        - 음수(date + offset)
+    """
     return date - timedelta(days=offset)
 
 
-def test():
-    day_off = cache.get("day_off")
-    today = datetime.today().date()
-
-    if not day_off:
-        if ExchangeRateSchedule.objects.filter(day_off=today).exists():
-            cache.set("day_off", today)
-            return True
-        cache.set("day_off", -1)
-        return False
-
-    if day_off == today:
-        return True
-    return False
-
 def work_date(date: date) -> date:
-    test()
-    # cache.set("day_off", -1)
-    # if cache.get("day_off"):
-    #     print(date_offset(date, -1))
-        # work_date(date_offset(date, -1))
-        # print(date)
-    offset = date.weekday() - 4
-    if 0 < offset:
-        return date_offset(date, offset)
-    return date
+    schedule: list[ExchangeRateSchedule] = ExchangeRateSchedule.objects.filter(
+        day_off__range=[date_offset(date, 15), date]
+    ).values_list(
+        "day_off",
+        flat=True
+    )
+
+    res = date
+    while True:
+        if res in schedule:
+            res = date_offset(res, 1)
+            if (offset := res.weekday() - 4) > 0:
+                res = date_offset(res, offset)
+        else:
+            break
+    return res
+
+

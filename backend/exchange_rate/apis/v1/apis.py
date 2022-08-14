@@ -1,5 +1,6 @@
-from django.shortcuts import get_object_or_404
 from ninja import Router
+
+from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.conf import settings
 
@@ -13,7 +14,8 @@ router = Router()
 
 
 @router.get(
-    "watch", response={200: ResponseSchema[list[CountrySchema]], 400: ResponseSchema[ErrorSchema]}
+    "watch",
+    response={200: ResponseSchema[list[CountrySchema]], 400: ResponseSchema[ErrorSchema]},
 )
 def get_watch_list(request):
     watch_list: WatchList = WatchList.objects.filter(user=request.user).select_related("country")
@@ -24,7 +26,10 @@ def get_watch_list(request):
     return 200, ResponseSchema(data=[CountrySchema(**model_to_dict(i.country)) for i in watch_list])
 
 
-@router.post("watch", response={200: None, 404: ResponseSchema[ErrorSchema]})
+@router.post(
+    "watch",
+    response={200: None, 404: ResponseSchema[ErrorSchema]},
+)
 def add_watch_list(request, watch: WatchListSchema):
     # 30일 캐싱
     country = cache_model(
@@ -36,7 +41,10 @@ def add_watch_list(request, watch: WatchListSchema):
     return 200, None
 
 
-@router.delete("watch", response={204: None, 404: None})
+@router.delete(
+    "watch",
+    response={204: None, 404: None},
+)
 def delete_watch_list(request, watch: WatchListSchema):
     # 30일 캐싱
     country = cache_model(

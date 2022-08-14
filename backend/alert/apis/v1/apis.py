@@ -1,16 +1,19 @@
 from ninja import Router
+from ninja.security import django_auth
 
 from django.http import HttpRequest
 
 from exchange_rate.base import work_date
 from exchange_rate.models import ExchangeRateSchedule
 from datetime import date
+
+from alert.apis.v1.schemas import AlertCreateSchema
+
 router = Router()
 
 
-@router.get("test")
-def test(request: HttpRequest):
-    work_date(date(2022, 8, 15))
+@router.post("/")
+def test(request: HttpRequest, body: AlertCreateSchema):
+    print(body)
 
     return 200
-    # ExchangeRateSchedule.objects.filter(day_off__range=[])

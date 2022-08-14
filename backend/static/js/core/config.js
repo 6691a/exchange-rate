@@ -87,8 +87,28 @@ const host = debug ? 'http://127.0.0.1:8000' : window.location.protocol + '//' +
 const path = '/api/v1/'
 const api_path = host + path
 const static_host = debug ? host + '/' : 'https://s3-exchange-rate.s3.ap-northeast-2.amazonaws.com/'
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 const http = axios.create({
-  baseURL: api_path
+  baseURL: api_path,
+  headers: {
+    "X-CSRFToken": `${getCookie('csrftoken')}`,
+  },
 });
 const float_digit = 2;
 

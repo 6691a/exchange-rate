@@ -1,11 +1,13 @@
 import watchFuncs from "./watch.js";
 import {chartFuncs, chartVars} from "./chart.js";
+import alertFuncs from "./alert.js";
 
 const indexVue = Vue.createApp({
     delimiters: ['[[', ']]'],
     setup() {
         return {
             watchFuncs,
+            alertFuncs,
             chartVars,
         }
     },

@@ -1,48 +1,56 @@
-let watchListClick = false
-const clickAttribute= "data-watch"
-const nonLikeCss= "bx bxs-heart bx-sm silver"
-const likeCss= "bx bxs-heart bx-sm light-red"
-const lastPath= window.location.pathname.split("/").pop().toUpperCase()
+let isClick = false
+const nonLikeCss = "bx bxs-heart bx-sm silver"
+const likeCss = "bx bxs-heart bx-sm light-red"
+const lastPath = window.location.pathname.split("/").pop().toUpperCase()
 
 
 async function addWatchList() {
-    const res = await http.post("watch", { "currency": lastPath })
+    const res = await http.post(
+        "watch/",
+        {
+            "currency": lastPath
+        }
+    )
     if (res.status !== 200) {
         // 실패 안내 출력
     }
 }
 
 async function delWatchList() {
-    const res = await http.delete("watch", {data: {"currency":  lastPath}})
+    const res = await http.delete(
+        "watch/",
+        {
+            data: {
+                "currency":  lastPath
+            }
+        }
+    )
     if (res.status !== 204) {
         // 실패 안내 출력
     }
 }
 async function setHeart(event) {
-    if (watchListClick) {
+    if (isClick) {
         return;
     }
-    const attr = clickAttribute
-    if (event.target.getAttribute(attr) === "true") {
-        event.target.className =  nonLikeCss
-        event.target.setAttribute(attr, "false")
-        await watchFuncs.delWatchList()
-    } else {
+    isClick = true;
+
+    if (event.target.classList.contains("silver")) {
         event.target.className = likeCss
-        event.target.setAttribute(attr, "true")
-        await watchFuncs.addWatchList()
+        await addWatchList()
     }
-    watchListClick = true;
+    else {
+        event.target.className =  nonLikeCss
+        await delWatchList()
+    }
 
     setTimeout(() => {
-        watchListClick = false;
+        isClick = false;
     }, 500);
 }
 
 
 const watchFuncs = {
-    addWatchList,
-    delWatchList,
     setHeart,
 }
 

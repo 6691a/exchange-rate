@@ -13,21 +13,21 @@ from exchange_rate.models import Country, ExchangeRate
 router = Router()
 
 
-@router.get(
-    "watch",
-    response={200: ResponseSchema[list[CountrySchema]], 400: ResponseSchema[ErrorSchema]},
-)
-def get_watch_list(request):
-    watch_list: WatchList = WatchList.objects.filter(user=request.user).select_related("country")
-
-    if not watch_list:
-        return 400, ResponseSchema(data=ErrorSchema(error="watch list not found"), status=400)
-
-    return 200, ResponseSchema(data=[CountrySchema(**model_to_dict(i.country)) for i in watch_list])
+# @router.get(
+#     "watch/",
+#     response={200: ResponseSchema[list[CountrySchema]], 400: ResponseSchema[ErrorSchema]},
+# )
+# def get_watch_list(request):
+#     watch_list: WatchList = WatchList.objects.filter(user=request.user).select_related("country")
+#
+#     if not watch_list:
+#         return 400, ResponseSchema(data=ErrorSchema(error="watch list not found"), status=400)
+#
+#     return 200, ResponseSchema(data=[CountrySchema(**model_to_dict(i.country)) for i in watch_list])
 
 
 @router.post(
-    "watch",
+    "watch/",
     response={200: None, 404: ResponseSchema[ErrorSchema]},
 )
 def add_watch_list(request, watch: WatchListSchema):
@@ -42,7 +42,7 @@ def add_watch_list(request, watch: WatchListSchema):
 
 
 @router.delete(
-    "watch",
+    "watch/",
     response={204: None, 404: None},
 )
 def delete_watch_list(request, watch: WatchListSchema):

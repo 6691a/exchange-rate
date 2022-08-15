@@ -24,24 +24,35 @@ async function setAlert(event) {
         // event.target.className = likeCss
         await addAlert()
     }
+    else {
 
-    // const attr = clickAttribute
-    // if (event.target.getAttribute(attr) === "true") {
-    //     event.target.className =  nonLikeCss
-    //     event.target.setAttribute(attr, "false")
-    //     await watchFuncs.delWatchList()
-    // } else {
-    //     event.target.className = likeCss
-    //     event.target.setAttribute(attr, "true")
-    //     await watchFuncs.addWatchList()
-    // }
-
+    }
     setTimeout(() => {
         isClick = false;
     }, 500);
 }
 
+function alertKeyInputEvent(event) {
+    let keyCode = event.keyCode
+    if ((keyCode > 31 && (keyCode < 48 || keyCode > 57)) && keyCode !== 46) {
+        event.preventDefault();
+    }
+    let inputValue = event.target.value
+
+    event.target.value = comma(uncomma(inputValue))
+}
+
+function comma(str) {
+ str = String(str);
+ return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function uncomma(str) {
+ str = String(str);
+ return str.replace(/[^\d]+/g, '');
+}
 const alertFuncs = {
     setAlert,
+    alertKeyInputEvent
 }
 export default alertFuncs

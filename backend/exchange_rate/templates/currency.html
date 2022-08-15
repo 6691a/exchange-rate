@@ -80,35 +80,24 @@
         <div class="modal-body">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           <div class="text-center mb-4">
-            <h3 class="mb-5">Enable One Time Password</h3>
+            <h3 class="mb-5">{{country.name}} 환율 알림</h3>
           </div>
-          <h6>Verify Your Mobile Number for SMS</h6>
-          <p>Enter your mobile phone number with country code and we will send you a verification code.</p>
+          <h6>얼마일 때 알려드릴까요?</h6>
           <form id="enableOTPForm" class="row g-3" onsubmit="return false">
             <div class="col-12">
-              <label class="form-label" for="modalEnableOTPPhone">Phone Number</label>
               <div class="input-group input-group-merge">
-                <span class="input-group-text">+1</span>
                 <input
+                  @keyup="alertFuncs.alertKeyInputEvent"
                   type="text"
-                  id="modalEnableOTPPhone"
-                  name="modalEnableOTPPhone"
+                  max='10'
+                  id="alert_input"
                   class="form-control phone-number-otp-mask"
-                  placeholder="202 555 0111"
+                  placeholder="가격을 입력하세요"
                 />
+                 <span class="input-group-text">원</span>
               </div>
             </div>
-            <div class="col-12">
-              <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
-              <button
-                type="reset"
-                class="btn btn-label-secondary"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                Cancel
-              </button>
-            </div>
+              <button type="submit" class="btn btn-primary me-sm-3 me-1">알림 받기</button>
           </form>
         </div>
       </div>

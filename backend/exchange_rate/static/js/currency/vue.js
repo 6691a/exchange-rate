@@ -1,6 +1,7 @@
 import watchFuncs from "./watch.js";
 import {chartFuncs, chartVars} from "./chart.js";
-import alertFuncs from "./alert.js";
+import alertFuncs from "../../../static/js/alert.js";
+
 
 const indexVue = Vue.createApp({
     delimiters: ['[[', ']]'],

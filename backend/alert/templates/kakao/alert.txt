@@ -1,4 +1,4 @@
 {% include "base/header.txt" %}
 {% load humanize %}
-{{currency}} {{price | intcomma}}원🔔
+{{name}} {{price | intcomma}}원🔔
 원하는 가격에 도달했어요🎉

@@ -14,14 +14,14 @@ class KakaoTalk:
         }
 
     @classmethod
-    def send(cls, token: str, currency: str, price: int, url_path: str) -> int:
+    def send(cls, token: str, name: str, price: int, url_path: str) -> int:
         # text는 최대 200자
         data = {
             "template_object": dumps(
                 {
                     "object_type": "text",
                     "text": render_to_string(
-                        "kakao/alert.txt", {"currency": currency, "price": price}
+                        "kakao/alert.txt", {"name": name, "price": price}
                     ),
                     "link": {
                         "web_url": f"https://finance.1ife.kr/{url_path.upper()}",

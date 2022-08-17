@@ -7,4 +7,5 @@ from base.schemas import BaseSchema
 
 class AlertCreateSchema(BaseSchema):
     currency: str
+    price: int
 

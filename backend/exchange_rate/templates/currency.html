@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
-
+{% load humanize %}
 <head>
   {% block title %}
     환율
@@ -15,9 +15,6 @@
     <script defer="defer" src="{% static 'libs/apex-charts/apexcharts.js' %}"></script>
     <script defer="defer" type="module" src="{% static 'js/currency/vue.js' %}"></script>
 
-<!--    <script defer="defer" src="{% static 'js/chart.js' %}"></script>-->
-<!--    <script defer="defer" src="{% static 'js/watch.js' %}"></script>-->
-<!--    <script defer="defer" src="{% static 'js/alert.js' %}"></script>-->
 
   {% endblock %}
 </head>
@@ -37,8 +34,12 @@
               <h5 class="card-title m-0 me-2">{{ country.name }}</h5>
                 <div class="btn px-0 py-0">
                   <span class="m-2">
-                    <button class="btn px-0" type="button" data-bs-toggle="modal" data-bs-target="#enableOTP">
-                      <i data-alert="true" class="bx bxs-bell bx-sm silver"></i>
+                    <button class="btn px-0" type="button" @click="alertFuncs.alertEvent">
+                      {% if alert %}
+                      <i id="bell" class="bx bxs-bell bx-sm yellow"></i>
+                      {% else %}
+                      <i id="bell" class="bx bxs-bell bx-sm silver"></i>
+                      {% endif %}
                     </button>
                   </span>
                   <span class="m-2" id="watch">
@@ -73,37 +74,32 @@
       </div>
     </div>
   </div>
-  <!-- Enable OTP Modal -->
-  <div class="modal fade" id="enableOTP" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-simple modal-enable-otp modal-dialog-centered">
+  <!-- Enable Modal -->
+  <div class="modal fade" id="alertForm" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-simple modal-dialog-centered">
       <div class="modal-content p-3 p-md-5">
         <div class="modal-body">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <div class="text-center mb-4">
+          <div class="text-left mb-4">
             <h3 class="mb-5">{{country.name}} 환율 알림</h3>
           </div>
-          <h6>얼마일 때 알려드릴까요?</h6>
-          <form id="enableOTPForm" class="row g-3" onsubmit="return false">
-            <div class="col-12">
-              <div class="input-group input-group-merge">
-                <input
-                  @keyup="alertFuncs.alertKeyInputEvent"
-                  type="text"
-                  max='10'
-                  id="alert_input"
-                  class="form-control phone-number-otp-mask"
-                  placeholder="가격을 입력하세요"
-                />
-                 <span class="input-group-text">원</span>
-              </div>
-            </div>
-              <button type="submit" class="btn btn-primary me-sm-3 me-1">알림 받기</button>
-          </form>
+          <div class="d-flex align-items-center justify-content-between my-3">
+              <h5 class="text-center mb-0">얼마일 때 알려드릴까요?</h5>
+              {% if alert %}
+              <span class="text-primary"  >{{alert.price|floatformat:"0"|intcomma}}원</span>
+              {% else %}
+              <a href="{% url 'alert:alert' currency=country.currency|upper %}" class="text-primary">설정하기</a>
+              {% endif %}
+          </div>
+          <div class="d-flex align-items-center justify-content-between my-3">
+            <h5 class="text-center mb-0">몇시에 알려드릴까요?</h5>
+            <a href="#" class="text-primary">설정하기</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <!--/ Enable OTP Modal -->
+  <!--/ Enable Modal -->
 
 {% endblock %}
 </body>

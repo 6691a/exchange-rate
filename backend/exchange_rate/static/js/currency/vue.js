@@ -1,6 +1,6 @@
 import watchFuncs from "./watch.js";
 import {chartFuncs, chartVars} from "./chart.js";
-import alertFuncs from "../../../static/js/alert.js";
+import {alertFuncs} from "../../../static/js/alert/alert.js";
 
 
 const indexVue = Vue.createApp({

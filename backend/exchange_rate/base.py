@@ -1,5 +1,4 @@
 from datetime import date, timedelta, datetime
-from django.core.cache import cache
 
 from exchange_rate.models import ExchangeRateSchedule
 

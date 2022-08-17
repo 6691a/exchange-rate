@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+{% load static %}
+
+<head>
+  {% block title %}
+    환율
+  {% endblock %}
+
+  {% block css %}
+    <link rel="stylesheet" href="{% static 'css/core/color.css' %}"/>
+  {% endblock %}
+
+  {% block js %}
+    <script defer="defer" type="module" src="{% static 'js/alert/vue.js' %}"></script>
+  {% endblock %}
+</head>
+
+<body>
+  {% block header %}
+    {% include "back-menu.html" %}
+  {% endblock %}
+
+  {% block content %}
+      <div class="nav-align-top mb-4">
+        <div class="tab-content">
+          <div class="tab-pane fade show active" role="tabpanel">
+            <!-- Total Balance -->
+            <div class="col-md-12 mb-1">
+              <div class="card-header d-flex align-items-center justify-content-between p-0 pb-3">
+                <h5 class="card-title m-0 me-2">{{country.name}}{{country.currency_kr}}가 얼마일 때 알려드릴까요?</h5>
+              </div>
+              <form v-on:submit.prevent="alertFuncs.alertSubmit" class="row g-3 my-2" onsubmit="return false">
+                <div class="col-12">
+                  <div class="input-group input-group-merge">
+                    <input
+                      @keyup="alertFuncs.alertKeyInputEvent"
+                      type="text"
+                      maxlength='10'
+                      autocomplete="off"
+                      v-model="alertVars.input.value"
+                      class="form-control phone-number-otp-mask"
+                      placeholder="가격을 입력하세요"
+                    />
+                    <span class="input-group-text">원</span>
+                  </div>
+                </div>
+                  <button type="submit" class="btn btn-primary me-sm-3 me-1">알림 받기</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  {% endblock %}
+</body>

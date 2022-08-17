@@ -1,6 +1,7 @@
 let axisColor
 let bgColor
 
+
 if (isDarkStyle) {
     axisColor = config.colors_dark.axisColor
     bgColor = config.colors_dark.cardColor

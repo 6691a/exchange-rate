@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo/premium-icon-investment-32.png' %}"/>
+
+    <!-- Meta webmasters -->
+    <meta property="og:title"              content="환율 알리미" />
+    <meta property="og:url"                content="https://finance.1ife.kr" />
+    <meta property="og:description"        content="원하는 환율의 정보를 확인하고 알림을 받아보세요!" />
+    <meta property="og:image"              content="{% static 'img/logo/premium-icon-investment-32.png' %}
+" />
+
+
+    <title>환율 알리미</title>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'css/core/core.css' %}" class="template-customizer-core-css"/>
+    <link rel="stylesheet" href="{% static 'css/core/theme-default.css' %}" class="template-customizer-theme-css"/>
+    <link rel="stylesheet" href="{% static 'css/core/demo.css' %}" />
+    <!-- Page -->
+    <link rel="stylesheet" href="{% static 'css/page-auth.css' %}" />
+    <!-- Icon  -->
+    <link rel="stylesheet" href="{% static 'css/icon/boxicons.css' %}" />
+
+</head>
+
+<body>
+<div class="container-xxl">
+      <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+          <!-- Register -->
+          <div class="card">
+            <div class="card-body">
+              <!-- Logo -->
+              <div class="app-brand justify-content-center">
+                      <img class="app-brand-link gap-2" src="{% static 'img/logo/premium-icon-investment-32.png' %}">
+                  <span class="app-brand-text demo text-body fw-bolder">환율 알리미</span>
+              </div>
+              <!-- /Logo -->
+              <p class="mb-4 text-center">원하는 환율의 정보를 확인하고 알림을 받아보세요👋</p>
+              <div class="app-brand justify-content-center">
+                  <a  href="{% url 'account:kakao_login' %}">
+                    <img src="{% static 'img/kakao_login_medium_wide.png' %}">
+                  </a>
+              </div>
+          </div>
+          <!-- /Register -->
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>

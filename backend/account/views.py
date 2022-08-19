@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,11 @@ from .exceptions import KakaoTokenException, KakaoUserException
 KEY = settings.KAKAO_LOGIN_REST_KEY
 REDIRECT_URL = settings.KAKAO_LOGIN_REDIRECT_URL
 
+def login(request):
+    context: dict = {
 
+    }
+    return render(request, "login.html", context)
 def kakao_login(request):
     url = f"https://kauth.kakao.com/oauth/authorize?client_id={KEY}&redirect_uri={REDIRECT_URL}&response_type=code"
     # if "KAKAOTALK" in request.META["HTTP_USER_AGENT"]:

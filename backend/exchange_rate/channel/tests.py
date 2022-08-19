@@ -108,7 +108,7 @@ class ChannelsTest(TransactionTestCase):
                 for i in range(len(exchage_answer)):
                     self.assertEqual(exchage_answer[i].standard_price, exchage[i].get("standard_price"))
                     self.assertEqual(exchage_answer[i].country, exchage[i].get("country"))
-                
+
                 self.assertEqual(hight_answer.standard_price, hight.get("standard_price"))
                 self.assertEqual(hight_answer.country, hight.get("country"))
                 self.assertEqual(low_answer.standard_price, low.get("standard_price"))
@@ -144,7 +144,7 @@ class ChannelsQueryTest(TransactionTestCase):
                 mock.return_value = BaseTest.mock_now(year=2022, month=6, day=16)
                 sleep(SLEEP_TIME)
                 ExchangeRate.objects.create(**i.dict)
-#
+
         with patch("django.utils.timezone.now") as mock:
             self.MOCK_EXCHAGERATE_2022_06_17 = [
                 ExchangeRate(
@@ -225,10 +225,8 @@ class ChannelsQueryTest(TransactionTestCase):
             self.assertEqual(last_answer.standard_price, last.standard_price)
 
     async def test_closing_price(self):
-        with patch(
-            "exchange_rate.channel.query._work_date",
-            return_value=BaseTest.mock_now(year=2022, month=6, day=20),
-        ):
+        with patch("exchange_rate.channel.query.date") as mock:
+            mock.today.return_value = BaseTest.mock_now(year=2022, month=6, day=21)
             closing = await closing_price("USD")
             closing_answer = BaseTest.exchange_max_price("미국", self.MOCK_EXCHAGERATE_2022_06_20)
 

@@ -1,7 +1,9 @@
 from typing import Optional
 
 from django.db import models
+from django.shortcuts import get_object_or_404
 
+from account.models import User
 from base.models import BaseModel
 from exchange_rate.models import Country
 from django.contrib.auth import get_user_model
@@ -34,10 +36,13 @@ class AlertManager(models.Manager):
 
     def get_object_or_none(self, **kwargs) -> Optional["Alert"]:
         try:
-            query_set: Alert | None = self.model.objects.get(**kwargs)
+            query_set: Alert = self.model.objects.get(**kwargs)
         except self.model.DoesNotExist:
             query_set: Alert | None = None
         return query_set
+
+    def find_not_send(self, user: User, country: Country, **kwargs) -> "Alert":
+        return get_object_or_404(self.model, user=user, country=country, active=True, send=False)
 
 
 class Alert(BaseAlert):

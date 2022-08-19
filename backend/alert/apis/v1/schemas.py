@@ -5,7 +5,9 @@ from ninja import Schema
 from base.schemas import BaseSchema
 
 
-class AlertCreateSchema(BaseSchema):
+class AlertDeleteSchema(BaseSchema):
     currency: str
-    price: int
 
+
+class AlertCreateSchema(AlertDeleteSchema):
+    price: int

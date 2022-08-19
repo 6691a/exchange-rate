@@ -1,5 +1,7 @@
-const lastPath = window.location.pathname.split("/").pop().toUpperCase()
 let isClick = false
+
+const alertHtml = Vue.ref()
+const lastPath = window.location.pathname.split("/").pop().toUpperCase()
 const nonLikeCss = "bx bxs-bell bx-sm silver"
 const likeCss = "bx bxs-bell bx-sm yellow"
 const input = Vue.ref()
@@ -19,14 +21,21 @@ async function addAlert(price){
     return true
 }
 
-async function alertEvent(event) {
-    // if (event.target.classList.contains("silver")) {
-    const form = new bootstrap.Modal(document.getElementById('alertForm'))
-    form.show()
-    // }
-    // else{
-    //
-    // }
+async function delAlert() {
+    const res = await http.delete(
+        "alert/",
+        {
+            data: {
+                "currency": lastPath,
+            }
+        }
+
+    )
+    if (res.status !== 204) {
+        // 실패 안내 출력
+    }
+    alertHtml.value = `<a href="/alert/${lastPath}" className="text-primary">설정하기</a>`
+
 }
 
 function alertKeyInputEvent(event) {
@@ -65,10 +74,11 @@ function uncomma(str) {
 
 const alertVars = {
     input,
+    alertHtml,
 }
 const alertFuncs = {
     alertKeyInputEvent,
     alertSubmit,
-    alertEvent
+    delAlert,
 }
 export  {alertFuncs, alertVars}

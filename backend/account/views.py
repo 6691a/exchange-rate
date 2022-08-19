@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.conf import settings
-from django.contrib.auth import login, logout
+from django.contrib.auth import login as django_login, logout as django_logout
 from django.contrib.auth.decorators import login_required
 
 from alert.tasks import send_kakao_welcome
@@ -12,11 +12,14 @@ from .exceptions import KakaoTokenException, KakaoUserException
 KEY = settings.KAKAO_LOGIN_REST_KEY
 REDIRECT_URL = settings.KAKAO_LOGIN_REDIRECT_URL
 
+
 def login(request):
     context: dict = {
 
     }
     return render(request, "login.html", context)
+
+
 def kakao_login(request):
     url = f"https://kauth.kakao.com/oauth/authorize?client_id={KEY}&redirect_uri={REDIRECT_URL}&response_type=code"
     # if "KAKAOTALK" in request.META["HTTP_USER_AGENT"]:
@@ -26,7 +29,7 @@ def kakao_login(request):
 
 @login_required
 def kakao_logout(request):
-    logout(request)
+    django_logout(request)
     return redirects.login()
 
 
@@ -76,6 +79,6 @@ def kakao_login_callback(request):
     if is_create:
         send_kakao_welcome.delay(user.refresh_token)
 
-    login(request, user)
+    django_login(request, user)
 
     return redirects.main()

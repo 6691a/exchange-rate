@@ -11,3 +11,5 @@ class AlertDeleteSchema(BaseSchema):
 
 class AlertCreateSchema(AlertDeleteSchema):
     price: int
+
+

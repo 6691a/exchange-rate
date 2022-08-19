@@ -13,3 +13,5 @@ class CountrySchema(BaseSchema):
 
 class WatchListSchema(BaseSchema):
     currency: str
+
+

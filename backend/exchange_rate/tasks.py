@@ -115,7 +115,7 @@ def send_alert(data: ExchangeRate):
         for i in query_set:
             is_send = send_kakao_talk.delay(
                 refresh_token=i.user.refresh_token,
-                name=f"country({currency})",
+                name=f"{country}({currency})",
                 price=price,
                 url_path=currency
             )

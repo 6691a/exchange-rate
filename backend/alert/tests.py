@@ -98,6 +98,3 @@ class AlertTest(TestCase):
             msg
         )
         self.assertEqual(url, "https://finance.1ife.kr/USD")
-        print(msg)
-
-        print(url)

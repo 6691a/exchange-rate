@@ -16,6 +16,10 @@ from .channel.messages import exchange_rate_msg, watch_msg
 TIME_OUT = 50400
 
 
+def _str_to_datetime(string: str, formatting: str) -> datetime:
+    return datetime.strptime(string, formatting)
+
+
 class Currency:
     def get(self) -> dict | None:
         """
@@ -33,15 +37,12 @@ class Currency:
         req = re_sub(r",(\s)+]", "]", req)
         return json_loads(req)
 
-    def __str_to_datetime(self, string: str, formatting: str) -> datetime:
-        return datetime.strptime(string, formatting)
-
     def update(self) -> list[ExchangeRate]:
         res = self.get()
         if not res:
             return False
 
-        fix_time = self.__str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
+        fix_time = _str_to_datetime(res.get("날짜"), "%Y년 %m월 %d일 %H:%M")
         data = []
         for i in res.get("리스트"):
             split = i.get("통화명").split(" ")
@@ -134,7 +135,6 @@ def jabs(data: list[ExchangeRate]):
 
         # 알림 보내기
         send_alert(exchage)
-
 
 
 @shared_task

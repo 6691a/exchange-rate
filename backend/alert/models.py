@@ -29,9 +29,9 @@ class AlertManager(models.Manager):
     """
     def get_or_create(self, *, price: int, **kwargs) -> "Alert":
         try:
-            query_set: Alert = self.model.objects.get(**kwargs)
+            query_set: Alert = self.model.objects.get(send=False, **kwargs)
         except self.model.DoesNotExist:
-            query_set: Alert = self.model.objects.create(price=price, **kwargs)
+            query_set: Alert = self.model.objects.create(price=price, send=False, **kwargs)
         return query_set
 
     def get_object_or_none(self, **kwargs) -> Optional["Alert"]:

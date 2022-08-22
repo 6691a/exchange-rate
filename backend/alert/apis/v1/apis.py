@@ -1,3 +1,5 @@
+import datetime
+
 from ninja import Router
 
 from django.http import HttpRequest
@@ -40,3 +42,18 @@ def del_alert(request: HttpRequest, body: AlertDeleteSchema):
     alert = Alert.objects.find_not_send(request.user, country)
     alert.delete()
     return 204, None
+
+
+# alert kakao talk test api
+# @router.get("/test/")
+# def test(request, price: int):
+#     from exchange_rate.models import ExchangeRate
+#     obj = ExchangeRate.objects.create(
+#         fix_time=datetime.date.today(),
+#         currency="USD",
+#         country="미국",
+#         standard_price=price,
+#     )
+#     from exchange_rate.tasks import send_alert
+#     send_alert(obj)
+#     return 200

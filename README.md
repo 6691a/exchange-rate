@@ -7,8 +7,6 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -18,7 +16,6 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -26,7 +23,7 @@
 
   <h3 align="center">
     <a href="https://finance.1ife.kr/">
-    환율 알리미
+    환율 알리미 - paul 브랜치
     </a>
 
   </h3>
@@ -38,32 +35,17 @@
     <img src="https://img.shields.io/badge/Notion-ffffff?style=flat-square&logo=notion&logoColor=black"/>
 </a>
 
-
-
-
-
   <p align="center">
     자세한 내용은 환율알리미 슬랙을 확인해 주세요.
   </p>
 </div>
 
-
-
-
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## 구성도
+
 <div align="center">
   <img src="./backend/static/img/readme/webserver1.png" alt="server img1">
   <img src="./backend/static/img/readme/webserver2.png" alt="server img1">
   <img src="./backend/static/img/readme/cicd.png" alt="server img1">
 </div>
-
-
-
-
-
-
-
-

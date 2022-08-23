@@ -46,10 +46,15 @@ class AlertManager(models.Manager):
 
 
 class Alert(BaseAlert):
+    RANGE_CHOICE = (
+        ("More than", "이상"),
+        ("Less than", "이하")
+    )
     price = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="알림 가격", blank=True
     )
     send = models.BooleanField(default=False, verbose_name="발송 여부")
+    range = models.CharField(max_length=10, choices=RANGE_CHOICE)
     objects = AlertManager()
 
     class Meta:

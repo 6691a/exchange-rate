@@ -45,9 +45,7 @@ async function socketConnect(name) {
     const socket = new WebSocket(
         socketPath + name + '/'
     )
-
     addSocketEvent(socket)
-
 }
 
 

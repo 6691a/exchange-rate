@@ -61,4 +61,4 @@ def delete_watch_list(request: HttpRequest, watch: WatchListSchema):
     response={200: ResponseSchema[list[CountrySchema]]}
 )
 def get_country_list(request: HttpRequest):
-    return 200, ResponseSchema(data=[CountrySchema(**model_to_dict(i)) for i in  Country.objects.all()])
+    return 200, ResponseSchema(data=[CountrySchema(**model_to_dict(i)) for i in Country.objects.all()])

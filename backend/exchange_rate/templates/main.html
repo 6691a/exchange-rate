@@ -33,7 +33,11 @@
             <ul class="p-0 m-0">
                 {% for w in watchList %}
                 <a href={% url 'exchange_rate:currency' currency=w.country.currency|upper %}  class="watch-list" >
+                    {% if forloop.last %}
+                    <li class="btn d-flex px-0">
+                    {% else %}
                     <li class="btn d-flex mb-4 px-0">
+                    {% endif %}
                         <div class="avatar flex-shrink-0 me-3">
                             <img src={% static 'img/currency/' %}{{w.country.currency|lower}}.png alt="User" />
                         </div>
@@ -52,7 +56,6 @@
                                         <h6 class="mb-0">0원</h6>
                                     </div>
                                 </template>
-
                             </div>
                         </div>
                     </li>

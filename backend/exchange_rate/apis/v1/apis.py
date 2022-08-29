@@ -3,13 +3,12 @@ from ninja import Router
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
-from django.conf import settings
 
 from exchange_rate.models import WatchList
-from base.utils import cache_model
 from base.schemas import ErrorSchema, ResponseSchema
 from .schemas import CountrySchema, WatchListSchema
 from exchange_rate.models import Country
+from ...caches import country_cache
 
 router = Router()
 
@@ -33,9 +32,7 @@ def get_watch_list(request: HttpRequest):
 )
 def add_watch_list(request: HttpRequest, watch: WatchListSchema):
     # 30일 캐싱
-    country = cache_model(
-        Country, watch.currency, settings.THIRTY_DAY_TO_SECOND, currency=watch.currency
-    )
+    country = country_cache(watch.currency)
     if not WatchList.objects.get_or_create(user=request.user, country=country):
         return 404, ResponseSchema(data=ErrorSchema(error="watch list not found"), status=404)
 
@@ -48,9 +45,7 @@ def add_watch_list(request: HttpRequest, watch: WatchListSchema):
 )
 def delete_watch_list(request: HttpRequest, watch: WatchListSchema):
     # 30일 캐싱
-    country = cache_model(
-        Country, watch.currency, settings.THIRTY_DAY_TO_SECOND, currency=watch.currency
-    )
+    country = country_cache(watch.currency)
     watch_list = get_object_or_404(WatchList, user=request.user, country=country)
     watch_list.delete()
     return 204, None

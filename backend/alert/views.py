@@ -7,7 +7,6 @@ from exchange_rate.models import Country
 @login_required
 def alert(request, currency):
     country: Country = country_cache(currency)
-    print(country)
     context: dict = {
         "country": country,
     }

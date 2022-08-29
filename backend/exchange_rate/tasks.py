@@ -9,12 +9,12 @@ from asgiref.sync import async_to_sync
 from channel.base import channel_group_send
 from alert.query import alert_query
 from alert.tasks import send_kakao_talk
-from .models import ExchangeRate, ExchangeRateSchedule
+from .models import ExchangeRate, ExchangeRateSchedule, Country
 from .channel.messages import exchange_rate_msg, watch_msg
 
 # 14시간
 TIME_OUT = 50400
-
+EXCHANGE_RATE_CACHE_KEY = "exchange_rate_"
 
 def _str_to_datetime(string: str, formatting: str) -> datetime:
     return datetime.strptime(string, formatting)
@@ -49,6 +49,7 @@ class Currency:
             country = split[0]
             currency = split[1]
             standard_price = i.get("매매기준율")
+            self.cache(standard_price=standard_price)
             data.append(
                 ExchangeRate(
                     fix_time=fix_time,
@@ -63,13 +64,22 @@ class Currency:
 
 @shared_task
 def day_off():
+    """평일 8시 30분에 작업
+    1. 쉬는날 체킹
+    2. 환율 캐쉬 초기화
+    """
     today = datetime.today().date()
     if ExchangeRateSchedule.objects.filter(day_off=datetime.today()).exists():
         cache.set("day_off", today, TIME_OUT)
         return today
     cache.set("day_off", -1, TIME_OUT)
+
+    clear_exchange_cache()
     return -1
 
+
+def clear_exchange_cache():
+    cache.delete_many([f"{EXCHANGE_RATE_CACHE_KEY}{i.currency}" for i in Country.objects.all()])
 
 def is_day_off():
     """
@@ -125,6 +135,14 @@ def send_alert(data: ExchangeRate):
                 i.save()
 
 
+def update_exchange_cache(data: ExchangeRate):
+    key: str = f"{EXCHANGE_RATE_CACHE_KEY}{data.currency}"
+    if cache_data := cache.get(key):
+        cache_data.append(data)
+        cache.set(key, cache_data)
+    return
+
+
 def jabs(data: list[ExchangeRate]):
     for exchage in data:
         # 환율 그래프 갱신
@@ -135,6 +153,9 @@ def jabs(data: list[ExchangeRate]):
 
         # 알림 보내기
         send_alert(exchage)
+
+        # 캐쉬 갱신
+        update_exchange_cache(exchage)
 
 
 @shared_task

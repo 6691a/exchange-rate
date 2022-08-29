@@ -4,10 +4,9 @@ from functools import wraps
 from asgiref.sync import sync_to_async, async_to_sync
 
 from django.core.cache import cache
-from django.db.models import Model
+from django.db.models.base import ModelBase
 from django.shortcuts import get_object_or_404
 from django.db import connection, reset_queries
-
 
 def destructuring(dict: dict, *args: str):
     """
@@ -37,16 +36,3 @@ def query_debugger(func):
     return wrapper
 
 
-async def async_cache_model(model: Model, key: str, timeout: int = 300, **kwargs) -> Model:
-    key = f"county_{key}"
-
-    if county := cache.get(key):
-        return county
-
-    country = await sync_to_async(get_object_or_404)(model, **kwargs)
-    cache.set(key, country, timeout)
-    return country
-
-
-def cache_model(model: Model, key: str, timeout: int = 300, **kwargs) -> Model:
-    return async_to_sync(async_cache_model)(model, key, timeout, **kwargs)

@@ -7,7 +7,8 @@ from django.http import HttpRequest
 from exchange_rate.caches import country_cache
 from alert.apis.v1.schemas import AlertCreateSchema, AlertDeleteSchema
 from alert.models import Alert
-from exchange_rate.models import Country
+from exchange_rate.channel.schemas import ExchangeRateSchema
+
 
 router = Router()
 
@@ -29,7 +30,6 @@ def add_alert(request: HttpRequest, body: AlertCreateSchema):
         country=country,
         active=True,
     )
-
     return 200
 
 

@@ -7,5 +7,4 @@ app_name = "alert"
 urlpatterns = [
     path("<str:currency>", alert, name="alert"),
     path("beat/<str:currency>", alert_beat, name="alert_beat"),
-
 ]

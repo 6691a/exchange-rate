@@ -42,9 +42,8 @@ function search(e) {
         const regex = new RegExp(val, 'gi')
         return text.match(regex)
     })
-    if (filterData) {
+    if (Object.keys(filterData).length !== 0 ) {
         let html = ""
-        console.log(data)
         filterData.map((data) => {
             const splits = data.split(",")
             html += template(splits[1], splits[0])

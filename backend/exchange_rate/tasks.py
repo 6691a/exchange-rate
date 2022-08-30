@@ -49,7 +49,6 @@ class Currency:
             country = split[0]
             currency = split[1]
             standard_price = i.get("매매기준율")
-            self.cache(standard_price=standard_price)
             data.append(
                 ExchangeRate(
                     fix_time=fix_time,

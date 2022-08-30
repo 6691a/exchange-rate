@@ -18,7 +18,7 @@ function template(text, path) {
         <a href="/${path}" class="watch-list">
             <li class="btn d-flex px-0">
                 <div class="avatar flex-shrink-0 me-3">
-                    <img src="${static_host}static/img/currency/${path}.png" alt="User">
+                    <img src="${static_host}static/img/currency/${path.toLowerCase()}.png" alt="User">
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">

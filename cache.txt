@@ -1,0 +1,3 @@
+exchange_{name} : Exchange_rate model 환율 값 관련 캐쉬
+
+country_{name}: Country modele 캐쉬

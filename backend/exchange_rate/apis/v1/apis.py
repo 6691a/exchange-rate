@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+
 from ninja import Router
 
 from django.http import HttpRequest
@@ -8,10 +10,15 @@ from exchange_rate.models import WatchList
 from base.schemas import ErrorSchema, ResponseSchema
 from .schemas import CountrySchema, WatchListSchema
 from exchange_rate.models import Country
-from ...caches import country_cache
+from exchange_rate.caches import country_cache, exchange_cache
 
 router = Router()
 
+
+@router.get("/")
+def get_exchange_list(request: HttpRequest, currency: str):
+    data = async_to_sync(exchange_cache)(currency)
+    return 200
 
 @router.get(
     "watch/",

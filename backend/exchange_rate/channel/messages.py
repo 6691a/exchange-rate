@@ -7,7 +7,7 @@ from ..models import ExchangeRate
 Json = str
 
 
-async def exchange_rate_msg(exchange: list[ExchangeRate] | ExchangeRate, currency: str) -> Json:
+async def exchange_rate_msg(exchange: list[ExchangeRate] | ExchangeRate, currency: str, is_json: bool = True) -> Json | ResponseSchema:
     low, high = await latest_exchange_aggregate(currency=currency)
     closing = await closing_price(currency=currency)
 
@@ -16,15 +16,16 @@ async def exchange_rate_msg(exchange: list[ExchangeRate] | ExchangeRate, currenc
 
     if not closing:
         raise ClosingPriceException
-
-    return ResponseSchema(
+    schema: ResponseSchema = ResponseSchema(
         data=ChartSchema(
             exchange_rate=[ExchangeRateSchema(**i.dict) for i in exchange],
             hight_price=ExchangeRateSchema(**high.dict),
             low_price=ExchangeRateSchema(**low.dict),
             closing_price=ExchangeRateSchema(**closing.dict),
         ),
-    ).json()
+    )
+
+    return schema.json() if is_json else schema
 
 
 async def watch_msg(currency: str) -> Json:
@@ -36,7 +37,3 @@ async def watch_msg(currency: str) -> Json:
     return ResponseSchema(
         data=WatchListSchema(yester_exchange=yester, last_exchange=last)
     ).json()
-
-
-
-

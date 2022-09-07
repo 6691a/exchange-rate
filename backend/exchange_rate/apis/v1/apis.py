@@ -11,14 +11,18 @@ from base.schemas import ErrorSchema, ResponseSchema
 from .schemas import CountrySchema, WatchListSchema
 from exchange_rate.models import Country
 from exchange_rate.caches import country_cache, exchange_cache
+from ...channel.messages import exchange_rate_msg
+from ...channel.schemas import ChartSchema
 
 router = Router()
 
 
-@router.get("/")
+@router.get(
+    "/"
+)
 def get_exchange_list(request: HttpRequest, currency: str):
-    data = async_to_sync(exchange_cache)(currency)
-    return 200
+    exchange = async_to_sync(exchange_cache)(currency)
+    return 200, async_to_sync(exchange_rate_msg)(exchange, currency, False)
 
 @router.get(
     "watch/",

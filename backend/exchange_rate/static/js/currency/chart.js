@@ -13,14 +13,29 @@ if (isDarkStyle) {
 
 let fluctuation = Vue.ref(`0원 (0%)`)
 let price = Vue.ref(`0원`)
-let apexChart = null
 const series = [{
     name: '가격',
     data: [],
 }]
 const minWidth = window.innerWidth <= 500 ? 33 : 13
 
-function renderChart() {
+async function get_exchange_rate(currency) {
+    const res = await http.get(
+        "/",
+        {
+            params: {
+                currency
+            }
+        }
+    )
+
+    if (res.status !== 200) {
+        // 실패 안내 출력
+    }
+    return res
+}
+
+function renderChart(series, apexChart) {
     const chartEl = document.querySelector('#chartEl')
     const chartConfig = {
         series,
@@ -101,17 +116,19 @@ function renderChart() {
 
     }
     if (typeof chartEl !== undefined && chartConfig !== null) {
-        apexChart = new ApexCharts(chartEl, chartConfig);
-        apexChart.render();
+        apexChart.value = new ApexCharts(chartEl, chartConfig);
+
+        apexChart.value.render();
     }
+
 }
 
-function socketConnect(name) {
+function socketConnect(currency) {
     const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
     const socketPath = protocol + window.location.host + '/ws/exchange_rate/'
 
     const socket = new WebSocket(
-        socketPath + name + '/'
+        socketPath + currency + '/'
     )
     addSocketEvent(socket)
 }
@@ -145,6 +162,7 @@ function addSocketEvent(socket) {
         fluctuation.value = render_price(current_price, closing.standard_price)
         //
         exchange.forEach((v) => series[0].data.push({ x: v.created_at, y: v.standard_price }))
+
         apexChart.updateSeries(series)
         apexChart.updateOptions({
             chart: {
@@ -231,6 +249,7 @@ const chartVars = {
 
 }
 const chartFuncs = {
+    get_exchange_rate,
     renderChart,
     socketConnect,
 }

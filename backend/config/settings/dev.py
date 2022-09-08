@@ -39,22 +39,22 @@ INSTALLED_APPS += [
 
 MIDDLEWARE += []
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": env.DB_HOST,
-#         "USER": env.DB_USERNAME,
-#         "PASSWORD": env.DB_PASSWORD.get_secret_value(),
-#         "NAME": env.DB_NAME,
-#     }
-# }
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env.DB_HOST,
+        "USER": env.DB_USERNAME,
+        "PASSWORD": env.DB_PASSWORD.get_secret_value(),
+        "NAME": env.DB_NAME,
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
@@ -79,19 +79,19 @@ CHANNEL_LAYERS = {
     },
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    }
-}
-
 # CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379",
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'LOCATION': 'unique-snowflake',
 #     }
 # }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}
 
 # celery
 CELERY_ALWAYS_EAGER = True

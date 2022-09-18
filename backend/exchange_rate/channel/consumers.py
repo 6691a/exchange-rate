@@ -16,7 +16,6 @@ class ExchangeRateConsumer(BaseWebSocket):
 
         try:
             if exchange := await exchange_cache(currency):
-                print(await exchange_rate_msg(exchange, currency))
                 return await self.send(await exchange_rate_msg(exchange, currency))
         except ClosingPriceException:
             await self.send(

@@ -12,20 +12,20 @@ def date_offset(date_time: datetime, offset: int) -> datetime:
     return date_time - timedelta(days=offset)
 
 
-def work_date(date_time: datetime) -> date:
+def work_date(date_time: datetime) -> datetime:
     schedules: list[ExchangeRateSchedule] = ExchangeRateSchedule.objects.filter(
         day_off__range=[date_offset(date_time, 15), date_time]
     ).values_list(
         "day_off",
         flat=True
     )
-    date = date_time.date()
+
     while True:
-        if date in schedules:
-            date = date_offset(date, 1)
+        if date_time.date() in schedules:
+            date_time = date_offset(date_time, 1)
         else:
-            if (offset := date.weekday() - 4) > 0:
-                date = date_offset(date, offset)
+            if (offset := date_time.weekday() - 4) > 0:
+                date_time = date_offset(date_time, offset)
             break
-    return date
+    return date_time
 

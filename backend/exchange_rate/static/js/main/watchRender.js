@@ -1,6 +1,6 @@
 const htmls = Vue.ref({})
 
-async function getCurrency() {
+function getCurrency() {
     const res = []
     const el = document.getElementsByClassName('watch-list')
     for (const e of el) {
@@ -29,6 +29,15 @@ function renderWatchList(currency) {
     `
 }
 
+function socketConnect(name) {
+    const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
+    const socketPath = protocol + window.location.host + '/ws/watch/'
+    const socket = new WebSocket(
+        socketPath + name + '/'
+    )
+    addSocketEvent(socket)
+}
+
 function addSocketEvent(socket) {
     socket.onmessage = (e) => {
         const res = JSON.parse(e.data)
@@ -38,16 +47,6 @@ function addSocketEvent(socket) {
         htmls.value[last.currency] = renderWatchList({ yester, last })
     }
 }
-
-async function socketConnect(name) {
-    const protocol = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://'
-    const socketPath = protocol + window.location.host + '/ws/watch/'
-    const socket = new WebSocket(
-        socketPath + name + '/'
-    )
-    addSocketEvent(socket)
-}
-
 
 const watchRenderFuncs = {
     getCurrency,

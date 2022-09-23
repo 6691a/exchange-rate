@@ -8,11 +8,10 @@ const indexVue = Vue.createApp({
             watchRenderVars,
         }
     },
-
-    async mounted() {
-        const currency = await watchRenderFuncs.getCurrency()
+    mounted() {
+        const currency = watchRenderFuncs.getCurrency()
         for (let c of currency) {
-            await watchRenderFuncs.socketConnect(c)
+            watchRenderFuncs.socketConnect(c)
         }
     }
 

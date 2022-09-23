@@ -2,7 +2,6 @@
 <html>
   <head>
     <!-- core JS -->
-
     <script src="{% static 'js/search/search.js' %}"></script>
 </head>
   <body>
@@ -23,6 +22,7 @@
         <!-- /Search -->
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
+          {% if request.user.is_authenticated %}
           <!-- User -->
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -54,6 +54,15 @@
               </li>
             </ul>
           </li>
+          {% else %}
+          <li class="nav-item navbar-dropdown dropdown-user dropdown">
+            <a href="/account/login">
+              <div class="avatar avatar-online">
+                <img src="http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" alt class="w-px-40 h-auto rounded-circle" />
+              </div>
+            </a>
+          </li>
+          {% endif %}
           <!--/ User -->
         </ul>
       </div>

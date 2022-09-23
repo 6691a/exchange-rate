@@ -1,11 +1,9 @@
 from base.schemas import ResponseSchema, ErrorSchema
 
 from channel.base import BaseWebSocket
-from .exceptions import ClosingPriceException, FluctuationException
-from .schemas import WatchListSchema
-from .query import latest_exchange, fluctuation_rate
-from .messages import exchange_rate_msg, watch_msg
 from exchange_rate.caches import exchange_cache
+from .messages import exchange_rate_msg, watch_msg
+from .exceptions import ClosingPriceException, FluctuationException
 
 
 class ExchangeRateConsumer(BaseWebSocket):

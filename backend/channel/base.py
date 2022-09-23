@@ -41,7 +41,7 @@ class BaseWebSocket(AsyncJsonWebsocketConsumer):
         self.user = self.scope["user"]
 
         if not self.user.is_authenticated:
-            return
+            ...
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         # await self.__save_channel_data(self.user, self.group_name, self.channel_name)

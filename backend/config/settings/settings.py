@@ -103,6 +103,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #         "TIMEOUT": 86400,
 #     }
 # }
+# cashe keys
+CACHE_KEY_EXCHANGE_RATE = "exchange_rate_"
 
 # channels
 ASGI_APPLICATION = "config.asgi.application"
@@ -114,3 +116,4 @@ LOGIN_URL = "/account/login"
 DATE_TIME_FORMATE = "%Y.%m.%d %H:%M"
 
 THIRTY_DAY_TO_SECOND = 2592000
+

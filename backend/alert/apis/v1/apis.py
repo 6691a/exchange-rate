@@ -1,10 +1,10 @@
-import datetime
+from asgiref.sync import async_to_sync
 
 from ninja import Router
 
 from django.http import HttpRequest
 
-from exchange_rate.caches import country_cache
+from exchange_rate.caches import country_cache, exchange_cache
 from alert.apis.v1.schemas import AlertCreateSchema, AlertDeleteSchema
 from alert.models import Alert
 from exchange_rate.channel.schemas import ExchangeRateSchema
@@ -24,12 +24,20 @@ def get_alert(request: HttpRequest):
 )
 def add_alert(request: HttpRequest, body: AlertCreateSchema):
     country = country_cache(body.currency)
-    Alert.objects.get_or_create(
-        price=body.price,
-        user=request.user,
-        country=country,
-        active=True,
-    )
+    exchange = async_to_sync(exchange_cache)(country.currency)[-1]
+    standard_price = exchange.standard_price
+    print(standard_price)
+    if body.price < standard_price:
+        print(body.price, standard_price)
+    else:
+        print(body.price, standard_price)
+    # Alert.objects.get_or_create(
+    #     price=body.price,
+    #     user=request.user,
+    #     country=country,
+    #     active=True,
+    #     # range=,
+    # )
     return 200
 
 

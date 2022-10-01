@@ -18,9 +18,8 @@ def country_cache(currency: str) -> Country:
 
 async def exchange_cache(currency: str):
     # exchange_rate.task에도 이름 변경
-    key = f"exchange_rate_{currency}"
+    key = f"{settings.CACHE_KEY_EXCHANGE}{currency}"
     if exchange := cache.get(key):
-
         return exchange
     exchange = await latest_exchange(currency__icontains=currency)
     cache.set(key, exchange)

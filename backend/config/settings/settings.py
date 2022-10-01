@@ -114,3 +114,5 @@ LOGIN_URL = "/account/login"
 DATE_TIME_FORMATE = "%Y.%m.%d %H:%M"
 
 THIRTY_DAY_TO_SECOND = 2592000
+
+CACHE_KEY_EXCHANGE = "exchange_rate_"

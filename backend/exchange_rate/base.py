@@ -19,13 +19,13 @@ def work_date(date_time: datetime) -> datetime:
         "day_off",
         flat=True
     )
-
     while True:
         if date_time.date() in schedules:
             date_time = date_offset(date_time, 1)
         else:
             if (offset := date_time.weekday() - 4) > 0:
                 date_time = date_offset(date_time, offset)
-            break
+            else:
+                break
     return date_time
 

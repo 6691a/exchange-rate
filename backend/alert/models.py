@@ -51,10 +51,13 @@ class Alert(BaseAlert):
         ("Less than", "이하")
     )
     price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="알림 가격", blank=True
+        max_digits=10, decimal_places=2, verbose_name="알림 요청 가격", blank=True
     )
     send = models.BooleanField(default=False, verbose_name="발송 여부")
     range = models.CharField(max_length=10, choices=RANGE_CHOICE)
+    exchange_price = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name="알림 설정시 환율 가격", blank=True
+    )
     objects = AlertManager()
 
     class Meta:

@@ -1,4 +1,4 @@
-import datetime
+from asgiref.sync import async_to_sync
 
 from ninja import Router
 
@@ -21,24 +21,26 @@ def get_alert(request: HttpRequest):
 
 @router.post(
     "/",
-    response={200: None, 404: None}
+    response={200: None, 400: None, 404: None}
 )
 def add_alert(request: HttpRequest, body: AlertCreateSchema):
     country = country_cache(body.currency)
     # 알림 설정 이상, 이하 체크
     if exchange := async_to_sync(exchange_cache)(body.currency):
-        if exchange[-1].standard_price - body.price > 0:
+        if exchange[-1].standard_price - body.price >= 0:
             range = Alert.RANGE_CHOICE[1][0]
         else:
             range = Alert.RANGE_CHOICE[0][0]
 
-    Alert.objects.get_or_create(
-        price=body.price,
-        user=request.user,
-        country=country,
-        range=range
-    )
-    return 200
+        Alert.objects.get_or_create(
+            price=body.price,
+            user=request.user,
+            country=country,
+            range=range,
+            exchange_price=exchange[-1].standard_price
+        )
+        return 200, None
+    return 400, None
 
 
 @router.delete(

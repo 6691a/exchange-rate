@@ -1,10 +1,12 @@
 from re import sub as re_sub
+from datetime import datetime
 from json import loads as json_loads
 from httpx import get as httpx_get
-from celery import shared_task
-from datetime import datetime
-from django.core.cache import cache
 from asgiref.sync import async_to_sync
+from celery import shared_task
+
+from django.conf import settings
+from django.core.cache import cache
 
 from channel.base import channel_group_send
 from alert.query import alert_query
@@ -14,7 +16,6 @@ from .channel.messages import exchange_rate_msg, watch_msg
 
 # 14시간
 TIME_OUT = 50400
-EXCHANGE_RATE_CACHE_KEY = "exchange_rate_"
 
 def _str_to_datetime(string: str, formatting: str) -> datetime:
     return datetime.strptime(string, formatting)
@@ -78,7 +79,7 @@ def day_off():
 
 
 def clear_exchange_cache():
-    cache.delete_many([f"{EXCHANGE_RATE_CACHE_KEY}{i.currency}" for i in Country.objects.all()])
+    cache.delete_many([f"{settings.CACHE_KEY_EXCHANGE_RATE}{i.currency}" for i in Country.objects.all()])
 
 def is_day_off():
     """
@@ -135,7 +136,7 @@ def send_alert(data: ExchangeRate):
 
 
 def update_exchange_cache(data: ExchangeRate):
-    key: str = f"{EXCHANGE_RATE_CACHE_KEY}{data.currency}"
+    key: str = f"{settings.CACHE_KEY_EXCHANGE_RATE}{data.currency}"
     if cache_data := cache.get(key):
         cache_data.append(data)
         cache.set(key, cache_data)

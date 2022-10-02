@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-
+<!--  class="layout-navbar-fixed dark-style layout-menu-fixed"-->
 <html
   lang="en"
   dir="ltr"
@@ -8,7 +8,7 @@
   data-assets-path="static"
   data-debug="{{ debug }}"
   data-mode="{{user.setting.mode}}"
-  class="layout-navbar-fixed dark-style layout-menu-fixed"
+  class="layout-navbar-fixed light-style layout-menu-fixed"
 >
   <head>
     <meta charset="UTF-8" />
@@ -64,11 +64,8 @@
         <div class="layout-page">
           <!-- navbar -->
           <div class="layout-container">
-              {% if request.user.is_authenticated %} 
               {% block header %}
-              {% endblock %}              
-              {% endif %}
-
+              {% endblock %}
               <!-- Content wrapper -->
               <div class="content-wrapper">
                 <!-- Content -->

@@ -104,6 +104,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #     }
 # }
 
+# cashe keys
+CACHE_KEY_EXCHANGE_RATE = "exchange_rate_"
+
 # channels
 ASGI_APPLICATION = "config.asgi.application"
 
@@ -115,4 +118,4 @@ DATE_TIME_FORMATE = "%Y.%m.%d %H:%M"
 
 THIRTY_DAY_TO_SECOND = 2592000
 
-CACHE_KEY_EXCHANGE = "exchange_rate_"
+

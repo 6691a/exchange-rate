@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from django.test import TransactionTestCase
+from django.test import TestCase
 from time import sleep
 from datetime import timedelta
 
@@ -19,7 +19,7 @@ User = get_user_model()
 SLEEP_TIME = 0.001
 
 
-class ChannelsTest(TransactionTestCase):
+class ChannelsTest(TestCase):
     def setUp(self):
         self.user = User.objects.create(
             email="user@example.com",
@@ -28,6 +28,7 @@ class ChannelsTest(TransactionTestCase):
             age_range="20~29",
             avatar_url="None",
         )
+
         self.yester_data = [
             ExchangeRate(
                 fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=100
@@ -82,7 +83,7 @@ class ChannelsTest(TransactionTestCase):
         ]
         with patch("django.utils.timezone.now") as mock:
             mock.return_value = BaseTest.mock_now(year=2022, month=8, day=5)
-            ExchangeRate.objects.bulk_create(self.today_data)
+            self.today_data = ExchangeRate.objects.bulk_create(self.today_data)
 
     async def test_connect_msg(self):
         with patch("exchange_rate.channel.query.datetime") as mock:
@@ -105,6 +106,7 @@ class ChannelsTest(TransactionTestCase):
                 low_answer = BaseTest.exchange_min_price("미국", self.today_data)
                 closing_answer = self.yester_data[-1]
 
+
                 for i in range(len(exchage_answer)):
                     self.assertEqual(exchage_answer[i].standard_price, exchage[i].get("standard_price"))
                     self.assertEqual(exchage_answer[i].country, exchage[i].get("country"))
@@ -117,7 +119,7 @@ class ChannelsTest(TransactionTestCase):
                 self.assertEqual(closing_answer.country, closing.get("country"))
 
 
-class ChannelsQueryTest(TransactionTestCase):
+class ChannelsQueryTest(TestCase):
     def setUp(self):
         with patch("django.utils.timezone.now") as mock:
             self.MOCK_EXCHAGERATE_2022_06_16 = [
@@ -231,6 +233,3 @@ class ChannelsQueryTest(TransactionTestCase):
             closing_answer = BaseTest.exchange_max_price("미국", self.MOCK_EXCHAGERATE_2022_06_20)
 
             self.assertEqual(closing_answer.standard_price, closing.standard_price)
-
-
-

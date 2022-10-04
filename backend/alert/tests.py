@@ -1,19 +1,19 @@
 from unittest.mock import patch
 
 from django.template.loader import render_to_string
-from django.test import TestCase, TransactionTestCase
-from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.core.cache import cache
 
 from base.tests import BaseTest
 from exchange_rate.models import ExchangeRate
-from exchange_rate.tests import create_exchange, create_country
+from exchange_rate.test_models import create_exchange, create_country
 from .models import Alert
 from .query import alert_query
 
 from account.tests import create_user
 
 
-class AlertTest(TestCase):
+class AlertCreateTest(TestCase):
     def setUp(self):
         self.user1 = create_user("email1@email.com")
         self.user2 = create_user("email2@email.com")
@@ -31,9 +31,12 @@ class AlertTest(TestCase):
             standard_price=100.0
         )
 
+    def tearDown(self):
+        cache.clear()
+
     def test_create_alert(self):
         self.client.force_login(self.user1)
-        date = BaseTest.mock_now(year=2022, month=8, day=5)
+        date = BaseTest.mock_now(year=2022, month=10, day=4)
 
         self.exchnage_USD = create_exchange(
             date,
@@ -41,7 +44,6 @@ class AlertTest(TestCase):
         )
         with patch("exchange_rate.channel.query.datetime") as mock:
             mock.today.return_value = date
-
             # 계약 등록
             res = self.client.post(
                 path="/api/v1/alert/",
@@ -64,13 +66,22 @@ class AlertTest(TestCase):
             )
             self.assertEqual(res.status_code, 200)
 
+            query_set = alert_query(1510.0, "미국")
+            self.assertEqual(len(query_set), 1)
+            self.assertEqual(query_set[0].price, 1500)
+            self.assertEqual(query_set[0].range, "More than")
+            self.assertEqual(query_set[0].country.name, "미국")
 
-            query_set = alert_query(1500.0, "미국")
+            query_set = alert_query(1190.0, "미국")
+            self.assertEqual(len(query_set), 1)
+            self.assertEqual(query_set[0].price, 1200)
+            self.assertEqual(query_set[0].range, "Less than")
+            self.assertEqual(query_set[0].country.name, "미국")
+
+            self.exchnage_USD.delete()
 
 
-
-
-
+class AlertMSGTest(TestCase):
     def test_alert_msg(self):
         query_set: ExchangeRate = ExchangeRate.objects.create(
             fix_time=BaseTest.mock_now(), currency="USD", country="미국", standard_price=100

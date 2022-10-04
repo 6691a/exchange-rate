@@ -11,7 +11,6 @@ class ExchangeRateConsumer(BaseWebSocket):
         currency = self.scope["url_route"]["kwargs"]["currency"].upper()
         group_name = currency
         await super().connect(group_name=group_name)
-
         try:
             if exchange := await exchange_cache(currency):
                 return await self.send(await exchange_rate_msg(exchange, currency))

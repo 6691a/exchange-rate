@@ -3,7 +3,7 @@ from django.db.models import Q, Case, When, QuerySet, ExpressionWrapper, Boolean
 from .models import Alert
 
 
-def alert_query(price: float, country: str) -> QuerySet[Alert]:
+def alert_query(price: float, country_name: str) -> QuerySet[Alert]:
     return Alert.objects.annotate(
         is_alert=Case(
             When(
@@ -14,6 +14,6 @@ def alert_query(price: float, country: str) -> QuerySet[Alert]:
         ),
 
     ).filter(
-        country__name=country, active=True, is_alert=True, send=False
+        country__name=country_name, active=True, is_alert=True, send=False
     ).select_related("user")
 

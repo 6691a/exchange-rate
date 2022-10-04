@@ -19,16 +19,7 @@ User = get_user_model()
 SLEEP_TIME = 0.001
 
 
-def create_exchange(datetime: datetime, **kwargs) -> ExchangeRate:
-    with patch("django.utils.timezone.now") as mock:
-        mock.return_value = datetime
-        return ExchangeRate.objects.create(**kwargs)
-
-def create_country(**kwargs) -> Country:
-    return Country.objects.create(**kwargs)
-
-
-class TaskTest(TransactionTestCase):
+class TaskTest(TestCase):
     def setUp(self):
         yester_data = [
             ExchangeRate(
@@ -84,7 +75,7 @@ class TaskTest(TransactionTestCase):
         )
 
     async def test_update_exchange_rate(self):
-        with patch("exchange_rate.channel.query.date") as mock:
+        with patch("exchange_rate.channel.query.datetime") as mock:
             mock.today.return_value = BaseTest.mock_now(year=2022, month=8, day=5)
 
             async with AuthWebsocketCommunicator(
@@ -103,7 +94,6 @@ class TaskTest(TransactionTestCase):
 
                 res = await wc.receive_json_from()
                 res = res["data"]["exchange_rate"][0]
-
                 self.assertEqual(res["country"], query_set.country)
                 self.assertEqual(res["standard_price"], query_set.standard_price)
                 self.assertEqual(res["currency"], query_set.currency)

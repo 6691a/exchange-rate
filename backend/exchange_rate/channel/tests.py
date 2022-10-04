@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from time import sleep
 from datetime import timedelta
 
@@ -19,7 +19,7 @@ User = get_user_model()
 SLEEP_TIME = 0.001
 
 
-class ChannelsTest(TestCase):
+class ChannelsTest(TransactionTestCase):
     def setUp(self):
         self.user = User.objects.create(
             email="user@example.com",

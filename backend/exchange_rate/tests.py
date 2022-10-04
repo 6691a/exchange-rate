@@ -19,7 +19,7 @@ User = get_user_model()
 SLEEP_TIME = 0.001
 
 
-class TaskTest(TestCase):
+class TaskTest(TransactionTestCase):
     def setUp(self):
         yester_data = [
             ExchangeRate(
